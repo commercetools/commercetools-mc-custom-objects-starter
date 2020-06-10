@@ -9,7 +9,7 @@ import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import { PaginatedTable } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
 import CustomObjectsList, { ENTER } from './custom-objects-list';
-import GetCustomObjects from './get-custom-objects.rest.graphql';
+import GetCustomObjects from '../get-custom-objects.rest.graphql';
 import { DEFAULT_VARIABLES, PAGE_SIZE } from './constants';
 import { COLUMN_KEYS } from './column-definitions';
 

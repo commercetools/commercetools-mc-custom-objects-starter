@@ -13,7 +13,7 @@ import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import { PaginatedTable } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
-import GetCustomObjects from './get-custom-objects.rest.graphql';
+import GetCustomObjects from '../get-custom-objects.rest.graphql';
 import { DATE_FORMAT, DEFAULT_VARIABLES } from './constants';
 import { columnDefinitions, COLUMN_KEYS } from './column-definitions';
 import messages from './messages';

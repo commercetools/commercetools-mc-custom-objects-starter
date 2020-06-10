@@ -9,7 +9,7 @@ export default defineMessages({
   titleResults: {
     id: 'ContainerList.title.results',
     description: 'Custom object title result total',
-    defaultMessage: '{total} results'
+    defaultMessage: '{total} {total, plural, one {result} other {results}}'
   },
   createContainer: {
     id: 'ContainerList.button.createContainer',
@@ -25,5 +25,36 @@ export default defineMessages({
     id: 'ContainerList.error.noResults',
     description: 'Error title when no results are returned',
     defaultMessage: 'No containers found on this project.'
+  },
+  attributesLabel: {
+    id: 'ContainerList.label.attributes',
+    description: 'The attributes label',
+    defaultMessage:
+      '({total} {total, plural, one {attribute} other {attributes}})'
+  },
+  newestFirstLabel: {
+    id: 'ContainerList.sort.label.newestFirst',
+    description: 'The newest first sort option label',
+    defaultMessage: 'Newest first'
+  },
+  oldestFirstLabel: {
+    id: 'ContainerList.sort.label.oldestFirst',
+    description: 'The oldest first sort option label',
+    defaultMessage: 'Oldest first'
+  },
+  lastModifiedLabel: {
+    id: 'ContainerList.sort.label.lastModified',
+    description: 'The last modified sort option labell',
+    defaultMessage: 'Last modified'
+  },
+  alphabeticalAscLabel: {
+    id: 'ContainerList.sort.label.alphabeticalAsc',
+    description: 'The ascending alphabetical sort option label',
+    defaultMessage: 'Alphabetical (asc)'
+  },
+  alphabeticalDescLabel: {
+    id: 'ContainerList.sort.label.alphabeticalDesc',
+    description: 'The descending alphabetical sort option label',
+    defaultMessage: 'Alphabetical (desc)'
   }
 });
