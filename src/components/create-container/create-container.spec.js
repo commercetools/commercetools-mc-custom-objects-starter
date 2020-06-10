@@ -1,27 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import faker from 'faker';
-import kebabCase from 'lodash/kebabCase';
-import times from 'lodash/times';
 import { FormattedMessage } from 'react-intl';
 import { getMutation, setMutation } from '@apollo/react-hooks';
 import { mockShowNotification } from '@commercetools-frontend/actions-global';
 import { CONTAINER, ROOT_PATH } from '../../constants';
 import ContainerForm from '../container-form';
-import { TYPES } from '../container-form/constants';
 import CreateContainer from './create-container';
 import CreateContainerCustomObject from './create-container.rest.graphql';
 import messages from './messages';
+import { generateFormValues } from '../../test-util';
 
-const formValues = {
-  key: kebabCase(faker.random.words()),
-  attributes: times(3, () => ({
-    name: faker.random.word(),
-    type: faker.random.arrayElement(Object.values(TYPES)),
-    required: faker.random.boolean(),
-    set: faker.random.boolean()
-  }))
-};
+const formValues = generateFormValues();
 
 const mocks = {
   match: {

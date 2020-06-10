@@ -11,25 +11,10 @@ import {
   ViewHeader
 } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
-import { CONTAINER } from '../../constants';
-import { TYPES } from '../container-form/constants';
+import { generateContainer } from '../../test-util';
 import GetContainers from '../get-custom-objects.rest.graphql';
 import ContainerList from './container-list';
 import { DEFAULT_VARIABLES, FIELDS, PAGE_SIZE } from './constants';
-
-const generateContainer = () => ({
-  container: CONTAINER,
-  key: faker.random.word(),
-  value: {
-    attributes: times(faker.random.number({ min: 1, max: 5 }), () => ({
-      name: faker.random.words(),
-      type: faker.random.arrayElement(Object.values(TYPES)),
-      set: faker.random.boolean(),
-      required: faker.random.boolean()
-    }))
-  },
-  lastModifiedAt: faker.date.recent()
-});
 
 const generateContainers = (
   total = faker.random.number({ min: 1, max: 10 })

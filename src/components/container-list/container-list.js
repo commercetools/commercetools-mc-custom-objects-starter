@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { SecondaryButton } from '@commercetools-uikit/buttons';
@@ -134,23 +135,25 @@ const ContainerList = ({ match }) => {
               gridAutoColumns="1fr"
               gridTemplateColumns={`repeat(auto-fill, minmax(${customProperties.constraintM}, 1fr))`}
             >
-              {results.map(({ key, value }) => (
-                <Card key={key}>
-                  <Spacings.Inline>
-                    <Text.Body data-testid="container-key" truncate={true}>
-                      {key}
-                    </Text.Body>
-                    <Text.Body>
-                      <FormattedMessage
-                        data-testid="container-attributes"
-                        values={{
-                          total: value.attributes.length
-                        }}
-                        {...messages.attributesLabel}
-                      />
-                    </Text.Body>
-                  </Spacings.Inline>
-                </Card>
+              {results.map(({ id, key, value }) => (
+                <Link key={id} to={`${match.url}/${id}/general`}>
+                  <Card>
+                    <Spacings.Inline>
+                      <Text.Body data-testid="container-key" truncate={true}>
+                        {key}
+                      </Text.Body>
+                      <Text.Body>
+                        <FormattedMessage
+                          data-testid="container-attributes"
+                          values={{
+                            total: value.attributes.length
+                          }}
+                          {...messages.attributesLabel}
+                        />
+                      </Text.Body>
+                    </Spacings.Inline>
+                  </Card>
+                </Link>
               ))}
             </Grid>
             <Pagination

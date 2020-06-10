@@ -6,7 +6,8 @@ import { useIsAuthorized } from '@commercetools-frontend/permissions';
 import LockedDiamondSVG from '@commercetools-frontend/assets/images/locked-diamond.svg';
 import { MaintenancePageLayout } from '@commercetools-frontend/application-components';
 import ContainerList from './components/container-list';
-import CreateContainer from './components/create-container/create-container';
+import CreateContainer from './components/create-container';
+import ContainerDetails from './components/container-details';
 import CustomObjectsList from './components/custom-objects-list';
 import { PERMISSIONS } from './constants';
 import { messages } from './messages';
@@ -42,6 +43,10 @@ const ApplicationRoutes = ({ match }) => {
       <Route
         path={`${match.path}/containers/new`}
         render={props => <CreateContainer {...props} />}
+      />
+      <Route
+        path={`${match.path}/containers/:id`}
+        render={props => <ContainerDetails {...props} />}
       />
       <Route
         path={`${match.path}/containers`}

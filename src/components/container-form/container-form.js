@@ -7,20 +7,29 @@ import Form from './form';
 import messages from './messages';
 import { TYPES } from './constants';
 
-const ContainerForm = ({ onSubmit }) => {
+const initializeContainerValues = ({ key, value }) => ({
+  key,
+  attributes: value.attributes
+});
+
+const initializeEmptyValues = () => ({
+  key: '',
+  attributes: [
+    {
+      name: '',
+      type: '',
+      set: false,
+      required: false
+    }
+  ]
+});
+
+const ContainerForm = ({ container, onSubmit }) => {
   const intl = useIntl();
 
-  const initialValues = {
-    key: '',
-    attributes: [
-      {
-        name: '',
-        type: '',
-        set: false,
-        required: false
-      }
-    ]
-  };
+  const initialValues = container
+    ? initializeContainerValues(container)
+    : initializeEmptyValues();
 
   const stringSchema = yup.string().required({
     required: intl.formatMessage(messages.requiredFieldError)
@@ -54,6 +63,7 @@ const ContainerForm = ({ onSubmit }) => {
 };
 ContainerForm.displayName = 'ContainerForm';
 ContainerForm.propTypes = {
+  container: PropTypes.object,
   onSubmit: PropTypes.func.isRequired
 };
 
