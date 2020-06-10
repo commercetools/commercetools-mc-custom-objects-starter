@@ -4,3 +4,4 @@ export const PERMISSIONS = {
   ManageCustomers: 'ManageCustomers'
 };
 export const ROOT_PATH = 'custom-objects';
+export const CONTAINER = 'mc-custom-object-schema';

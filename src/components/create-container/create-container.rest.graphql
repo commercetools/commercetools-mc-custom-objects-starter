@@ -1,0 +1,16 @@
+mutation CreateCustomObject($body: Json) {
+  customObjects(body: $body)
+    @rest(
+      path: "/custom-objects"
+      type: "CustomObjectMutationResult"
+      method: "POST"
+      bodyKey: "body"
+    ) {
+    results @type(name: "CustomObject") {
+      id
+      version
+      key
+      container
+    }
+  }
+}

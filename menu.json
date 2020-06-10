@@ -14,6 +14,16 @@
         }
       ],
       "uriPath": "custom-objects"
+    },
+    {
+      "key": "container-list",
+      "labelAllLocales": [
+        {
+          "locale": "en",
+          "value": "Container List"
+        }
+      ],
+      "uriPath": "custom-objects/containers"
     }
   ],
   "labelAllLocales": [

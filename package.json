@@ -39,9 +39,14 @@
     "@commercetools-frontend/sdk": "16.8.0",
     "@commercetools-uikit/buttons": "10.18.4",
     "@commercetools-uikit/card": "10.18.4",
+    "@commercetools-uikit/collapsible-panel": "10.18.4",
+    "@commercetools-uikit/constraints": "10.18.4",
+    "@commercetools-uikit/field-label": "10.18.4",
+    "@commercetools-uikit/fields": "10.18.4",
     "@commercetools-uikit/i18n": "10.13.0",
     "@commercetools-uikit/icons": "10.18.4",
     "@commercetools-uikit/inputs": "10.18.4",
+    "@commercetools-uikit/messages": "10.18.4",
     "@commercetools-uikit/spacings": "10.18.4",
     "@commercetools-uikit/text": "10.18.4",
     "@types/prop-types": "^15.7.3",
@@ -56,6 +61,7 @@
     "apollo-link": "1.2.13",
     "apollo-link-rest": "0.7.3",
     "apollo-utilities": "1.3.3",
+    "formik": "2.1.4",
     "global": "4.4.0",
     "graphql": "14.6.0",
     "lodash": "4.17.15",
@@ -69,7 +75,8 @@
     "react-redux": "7.1.3",
     "react-router": "5.1.2",
     "react-router-dom": "5.1.2",
-    "redux": "4.0.5"
+    "redux": "4.0.5",
+    "yup": "0.28.5"
   },
   "devDependencies": {
     "@babel/core": "7.9.6",
