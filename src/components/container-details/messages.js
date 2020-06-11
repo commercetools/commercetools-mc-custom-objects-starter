@@ -6,14 +6,34 @@ export default defineMessages({
     description: 'Label for back button',
     defaultMessage: 'To Containers list'
   },
-  errorLoading: {
-    id: 'ContainerDetails.error.loading.title',
-    description: 'Error title when querying for container fails',
-    defaultMessage: 'Something went wrong loading the container.'
-  },
   generalTab: {
     id: 'ContainerDetails.tabs.general',
     description: 'Label for general tab',
     defaultMessage: 'General'
+  },
+  deleteContainer: {
+    id: 'ContainerDetails.button.deleteContainer',
+    description: 'Label for delete container button',
+    defaultMessage: 'Delete Container'
+  },
+  deleteContainerConfirmation: {
+    id: 'ContainerDetails.message.deleteBundleConfirm',
+    description: 'Delete bundle confirmation message',
+    defaultMessage: 'Are you sure you want to delete this container?'
+  },
+  deleteSuccess: {
+    id: 'ContainerDetails.message.delete.success',
+    description: 'Success message for deleting container',
+    defaultMessage: 'Your container has been deleted.'
+  },
+  deleteError: {
+    id: 'ContainerDetails.message.delete.error',
+    description: 'Error message for deleting container',
+    defaultMessage: 'Something went wrong. Your container was not deleted.'
+  },
+  errorLoading: {
+    id: 'ContainerDetails.error.loading.title',
+    description: 'Error title when querying for container fails',
+    defaultMessage: 'Something went wrong loading the container.'
   }
 });

@@ -6,6 +6,7 @@ import { TYPES } from '../components/container-form/constants';
 
 export const generateContainer = () => ({
   id: faker.random.uuid(),
+  version: faker.random.number({ min: 1, max: 10 }),
   container: CONTAINER,
   key: faker.random.word(),
   value: {
