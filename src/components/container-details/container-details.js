@@ -19,7 +19,7 @@ import { useShowSideNotification } from '@custom-applications-local/core/hooks';
 import { ROOT_PATH } from '../../constants';
 import EditContainer from '../edit-container';
 import GetContainer from '../get-custom-object.rest.graphql';
-import DeleteContainer from './delete-custom-object.rest.graphql';
+import DeleteContainer from '../delete-custom-object.rest.graphql';
 import messages from './messages';
 import styles from './container-details.mod.css';
 

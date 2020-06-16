@@ -15,7 +15,7 @@ import { ViewHeader } from '@custom-applications-local/core/components';
 import { generateContainer } from '../../test-util';
 import { ROOT_PATH } from '../../constants';
 import GetContainer from '../get-custom-object.rest.graphql';
-import DeleteContainer from './delete-custom-object.rest.graphql';
+import DeleteContainer from '../delete-custom-object.rest.graphql';
 import ContainerDetails from './container-details';
 import messages from './messages';
 

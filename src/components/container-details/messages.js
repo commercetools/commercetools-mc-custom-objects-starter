@@ -17,8 +17,8 @@ export default defineMessages({
     defaultMessage: 'Delete Container'
   },
   deleteContainerConfirmation: {
-    id: 'ContainerDetails.message.deleteBundleConfirm',
-    description: 'Delete bundle confirmation message',
+    id: 'ContainerDetails.message.deleteContainerConfirm',
+    description: 'Delete container confirmation message',
     defaultMessage: 'Are you sure you want to delete this container?'
   },
   deleteSuccess: {

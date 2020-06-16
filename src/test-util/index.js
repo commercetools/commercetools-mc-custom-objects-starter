@@ -40,3 +40,11 @@ export const generateFormValues = () => ({
     set: faker.random.boolean()
   }))
 });
+
+export const generateCustomObject = () => ({
+  id: faker.random.uuid(),
+  version: faker.random.number({ min: 1, max: 10 }),
+  container: kebabCase(faker.random.words()),
+  key: faker.random.word(),
+  value: {}
+});

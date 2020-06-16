@@ -11,7 +11,7 @@ import {
 } from '@apollo/react-hooks';
 import { mockShowNotification } from '@commercetools-frontend/actions-global';
 import { CONTAINER } from '../../constants';
-import { generateContainers } from '../../test-util';
+import { generateContainers, generateCustomObject } from '../../test-util';
 import GetContainers from '../get-custom-objects.rest.graphql';
 import UpdateCustomObject from '../update-custom-object.rest.graphql';
 import CustomObjectForm from '../custom-object-form';
@@ -24,13 +24,7 @@ const formValues = {
   value: {}
 };
 const mocks = {
-  customObject: {
-    id: faker.random.uuid(),
-    version: faker.random.number({ min: 1, max: 10 }),
-    container,
-    key: faker.random.word(),
-    value: {}
-  },
+  customObject: generateCustomObject(),
   onComplete: jest.fn()
 };
 
