@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import last from 'lodash/last';
-import times from 'lodash/times';
 import faker from 'faker';
 import { setQuery, useQuery } from '@apollo/react-hooks';
 import { SelectInput } from '@commercetools-uikit/inputs';
@@ -11,21 +10,10 @@ import {
   ViewHeader
 } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
-import { generateContainer } from '../../test-util';
+import { generateContainers } from '../../test-util';
 import GetContainers from '../get-custom-objects.rest.graphql';
 import ContainerList from './container-list';
 import { DEFAULT_VARIABLES, FIELDS, PAGE_SIZE } from './constants';
-
-const generateContainers = (
-  total = faker.random.number({ min: 1, max: 10 })
-) => ({
-  customObjects: {
-    count: total,
-    total,
-    offset: 0,
-    results: times(total, generateContainer)
-  }
-});
 
 const mocks = {
   match: {

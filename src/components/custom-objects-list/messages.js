@@ -11,6 +11,11 @@ export default defineMessages({
     description: 'Custom object title result total',
     defaultMessage: '{total} results'
   },
+  createCustomObject: {
+    id: 'CustomObjectList.button.createCustomObject',
+    description: 'Label for the button to create a custom object',
+    defaultMessage: 'Create a custom object'
+  },
   container: {
     id: 'CustomObjectList.filter.container',
     description: 'The label for the container input',

@@ -11,6 +11,7 @@ import ContainerDetails from './components/container-details';
 import CustomObjectsList from './components/custom-objects-list';
 import { PERMISSIONS } from './constants';
 import { messages } from './messages';
+import CreateCustomObject from './components/create-custom-object/create-custom-object';
 
 const PageUnauthorized = () => (
   <MaintenancePageLayout
@@ -52,7 +53,11 @@ const ApplicationRoutes = ({ match }) => {
         path={`${match.path}/containers`}
         render={props => <ContainerList {...props} />}
       />
-      <Route component={CustomObjectsList} />
+      <Route
+        path={`${match.path}/new`}
+        render={props => <CreateCustomObject {...props} />}
+      />
+      <Route render={props => <CustomObjectsList {...props} />} />
     </Switch>
   );
 };

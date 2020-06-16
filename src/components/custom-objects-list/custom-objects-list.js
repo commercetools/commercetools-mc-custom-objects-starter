@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { useQuery } from '@apollo/react-hooks';
 import isObject from 'lodash/isObject';
 import map from 'lodash/map';
 import startCase from 'lodash/startCase';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
-import { FlatButton, SecondaryIconButton } from '@commercetools-uikit/buttons';
+import {
+  FlatButton,
+  SecondaryButton,
+  SecondaryIconButton
+} from '@commercetools-uikit/buttons';
 import Card from '@commercetools-uikit/card';
-import { CloseIcon, SearchIcon } from '@commercetools-uikit/icons';
+import {
+  CloseIcon,
+  PlusBoldIcon,
+  SearchIcon
+} from '@commercetools-uikit/icons';
 import { TextInput } from '@commercetools-uikit/inputs';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
@@ -21,7 +30,7 @@ import styles from './custom-objects-list.mod.css';
 
 export const ENTER = 'Enter';
 
-const CustomObjectsList = () => {
+const CustomObjectsList = ({ match }) => {
   const intl = useIntl();
   const [measurementCache, setMeasurementCache] = useState(null);
   const [container, setContainer] = useState('');
@@ -29,7 +38,7 @@ const CustomObjectsList = () => {
   const [direction, setDirection] = useState(SORT_OPTIONS.DESC);
   const [variables, setVariables] = useState({
     ...DEFAULT_VARIABLES,
-    sort: `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.ASC}`
+    sort: `${sort} ${direction}`
   });
   const { data, error } = useQuery(GetCustomObjects, {
     variables
@@ -145,6 +154,12 @@ const CustomObjectsList = () => {
               </Text.Body>
             )}
           </Spacings.Inline>
+          <SecondaryButton
+            iconLeft={<PlusBoldIcon />}
+            as="a"
+            href={`${match.url}/new`}
+            label={intl.formatMessage(messages.createCustomObject)}
+          />
         </Spacings.Inline>
         <Card theme="dark" type="flat">
           <Spacings.Inline scale="m" alignItems="center">
@@ -214,5 +229,10 @@ const CustomObjectsList = () => {
   );
 };
 CustomObjectsList.displayName = 'CustomObjectsList';
+CustomObjectsList.propTypes = {
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired
+  }).isRequired
+};
 
 export default CustomObjectsList;

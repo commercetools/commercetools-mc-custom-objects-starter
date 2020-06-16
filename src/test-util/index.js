@@ -20,6 +20,17 @@ export const generateContainer = () => ({
   lastModifiedAt: faker.date.recent()
 });
 
+export const generateContainers = (
+  total = faker.random.number({ min: 1, max: 10 })
+) => ({
+  customObjects: {
+    count: total,
+    total,
+    offset: 0,
+    results: times(total, generateContainer)
+  }
+});
+
 export const generateFormValues = () => ({
   key: kebabCase(faker.random.words()),
   attributes: times(3, () => ({

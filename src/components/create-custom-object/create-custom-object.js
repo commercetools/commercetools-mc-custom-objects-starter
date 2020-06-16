@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMutation } from '@apollo/react-hooks';
+import map from 'lodash/map';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useShowNotification } from '@commercetools-frontend/actions-global';
 import {
@@ -16,13 +17,14 @@ import {
 } from '@custom-applications-local/core/components';
 import { useShowSideNotification } from '@custom-applications-local/core/hooks';
 import { CONTAINER, ROOT_PATH } from '../../constants';
-import ContainerForm from '../container-form';
-import CreateContainerCustomObject from '../update-custom-object.rest.graphql';
 import messages from './messages';
+import GetContainers from '../get-custom-objects.rest.graphql';
+import CreateCustomObjectMutation from '../update-custom-object.rest.graphql';
+import CustomObjectForm from '../custom-object-form';
 
-const CreateContainer = ({ match, history }) => {
+const CreateCustomObject = ({ match, history }) => {
+  const mainRoute = `/${match.params.projectKey}/${ROOT_PATH}`;
   const intl = useIntl();
-  const mainRoute = `/${match.params.projectKey}/${ROOT_PATH}/containers`;
   const showSuccessNotification = useShowSideNotification(
     NOTIFICATION_KINDS_SIDE.success,
     messages.createSuccess
@@ -31,7 +33,11 @@ const CreateContainer = ({ match, history }) => {
     kind: NOTIFICATION_KINDS_SIDE.error,
     domain: DOMAINS.SIDE
   });
-  const [createContainer] = useMutation(CreateContainerCustomObject, {
+  const { data } = useQuery(GetContainers, {
+    variables: { limit: 500, offset: 0, where: `container="${CONTAINER}"` }
+  });
+
+  const [createCustomObject] = useMutation(CreateCustomObjectMutation, {
     onCompleted() {
       showSuccessNotification();
       history.push(mainRoute);
@@ -46,20 +52,17 @@ const CreateContainer = ({ match, history }) => {
   });
 
   function onSubmit(values) {
-    const { key, attributes } = values;
-
-    return createContainer({
+    return createCustomObject({
       variables: {
-        body: {
-          container: CONTAINER,
-          key,
-          value: {
-            attributes
-          }
-        }
+        body: values
       }
     });
   }
+
+  const { customObjects } = data || {};
+  const { results } = customObjects || {};
+
+  const containers = map(results, ({ id, key }) => ({ id, key }));
 
   return (
     <View>
@@ -74,14 +77,14 @@ const CreateContainer = ({ match, history }) => {
       />
       <TabContainer>
         <Spacings.Stack scale="m">
-          <ContainerForm onSubmit={onSubmit} />
+          <CustomObjectForm containers={containers} onSubmit={onSubmit} />
         </Spacings.Stack>
       </TabContainer>
     </View>
   );
 };
-CreateContainer.displayName = 'CreateContainer';
-CreateContainer.propTypes = {
+CreateCustomObject.displayName = 'CreateCustomObject';
+CreateCustomObject.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       projectKey: PropTypes.string.isRequired
@@ -92,4 +95,4 @@ CreateContainer.propTypes = {
   }).isRequired
 };
 
-export default CreateContainer;
+export default CreateCustomObject;

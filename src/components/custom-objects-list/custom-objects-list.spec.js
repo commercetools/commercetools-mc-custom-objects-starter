@@ -31,7 +31,13 @@ const generateCustomObjects = (
   }
 });
 
-const loadCustomObjectsList = () => shallow(<CustomObjectsList />);
+const mocks = {
+  match: {
+    url: faker.internet.url()
+  }
+};
+
+const loadCustomObjectsList = () => shallow(<CustomObjectsList {...mocks} />);
 
 describe('custom objects list', () => {
   beforeEach(() => {
@@ -43,7 +49,7 @@ describe('custom objects list', () => {
     expect(useQuery).toHaveBeenCalledWith(GetCustomObjects, {
       variables: {
         ...DEFAULT_VARIABLES,
-        sort: `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.ASC}`
+        sort: `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`
       }
     });
   });

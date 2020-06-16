@@ -6,7 +6,7 @@ import { mockShowNotification } from '@commercetools-frontend/actions-global';
 import { CONTAINER, ROOT_PATH } from '../../constants';
 import ContainerForm from '../container-form';
 import CreateContainer from './create-container';
-import CreateContainerCustomObject from './create-container.rest.graphql';
+import CreateContainerCustomObject from '../update-custom-object.rest.graphql';
 import messages from './messages';
 import { generateFormValues } from '../../test-util';
 
