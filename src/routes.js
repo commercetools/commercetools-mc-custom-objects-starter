@@ -9,9 +9,10 @@ import ContainerList from './components/container-list';
 import CreateContainer from './components/create-container';
 import ContainerDetails from './components/container-details';
 import CustomObjectsList from './components/custom-objects-list';
+import CreateCustomObject from './components/create-custom-object';
+import CustomObjectDetails from './components/custom-object-details';
 import { PERMISSIONS } from './constants';
 import { messages } from './messages';
-import CreateCustomObject from './components/create-custom-object/create-custom-object';
 
 const PageUnauthorized = () => (
   <MaintenancePageLayout
@@ -56,6 +57,10 @@ const ApplicationRoutes = ({ match }) => {
       <Route
         path={`${match.path}/new`}
         render={props => <CreateCustomObject {...props} />}
+      />
+      <Route
+        path={`${match.path}/:id`}
+        render={props => <CustomObjectDetails {...props} />}
       />
       <Route render={props => <CustomObjectsList {...props} />} />
     </Switch>

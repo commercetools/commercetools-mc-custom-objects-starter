@@ -62,7 +62,7 @@ const CreateCustomObject = ({ match, history }) => {
   const { customObjects } = data || {};
   const { results } = customObjects || {};
 
-  const containers = map(results, ({ id, key }) => ({ id, key }));
+  const containers = map(results, ({ id, key, value }) => ({ id, key, value }));
 
   return (
     <View>

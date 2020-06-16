@@ -4,14 +4,12 @@ import camelCase from 'lodash/camelCase';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useQuery } from '@apollo/react-hooks';
 import { PrimaryButton } from '@commercetools-uikit/buttons';
 import Card from '@commercetools-uikit/card';
 import Constraints from '@commercetools-uikit/constraints';
 import CollapsiblePanel from '@commercetools-uikit/collapsible-panel';
 import { SelectField, TextField } from '@commercetools-uikit/fields';
 import Spacings from '@commercetools-uikit/spacings';
-import GetContainer from '../get-custom-object.rest.graphql';
 import AttributeField from './attribute-field';
 import { getAttributeValues } from './util';
 import messages from './messages';
@@ -19,6 +17,7 @@ import styles from './form.mod.css';
 
 const Form = ({
   containers,
+  initialValues,
   values,
   touched,
   errors,
@@ -37,21 +36,18 @@ const Form = ({
     value: JSON.stringify(container)
   }));
 
-  const { refetch: getContainer } = useQuery(GetContainer, { skip: true });
-
   React.useEffect(() => {
-    async function getAttributes() {
-      if (values.container) {
-        const container = JSON.parse(values.container);
-        setFieldValue('attributes', null);
-        const { data } = await getContainer({ id: container.id });
-        const { attributes: results } = data.customObject.value;
-        setFieldValue('value', getAttributeValues(results));
-        setFieldValue('attributes', results);
-      }
+    if (values.container) {
+      const container = JSON.parse(values.container);
+      const attributes = container.value.attributes;
+      setFieldValue('attributes', null);
+      const value =
+        values.container !== initialValues.container
+          ? getAttributeValues(attributes)
+          : initialValues.value;
+      setFieldValue('value', value);
+      setFieldValue('attributes', attributes);
     }
-
-    getAttributes();
   }, [values.container]);
 
   return (
@@ -147,6 +143,12 @@ Form.propTypes = {
       key: PropTypes.string.isRequired
     }).isRequired
   ).isRequired,
+  initialValues: PropTypes.shape({
+    container: PropTypes.string,
+    key: PropTypes.string,
+    value: PropTypes.object,
+    attributes: PropTypes.array
+  }).isRequired,
   values: PropTypes.shape({
     container: PropTypes.string,
     key: PropTypes.string,

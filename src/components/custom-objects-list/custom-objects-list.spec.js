@@ -34,6 +34,9 @@ const generateCustomObjects = (
 const mocks = {
   match: {
     url: faker.internet.url()
+  },
+  history: {
+    push: jest.fn()
   }
 };
 

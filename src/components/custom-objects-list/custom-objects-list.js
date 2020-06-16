@@ -30,7 +30,7 @@ import styles from './custom-objects-list.mod.css';
 
 export const ENTER = 'Enter';
 
-const CustomObjectsList = ({ match }) => {
+const CustomObjectsList = ({ match, history }) => {
   const intl = useIntl();
   const [measurementCache, setMeasurementCache] = useState(null);
   const [container, setContainer] = useState('');
@@ -128,6 +128,10 @@ const CustomObjectsList = ({ match }) => {
       : clearContainerFilter();
   }
 
+  function handleRowClick(id) {
+    history.push(`${match.url}/${id}/general`);
+  }
+
   const { customObjects } = data || {};
   const { results, count, total, offset } = customObjects || {};
 
@@ -215,6 +219,9 @@ const CustomObjectsList = ({ match }) => {
             onSortChange={handleSortChange}
             next={next}
             previous={previous}
+            onRowClick={(event, rowIndex) =>
+              handleRowClick(results[rowIndex].id)
+            }
           />
         ) : (
           data && (
@@ -232,6 +239,9 @@ CustomObjectsList.displayName = 'CustomObjectsList';
 CustomObjectsList.propTypes = {
   match: PropTypes.shape({
     url: PropTypes.string.isRequired
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
   }).isRequired
 };
 
