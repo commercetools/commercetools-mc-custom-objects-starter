@@ -3,20 +3,17 @@ import { shallow } from 'enzyme';
 import faker from 'faker';
 import kebabCase from 'lodash/kebabCase';
 import { FormattedMessage } from 'react-intl';
-import {
-  getMutation,
-  setMutation,
-  setQuery,
-  useQuery
-} from '@apollo/react-hooks';
+import { getMutation, setMutation } from '@apollo/react-hooks';
 import { mockShowNotification } from '@commercetools-frontend/actions-global';
-import { CONTAINER, ROOT_PATH } from '../../constants';
-import { generateContainers } from '../../test-util';
-import GetContainers from '../get-custom-objects.rest.graphql';
+import { ROOT_PATH } from '../../constants';
+import * as ContainerContext from '../../context/container-context';
+import { generateContainerContext } from '../../test-util';
 import CreateCustomObjectMutation from '../update-custom-object.rest.graphql';
 import CreateCustomObject from './create-custom-object';
 import CustomObjectForm from '../custom-object-form';
 import messages from './messages';
+
+const containerContext = generateContainerContext();
 
 const formValues = {
   container: kebabCase(faker.random.words())
@@ -43,31 +40,11 @@ describe('create custom object', () => {
       .onSubmit(values);
 
   beforeEach(() => {
+    jest
+      .spyOn(ContainerContext, 'useContainerContext')
+      .mockImplementation(() => containerContext);
     mockShowNotification.mockClear();
     mocks.history.push.mockClear();
-  });
-
-  it('should retrieve list of containers', () => {
-    setQuery({ loading: true });
-    loadCreateCustomObject();
-    expect(useQuery).toHaveBeenCalledWith(GetContainers, {
-      variables: { limit: 500, offset: 0, where: `container="${CONTAINER}"` }
-    });
-  });
-
-  it('when containers query is loading, should pass empty containers to form', () => {
-    setQuery({ loading: true });
-    const wrapper = loadCreateCustomObject();
-    expect(wrapper.find(CustomObjectForm).prop('containers')).toEqual([]);
-  });
-
-  it('when containers query returns data, should pass containers to form', () => {
-    const data = generateContainers();
-    setQuery({ data });
-    const wrapper = loadCreateCustomObject();
-    expect(wrapper.find(CustomObjectForm).prop('containers').length).toEqual(
-      data.customObjects.results.length
-    );
   });
 
   it('when form submitted, should create container with form values', () => {

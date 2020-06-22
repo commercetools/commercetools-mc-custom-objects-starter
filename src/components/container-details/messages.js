@@ -4,7 +4,7 @@ export default defineMessages({
   backButton: {
     id: 'ContainerDetails.button.back',
     description: 'Label for back button',
-    defaultMessage: 'To Containers list'
+    defaultMessage: 'To Container Schemas list'
   },
   generalTab: {
     id: 'ContainerDetails.tabs.general',

@@ -6,42 +6,37 @@ import isObject from 'lodash/isObject';
 import map from 'lodash/map';
 import startCase from 'lodash/startCase';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
-import {
-  FlatButton,
-  SecondaryButton,
-  SecondaryIconButton
-} from '@commercetools-uikit/buttons';
+import { LinkButton, SecondaryButton } from '@commercetools-uikit/buttons';
 import Card from '@commercetools-uikit/card';
-import {
-  CloseIcon,
-  PlusBoldIcon,
-  SearchIcon
-} from '@commercetools-uikit/icons';
-import { TextInput } from '@commercetools-uikit/inputs';
+import Constraints from '@commercetools-uikit/constraints';
+import { PlusBoldIcon } from '@commercetools-uikit/icons';
+import { SelectInput } from '@commercetools-uikit/inputs';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import { PaginatedTable } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
+import { useContainerContext } from '../../context';
 import GetCustomObjects from '../get-custom-objects.rest.graphql';
 import { DATE_FORMAT, DEFAULT_VARIABLES } from './constants';
 import { columnDefinitions, COLUMN_KEYS } from './column-definitions';
 import messages from './messages';
 import styles from './custom-objects-list.mod.css';
 
-export const ENTER = 'Enter';
-
 const CustomObjectsList = ({ match, history }) => {
   const intl = useIntl();
+  const { hasContainers, containers, where } = useContainerContext();
   const [measurementCache, setMeasurementCache] = useState(null);
   const [container, setContainer] = useState('');
   const [sort, setSort] = useState(COLUMN_KEYS.MODIFIED);
   const [direction, setDirection] = useState(SORT_OPTIONS.DESC);
   const [variables, setVariables] = useState({
     ...DEFAULT_VARIABLES,
-    sort: `${sort} ${direction}`
+    sort: `${sort} ${direction}`,
+    where
   });
   const { data, error } = useQuery(GetCustomObjects, {
-    variables
+    variables,
+    skip: !hasContainers
   });
 
   function renderItem(results, { rowIndex, columnKey }) {
@@ -113,19 +108,11 @@ const CustomObjectsList = ({ match, history }) => {
     });
   }
 
-  function clearContainerFilter() {
-    const { where, ...rest } = variables;
-    clearMeasurementCache();
-    setContainer('');
-    setVariables(rest);
-  }
-
-  function filterByContainer() {
-    return container
-      ? getCustomObjects({
-          where: `container="${container}"`
-        })
-      : clearContainerFilter();
+  function filterByContainer(event) {
+    const { value } = event.target;
+    setContainer(value);
+    const filter = value ? `container="${value}"` : where;
+    getCustomObjects({ where: filter });
   }
 
   function handleRowClick(id) {
@@ -134,6 +121,11 @@ const CustomObjectsList = ({ match, history }) => {
 
   const { customObjects } = data || {};
   const { results, count, total, offset } = customObjects || {};
+
+  const containerOptions = map(containers, ({ key }) => ({
+    label: key,
+    value: key
+  }));
 
   return (
     <Spacings.Inset scale="m">
@@ -158,47 +150,46 @@ const CustomObjectsList = ({ match, history }) => {
               </Text.Body>
             )}
           </Spacings.Inline>
-          <SecondaryButton
-            iconLeft={<PlusBoldIcon />}
-            as="a"
-            href={`${match.url}/new`}
-            label={intl.formatMessage(messages.createCustomObject)}
-          />
+          {hasContainers && (
+            <SecondaryButton
+              data-testid="create-custom-object"
+              iconLeft={<PlusBoldIcon />}
+              as="a"
+              href={`${match.url}/new`}
+              label={intl.formatMessage(messages.createCustomObject)}
+            />
+          )}
         </Spacings.Inline>
-        <Card theme="dark" type="flat">
-          <Spacings.Inline scale="m" alignItems="center">
-            <Text.Body intlMessage={messages.container} />
-            <div
-              data-testid="container-filter"
-              className={styles.iconInput}
-              onKeyPress={event =>
-                event.key === ENTER ? filterByContainer() : null
-              }
-            >
-              <TextInput
-                data-testid="container-filter-input"
-                onChange={event => setContainer(event.target.value)}
-                value={container}
-              />
-              <div className={styles.icon}>
-                <SecondaryIconButton
-                  data-testid="container-filter-search"
-                  label={intl.formatMessage(messages.filter)}
-                  icon={<SearchIcon />}
-                  onClick={filterByContainer}
+        {hasContainers && (
+          <Card theme="dark" type="flat">
+            <Spacings.Inline scale="m" alignItems="center">
+              <Text.Body intlMessage={messages.filter} />
+              <Constraints.Horizontal constraint="m">
+                <SelectInput
+                  data-testid="container-filter"
+                  name="container"
+                  placeholder={intl.formatMessage(messages.container)}
+                  isClearable
+                  value={container}
+                  options={containerOptions}
+                  onChange={filterByContainer}
                 />
-              </div>
-            </div>
-            {container && (
-              <FlatButton
-                data-testid="container-filter-clear"
-                label={intl.formatMessage(messages.clear)}
-                icon={<CloseIcon size="small" />}
-                onClick={clearContainerFilter}
-              />
-            )}
+              </Constraints.Horizontal>
+            </Spacings.Inline>
+          </Card>
+        )}
+        {!hasContainers && (
+          <Spacings.Inline scale="xs" data-testid="no-containers-error">
+            <Text.Body
+              data-testid="loading-error"
+              intlMessage={messages.errorNoContainers}
+            />
+            <LinkButton
+              to={`${match.url}/containers/new`}
+              label={intl.formatMessage(messages.errorCreateContainerLink)}
+            />
           </Spacings.Inline>
-        </Card>
+        )}
         {error && (
           <Text.Body
             data-testid="loading-error"

@@ -1,5 +1,6 @@
 import faker from 'faker';
 import kebabCase from 'lodash/kebabCase';
+import map from 'lodash/map';
 import times from 'lodash/times';
 import { CONTAINER } from '../constants';
 import { TYPES } from '../components/container-form/constants';
@@ -48,3 +49,14 @@ export const generateCustomObject = () => ({
   key: faker.random.word(),
   value: {}
 });
+
+export const generateContainerContext = () => {
+  const containers = generateContainers(2).customObjects.results;
+  return {
+    hasContainers: true,
+    containers,
+    where: `container in (${map(containers, ({ key }) => `"${key}"`).join(
+      ','
+    )})`
+  };
+};

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import map from 'lodash/map';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useShowNotification } from '@commercetools-frontend/actions-global';
 import {
@@ -16,15 +15,16 @@ import {
   ViewHeader
 } from '@custom-applications-local/core/components';
 import { useShowSideNotification } from '@custom-applications-local/core/hooks';
-import { CONTAINER, ROOT_PATH } from '../../constants';
+import { useContainerContext } from '../../context';
+import { ROOT_PATH } from '../../constants';
 import messages from './messages';
-import GetContainers from '../get-custom-objects.rest.graphql';
 import CreateCustomObjectMutation from '../update-custom-object.rest.graphql';
 import CustomObjectForm from '../custom-object-form';
 
 const CreateCustomObject = ({ match, history }) => {
   const mainRoute = `/${match.params.projectKey}/${ROOT_PATH}`;
   const intl = useIntl();
+  const { containers } = useContainerContext();
   const showSuccessNotification = useShowSideNotification(
     NOTIFICATION_KINDS_SIDE.success,
     messages.createSuccess
@@ -32,9 +32,6 @@ const CreateCustomObject = ({ match, history }) => {
   const showErrorNotification = useShowNotification({
     kind: NOTIFICATION_KINDS_SIDE.error,
     domain: DOMAINS.SIDE
-  });
-  const { data } = useQuery(GetContainers, {
-    variables: { limit: 500, offset: 0, where: `container="${CONTAINER}"` }
   });
 
   const [createCustomObject] = useMutation(CreateCustomObjectMutation, {
@@ -58,11 +55,6 @@ const CreateCustomObject = ({ match, history }) => {
       }
     });
   }
-
-  const { customObjects } = data || {};
-  const { results } = customObjects || {};
-
-  const containers = map(results, ({ id, key, value }) => ({ id, key, value }));
 
   return (
     <View>

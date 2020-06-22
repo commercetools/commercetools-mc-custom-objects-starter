@@ -4,7 +4,7 @@ export default defineMessages({
   title: {
     id: 'ContainerList.title',
     description: 'The page title of the container list view',
-    defaultMessage: 'Container Manager'
+    defaultMessage: 'Container Schema Manager'
   },
   titleResults: {
     id: 'ContainerList.title.results',
@@ -14,7 +14,7 @@ export default defineMessages({
   createContainer: {
     id: 'ContainerList.button.createContainer',
     description: 'Label for the button to create an container',
-    defaultMessage: 'Create container'
+    defaultMessage: 'Create container schema'
   },
   errorLoading: {
     id: 'ContainerList.error.loading',
@@ -24,7 +24,7 @@ export default defineMessages({
   errorNoResults: {
     id: 'ContainerList.error.noResults',
     description: 'Error title when no results are returned',
-    defaultMessage: 'No containers found on this project.'
+    defaultMessage: 'No container schemas found on this project.'
   },
   attributesLabel: {
     id: 'ContainerList.label.attributes',

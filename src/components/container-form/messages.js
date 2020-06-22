@@ -9,7 +9,7 @@ export default defineMessages({
   containerInformationTitle: {
     id: 'Container.form.panel.container.title',
     description: 'Title for container information panel',
-    defaultMessage: 'Container Information'
+    defaultMessage: 'Schema Information'
   },
   keyTitle: {
     id: 'Container.form.key.title',

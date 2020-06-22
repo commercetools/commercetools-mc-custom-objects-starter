@@ -3,26 +3,23 @@ import { shallow } from 'enzyme';
 import faker from 'faker';
 import kebabCase from 'lodash/kebabCase';
 import { FormattedMessage } from 'react-intl';
-import {
-  getMutation,
-  setMutation,
-  setQuery,
-  useQuery
-} from '@apollo/react-hooks';
+import { getMutation, setMutation } from '@apollo/react-hooks';
 import { mockShowNotification } from '@commercetools-frontend/actions-global';
-import { CONTAINER } from '../../constants';
-import { generateContainers, generateCustomObject } from '../../test-util';
-import GetContainers from '../get-custom-objects.rest.graphql';
+import * as ContainerContext from '../../context/container-context';
+import { generateContainerContext, generateCustomObject } from '../../test-util';
 import UpdateCustomObject from '../update-custom-object.rest.graphql';
 import CustomObjectForm from '../custom-object-form';
 import EditCustomObject from './edit-custom-object';
 import messages from './messages';
 
+const containerContext = generateContainerContext();
 const container = kebabCase(faker.random.words());
+
 const formValues = {
   container,
   value: {}
 };
+
 const mocks = {
   customObject: generateCustomObject(),
   onComplete: jest.fn()
@@ -38,30 +35,10 @@ describe('edit custom object', () => {
       .onSubmit(values);
 
   beforeEach(() => {
+    jest
+      .spyOn(ContainerContext, 'useContainerContext')
+      .mockImplementation(() => containerContext);
     mockShowNotification.mockClear();
-  });
-
-  it('should retrieve list of containers', () => {
-    setQuery({ loading: true });
-    loadEditCustomObject();
-    expect(useQuery).toHaveBeenCalledWith(GetContainers, {
-      variables: { limit: 500, offset: 0, where: `container="${CONTAINER}"` }
-    });
-  });
-
-  it('when containers query is loading, should not display form', () => {
-    setQuery({ loading: true });
-    const wrapper = loadEditCustomObject();
-    expect(wrapper.find(CustomObjectForm).exists()).toEqual(false);
-  });
-
-  it('when containers query returns data, should pass containers to form', () => {
-    const data = generateContainers();
-    setQuery({ data });
-    const wrapper = loadEditCustomObject();
-    expect(wrapper.find(CustomObjectForm).prop('containers').length).toEqual(
-      data.customObjects.results.length
-    );
   });
 
   it('when form submitted, should edit container with form values', () => {

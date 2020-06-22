@@ -24,12 +24,22 @@ export default defineMessages({
   filter: {
     id: 'CustomObjectList.filter.label',
     description: 'Label for filter',
-    defaultMessage: 'Filter'
+    defaultMessage: 'Filter:'
   },
   clear: {
     id: 'CustomObjectList.clear.label',
     description: 'Label for clear',
     defaultMessage: 'Clear'
+  },
+  errorNoContainers: {
+    id: 'CustomObjectList.error.noContainers',
+    description: 'Error title when no containers exist on project',
+    defaultMessage: 'No container schemas found on this project.'
+  },
+  errorCreateContainerLink: {
+    id: 'CustomObjectList.error.noContainers.link',
+    description: 'Link title when no containers exist on project',
+    defaultMessage: 'Create a container.'
   },
   errorLoading: {
     id: 'CustomObjectList.error.loading',

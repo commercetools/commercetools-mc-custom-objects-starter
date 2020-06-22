@@ -66,6 +66,8 @@
   "CustomObjectList.column.lastModified": "",
   "CustomObjectList.column.value": "",
   "CustomObjectList.error.loading": "",
+  "CustomObjectList.error.noContainers": "",
+  "CustomObjectList.error.noContainers.link": "",
   "CustomObjectList.error.noResults": "",
   "CustomObjectList.filter.container": "",
   "CustomObjectList.filter.label": "",

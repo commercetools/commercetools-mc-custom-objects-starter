@@ -8,10 +8,14 @@ import { useQuery, setQuery } from '@apollo/react-hooks';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import { PaginatedTable } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
-import CustomObjectsList, { ENTER } from './custom-objects-list';
+import { generateContainerContext } from '../../test-util';
+import * as ContainerContext from '../../context/container-context';
 import GetCustomObjects from '../get-custom-objects.rest.graphql';
+import CustomObjectsList from './custom-objects-list';
 import { DEFAULT_VARIABLES, PAGE_SIZE } from './constants';
 import { COLUMN_KEYS } from './column-definitions';
+
+const containerContext = generateContainerContext();
 
 const generateCustomObject = () => ({
   container: faker.random.words(),
@@ -40,9 +44,19 @@ const mocks = {
   }
 };
 
+const createButton = '[data-testid="create-custom-object"]';
+const filter = '[data-testid="container-filter"]';
+const noContainerError = '[data-testid="no-containers-error"]';
+
 const loadCustomObjectsList = () => shallow(<CustomObjectsList {...mocks} />);
 
 describe('custom objects list', () => {
+  beforeAll(() => {
+    jest
+      .spyOn(ContainerContext, 'useContainerContext')
+      .mockImplementation(() => containerContext);
+  });
+
   beforeEach(() => {
     useQuery.mockClear();
   });
@@ -52,8 +66,10 @@ describe('custom objects list', () => {
     expect(useQuery).toHaveBeenCalledWith(GetCustomObjects, {
       variables: {
         ...DEFAULT_VARIABLES,
-        sort: `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`
-      }
+        sort: `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`,
+        where: containerContext.where
+      },
+      skip: false
     });
   });
 
@@ -225,91 +241,30 @@ describe('custom objects list', () => {
   });
 
   describe('container filter', () => {
-    const filter = "[data-testid='container-filter']";
-    const input = "[data-testid='container-filter-input']";
-    const search = "[data-testid='container-filter-search']";
-    const clear = "[data-testid='container-filter-clear']";
-
     const value = 'container-search';
-
     let wrapper;
+
     beforeEach(() => {
       setQuery({ data: generateCustomObjects() });
       wrapper = loadCustomObjectsList();
     });
 
-    it('when search button clicked and container input has value, should query for custom objects in container', () => {
+    it('when container selected, should query for custom objects in selected container', () => {
       wrapper
-        .find(input)
+        .find(filter)
         .props()
         .onChange({ target: { value } });
-      wrapper
-        .find(search)
-        .props()
-        .onClick();
       const result = last(useQuery.mock.calls)[1];
       expect(result.variables.where).toEqual(`container="${value}"`);
     });
 
-    it('when search button clicked and container input has no value, should query for all custom objects', () => {
-      wrapper
-        .find(search)
-        .props()
-        .onClick();
-      const result = last(useQuery.mock.calls)[1];
-      expect(result.variables.where).toBeUndefined();
-    });
-
-    it('when enter pressed and container input has value, should query for custom objects in container', () => {
-      wrapper
-        .find(input)
-        .props()
-        .onChange({ target: { value } });
+    it('when container cleared, should query for custom objects in all managed containers', () => {
       wrapper
         .find(filter)
         .props()
-        .onKeyPress({ key: ENTER });
+        .onChange({ target: { value: '' } });
       const result = last(useQuery.mock.calls)[1];
-      expect(result.variables.where).toEqual(`container="${value}"`);
-    });
-
-    it('when enter pressed and container input has no value, should query for all custom objects', () => {
-      wrapper
-        .find(filter)
-        .props()
-        .onKeyPress({ key: ENTER });
-      const result = last(useQuery.mock.calls)[1];
-      expect(result.variables.where).toBeUndefined();
-    });
-
-    it('when non-enter key pressed, should not query for custom objects', () => {
-      wrapper
-        .find(filter)
-        .props()
-        .onKeyPress({ key: 'Tab' });
-      expect(useQuery).toHaveBeenCalledTimes(1);
-    });
-
-    describe('when clear button clicked', () => {
-      beforeEach(() => {
-        wrapper
-          .find(input)
-          .props()
-          .onChange({ target: { value } });
-        wrapper
-          .find(clear)
-          .props()
-          .onClick();
-      });
-
-      it('should query for all custom objects', () => {
-        const result = last(useQuery.mock.calls)[1];
-        expect(result.variables.where).toBeUndefined();
-      });
-
-      it('should reset input value', () => {
-        expect(wrapper.find(input).prop('value')).toEqual('');
-      });
+      expect(result.variables.where).toEqual(containerContext.where);
     });
   });
 
@@ -349,5 +304,69 @@ describe('custom objects list', () => {
     expect(result.variables.sort).toEqual(
       `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`
     );
+  });
+
+  it('when row clicked, should open custom object details', () => {
+    const data = generateCustomObjects(1);
+    const customObject = data.customObjects.results[0];
+    setQuery({ data });
+    const wrapper = loadCustomObjectsList();
+    wrapper
+      .find(PaginatedTable)
+      .props()
+      .onRowClick({}, 0);
+    expect(mocks.history.push).toHaveBeenCalledWith(
+      `${mocks.match.url}/${customObject.id}/general`
+    );
+  });
+
+  describe('when container context has containers', () => {
+    let wrapper;
+
+    beforeEach(() => {
+      wrapper = loadCustomObjectsList();
+    });
+
+    it('should display container filter', () => {
+      expect(wrapper.find(filter).exists()).toEqual(true);
+    });
+
+    it('should display create custom object button', () => {
+      expect(wrapper.find(createButton).exists()).toEqual(true);
+    });
+
+    it('should not display no container error', () => {
+      expect(wrapper.find(noContainerError).exists()).toEqual(false);
+    });
+  });
+
+  describe('when container context has no containers', () => {
+    let wrapper;
+
+    beforeAll(() => {
+      jest
+        .spyOn(ContainerContext, 'useContainerContext')
+        .mockImplementation(() => ({
+          hasContainers: false,
+          containers: [],
+          where: ''
+        }));
+    });
+
+    beforeEach(() => {
+      wrapper = loadCustomObjectsList();
+    });
+
+    it('should not display container filter', () => {
+      expect(wrapper.find(filter).exists()).toEqual(false);
+    });
+
+    it('should not display create custom object button', () => {
+      expect(wrapper.find(createButton).exists()).toEqual(false);
+    });
+
+    it('should display no container error', () => {
+      expect(wrapper.find(noContainerError).exists()).toEqual(true);
+    });
   });
 });
