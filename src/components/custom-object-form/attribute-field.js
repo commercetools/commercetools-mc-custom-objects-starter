@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import { useIntl } from 'react-intl';
 import { FieldArray } from 'formik';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import {
   SecondaryButton,
   SecondaryIconButton
@@ -32,6 +33,9 @@ const AttributeField = ({
   reference
 }) => {
   const intl = useIntl();
+  const { project } = useApplicationContext();
+  const { currencies } = project;
+
   return (
     <>
       {isSet ? (
@@ -51,7 +55,9 @@ const AttributeField = ({
                   data-testid="add-attribute"
                   iconLeft={<PlusBoldIcon />}
                   label={intl.formatMessage(messages.addLabel)}
-                  onClick={() => push(getValue(type, attributes))}
+                  onClick={() =>
+                    push(getValue(type, attributes, reference, currencies))
+                  }
                 />
               </Constraints.Horizontal>
               {value.map((val, index) => (

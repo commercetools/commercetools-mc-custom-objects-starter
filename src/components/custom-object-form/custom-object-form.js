@@ -4,16 +4,23 @@ import find from 'lodash/find';
 import { useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { getAttributeValidation } from './util';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
+import { getAttributeValidation, getAttributeValues } from './util';
 import Form from './form';
 import messages from './messages';
 
-const initializeCustomObjectValues = (customObject, containers) => {
+const initializeCustomObjectValues = (customObject, containers, currencies) => {
   const container = find(containers, { key: customObject.container });
+  const attributes = container.value.attributes;
   return {
     ...customObject,
     container: JSON.stringify(container),
-    attributes: container.value.attributes
+    attributes,
+    // combining empty attribute values with saved values in case schema changed
+    value: {
+      ...getAttributeValues(attributes, currencies),
+      ...customObject.value
+    }
   };
 };
 
@@ -25,9 +32,11 @@ const initializeEmptyValues = () => ({
 
 const CustomObjectForm = ({ containers, customObject, onSubmit }) => {
   const intl = useIntl();
+  const { project } = useApplicationContext();
+  const { currencies } = project;
 
   const initialValues = customObject
-    ? initializeCustomObjectValues(customObject, containers)
+    ? initializeCustomObjectValues(customObject, containers, currencies)
     : initializeEmptyValues();
 
   const stringSchema = yup.string().required({

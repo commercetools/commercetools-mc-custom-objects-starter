@@ -4,6 +4,7 @@ import camelCase from 'lodash/camelCase';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { PrimaryButton } from '@commercetools-uikit/buttons';
 import Card from '@commercetools-uikit/card';
 import Constraints from '@commercetools-uikit/constraints';
@@ -30,6 +31,8 @@ const Form = ({
   setFieldValue
 }) => {
   const intl = useIntl();
+  const { project } = useApplicationContext();
+  const { currencies } = project;
 
   const containerOptions = map(containers, container => ({
     label: container.key,
@@ -43,7 +46,7 @@ const Form = ({
       setFieldValue('attributes', null);
       const value =
         values.container !== initialValues.container
-          ? getAttributeValues(attributes)
+          ? getAttributeValues(attributes, currencies)
           : initialValues.value;
       setFieldValue('value', value);
       setFieldValue('attributes', attributes);

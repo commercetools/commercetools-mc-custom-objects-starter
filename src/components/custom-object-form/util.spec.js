@@ -1,6 +1,7 @@
 import React from 'react';
 import faker from 'faker';
 import camelCase from 'lodash/camelCase';
+import times from 'lodash/times';
 import * as yup from 'yup';
 import { FormattedMessage } from 'react-intl';
 import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
@@ -43,6 +44,21 @@ describe('attribute utilities', () => {
       ];
       const values = { [camelCase(name)]: false };
       expect(getAttributeValues(attributes)).toEqual(values);
+    });
+
+    it('when attribute is a money type, should return empty amount and first currency code as initial value', () => {
+      const currencies = times(2, () => faker.finance.currencyCode());
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.Money
+        }
+      ];
+      const values = {
+        [camelCase(name)]: { amount: '', currencyCode: currencies[0] }
+      };
+      expect(getAttributeValues(attributes, currencies)).toEqual(values);
     });
 
     // commercetools reference type: https://docs.commercetools.com/http-api-types#references
@@ -136,6 +152,25 @@ describe('attribute utilities', () => {
         }
       ];
       const validation = { [camelCase(name)]: yup.boolean() };
+      expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
+        JSON.stringify(validation)
+      );
+    });
+
+    it('when attribute is a money type, should return yup object as validation', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.Money
+        }
+      ];
+      const validation = {
+        [camelCase(name)]: yup.object({
+          amount: yup.string(),
+          currencyCode: yup.string()
+        })
+      };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
         JSON.stringify(validation)
       );

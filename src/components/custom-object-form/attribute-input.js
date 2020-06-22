@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import camelCase from 'lodash/camelCase';
 import get from 'lodash/get';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import {
   CheckboxInput,
   TextInput,
-  NumberInput
+  NumberInput,
+  MoneyInput
 } from '@commercetools-uikit/inputs';
 import { ErrorMessage } from '@commercetools-uikit/messages';
 import Spacings from '@commercetools-uikit/spacings';
@@ -24,6 +26,9 @@ const AttributeInput = ({
   onBlur,
   attributes
 }) => {
+  const { project } = useApplicationContext();
+  const { currencies } = project;
+
   switch (type) {
     case TYPES.String:
       return (
@@ -75,6 +80,26 @@ const AttributeInput = ({
           </CheckboxInput>
           {touched && errors && (
             <ErrorMessage data-testid="field-error">{errors}</ErrorMessage>
+          )}
+        </Spacings.Stack>
+      );
+
+    case TYPES.Money:
+      return (
+        <Spacings.Stack scale="xs">
+          <MoneyInput
+            data-testid="field-type-money"
+            currencies={currencies}
+            name={name}
+            value={value}
+            hasError={!!(touched && errors)}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+          {touched && errors && (
+            <ErrorMessage data-testid="field-error">
+              {get(errors, 'amount')}
+            </ErrorMessage>
           )}
         </Spacings.Stack>
       );

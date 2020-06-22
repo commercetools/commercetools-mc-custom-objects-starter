@@ -25,6 +25,10 @@ const typeOptions = [
     value: TYPES.Boolean
   },
   {
+    label: <FormattedMessage {...messages.moneyLabel} />,
+    value: TYPES.Money
+  },
+  {
     label: <FormattedMessage {...messages.objectLabel} />,
     value: TYPES.Object
   },

@@ -2,13 +2,19 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import faker from 'faker';
 import camelCase from 'lodash/camelCase';
+import times from 'lodash/times';
 import { FormattedMessage } from 'react-intl';
+import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
 import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
 import AttributeInput from './attribute-input';
 import messages from './messages';
 import { generateContainer } from '../../test-util';
 import { getValue } from './util';
 import AttributeField from './attribute-field';
+
+const project = {
+  currencies: times(2, () => faker.finance.currencyCode())
+};
 
 const mocks = {
   name: camelCase(faker.random.words()),
@@ -32,6 +38,12 @@ const loadAttributeInput = (type, value, touched = false, errors, attributes) =>
   );
 
 describe('attribute input', () => {
+  beforeAll(() => {
+    jest
+      .spyOn(ApplicationContext, 'useApplicationContext')
+      .mockImplementation(() => ({ project }));
+  });
+
   describe('string type', () => {
     const input = '[data-testid="field-type-string"]';
     const value = faker.random.word();
@@ -227,6 +239,90 @@ describe('attribute input', () => {
     });
   });
 
+  describe('money type', () => {
+    const input = '[data-testid="field-type-money"]';
+    const value = {
+      amount: JSON.stringify(faker.random.number({ min: 1000, max: 2000 })),
+      currencyCode: faker.random.arrayElement(project.currencies)
+    };
+
+    it('should display money input', () => {
+      const wrapper = loadAttributeInput(TYPES.Money, value);
+      expect(wrapper.find(input).exists()).toEqual(true);
+    });
+
+    describe('when currency input touched without error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput(TYPES.Money, value, {
+          currencyCode: true
+        });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when amount input touched without error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput(TYPES.Money, value, { amount: true });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input not touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput(TYPES.Money, value, undefined, {
+          amount: <FormattedMessage {...messages.requiredFieldError} />
+        });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when amount input touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput(
+          TYPES.Money,
+          value,
+          { amount: true },
+          {
+            amount: <FormattedMessage {...messages.requiredFieldError} />
+          }
+        );
+      });
+
+      it('input should have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(true);
+      });
+
+      it('should display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(true);
+      });
+    });
+  });
+
   describe('reference type', () => {
     const input = '[data-testid="field-type-reference"]';
     const value = {
@@ -300,7 +396,12 @@ describe('attribute input', () => {
   describe('object type', () => {
     const container = generateContainer();
     const { attributes } = container.value;
-    const value = getValue(TYPES.Object, attributes);
+    const value = getValue(
+      TYPES.Object,
+      attributes,
+      faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+      project.currencies
+    );
 
     it('should display attribute fields', () => {
       const wrapper = loadAttributeInput(

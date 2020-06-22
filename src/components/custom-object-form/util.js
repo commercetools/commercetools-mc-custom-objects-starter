@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { FormattedMessage } from 'react-intl';
 import { TYPES } from '../container-form/constants';
 
-export const getValue = (type, attributes, reference) => {
+export const getValue = (type, attributes, reference, currencies) => {
   switch (type) {
     case TYPES.String:
     case TYPES.Number:
@@ -14,6 +14,12 @@ export const getValue = (type, attributes, reference) => {
     case TYPES.Boolean:
       return false;
 
+    case TYPES.Money:
+      return {
+        amount: '',
+        currencyCode: currencies[0]
+      };
+
     case TYPES.Reference:
       return {
         typeId: reference,
@@ -21,24 +27,36 @@ export const getValue = (type, attributes, reference) => {
       };
 
     case TYPES.Object:
-      return getAttributeValues(attributes); // eslint-disable-line no-use-before-define
+      return getAttributeValues(attributes, currencies); // eslint-disable-line no-use-before-define
 
     default:
       return null;
   }
 };
 
-const getInitialValueByType = (type, isSet, attributes, reference) =>
+const getInitialValueByType = (
+  type,
+  isSet,
+  attributes,
+  reference,
+  currencies
+) =>
   isSet
-    ? [getValue(type, attributes, reference)]
-    : getValue(type, attributes, reference);
+    ? [getValue(type, attributes, reference, currencies)]
+    : getValue(type, attributes, reference, currencies);
 
-export const getAttributeValues = attributes =>
+export const getAttributeValues = (attributes, currencies) =>
   reduce(
     attributes,
     (value, { name, type, set, attributes: nested, reference }) => ({
       ...value,
-      [camelCase(name)]: getInitialValueByType(type, set, nested, reference)
+      [camelCase(name)]: getInitialValueByType(
+        type,
+        set,
+        nested,
+        reference,
+        currencies
+      )
     }),
     {}
   );
@@ -69,6 +87,12 @@ const getValidationByType = (attribute, messages) => {
 
     case TYPES.Boolean:
       return getValidation(attribute, 'boolean', messages);
+
+    case TYPES.Money:
+      return yup.object({
+        amount: getValidation(attribute, 'string', messages),
+        currencyCode: getValidation(attribute, 'string', messages)
+      });
 
     case TYPES.Reference:
       return yup.object({

@@ -2,12 +2,18 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import faker from 'faker';
 import camelCase from 'lodash/camelCase';
+import times from 'lodash/times';
 import { FieldArray } from 'formik';
+import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
 import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
 import AttributeField from './attribute-field';
 import { generateContainer } from '../../test-util';
 import { getValue } from './util';
 import AttributeInput from './attribute-input';
+
+const project = {
+  currencies: times(2, () => faker.finance.currencyCode())
+};
 
 const container = generateContainer();
 
@@ -30,6 +36,12 @@ const loadAttributeField = isSet => {
 };
 
 describe('attribute field', () => {
+  beforeAll(() => {
+    jest
+      .spyOn(ApplicationContext, 'useApplicationContext')
+      .mockImplementation(() => ({ project }));
+  });
+
   describe('when attribute is a set', () => {
     const fieldArrayMocks = {
       push: jest.fn(),
@@ -67,7 +79,12 @@ describe('attribute field', () => {
         .props()
         .onClick();
       expect(fieldArrayMocks.push).toHaveBeenCalledWith(
-        getValue(mocks.type, mocks.attributes)
+        getValue(
+          mocks.type,
+          mocks.attributes,
+          mocks.reference,
+          project.currencies
+        )
       );
     });
 

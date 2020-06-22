@@ -1,10 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import faker from 'faker';
+import times from 'lodash/times';
+import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
 import { mockUseEffect } from '@custom-applications-local/core/test-util';
 import { generateContainers } from '../../test-util';
 import Form from './form';
 import { getAttributeValues } from './util';
+
+const project = {
+  currencies: times(2, () => faker.finance.currencyCode())
+};
 
 const containers = generateContainers(2);
 const emptyValues = {
@@ -36,6 +42,9 @@ const loadForm = (initialValues = emptyValues, values = emptyValues) =>
 describe('form', () => {
   beforeAll(() => {
     jest.spyOn(React, 'useEffect').mockImplementation(mockUseEffect);
+    jest
+      .spyOn(ApplicationContext, 'useApplicationContext')
+      .mockImplementation(() => ({ project }));
   });
 
   beforeEach(() => {
@@ -81,7 +90,7 @@ describe('form', () => {
     it('should set custom object value form value based on selected container', () => {
       expect(mocks.setFieldValue).toHaveBeenCalledWith(
         'value',
-        getAttributeValues(attributes)
+        getAttributeValues(attributes, project.currencies)
       );
     });
   });
@@ -115,7 +124,7 @@ describe('form', () => {
     it('should set custom object value form value based on selected container', () => {
       expect(mocks.setFieldValue).toHaveBeenCalledWith(
         'value',
-        getAttributeValues(attributes)
+        getAttributeValues(attributes, project.currencies)
       );
     });
   });

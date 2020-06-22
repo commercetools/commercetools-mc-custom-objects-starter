@@ -2,6 +2,7 @@ export const TYPES = {
   String: 'String',
   Number: 'Number',
   Boolean: 'Boolean',
+  Money: 'Money',
   Object: 'Object',
   Reference: 'Reference'
 };

@@ -56,6 +56,11 @@ export default defineMessages({
     description: 'Label for attributes boolean value',
     defaultMessage: 'Boolean'
   },
+  moneyLabel: {
+    id: 'Container.form.type.label.money',
+    description: 'Label for attributes money value',
+    defaultMessage: 'Money'
+  },
   objectLabel: {
     id: 'Container.form.type.label.object',
     description: 'Label for attributes object value',
