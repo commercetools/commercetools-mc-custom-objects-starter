@@ -25,7 +25,7 @@ const ReferenceAttribute = ({
     <div className={styles.nested}>
       <Constraints.Horizontal constraint="m">
         <SelectField
-          name={`${name}.reference`}
+          name={name}
           title={<FormattedMessage {...messages.referenceTitle} />}
           options={options}
           isRequired

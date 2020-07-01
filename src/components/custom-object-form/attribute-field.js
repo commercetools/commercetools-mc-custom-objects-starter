@@ -6,7 +6,7 @@ import { FieldArray } from 'formik';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import {
   SecondaryButton,
-  SecondaryIconButton
+  SecondaryIconButton,
 } from '@commercetools-uikit/buttons';
 import Card from '@commercetools-uikit/card';
 import Constraints from '@commercetools-uikit/constraints';
@@ -30,7 +30,8 @@ const AttributeField = ({
   onChange,
   onBlur,
   attributes,
-  reference
+  reference,
+  options,
 }) => {
   const intl = useIntl();
   const { project } = useApplicationContext();
@@ -72,9 +73,12 @@ const AttributeField = ({
                         value={val}
                         touched={get(touched, index)}
                         errors={get(errors, index)}
-                        attributes={attributes}
                         onChange={onChange}
                         onBlur={onBlur}
+                        isRequired={isRequired}
+                        isSet={isSet}
+                        attributes={attributes}
+                        options={options}
                       />
                     </div>
                     <SecondaryIconButton
@@ -107,9 +111,12 @@ const AttributeField = ({
             value={value}
             touched={touched}
             errors={errors}
-            attributes={attributes}
             onChange={onChange}
             onBlur={onBlur}
+            isRequired={isRequired}
+            isSet={isSet}
+            attributes={attributes}
+            options={options}
           />
         </Spacings.Stack>
       )}
@@ -129,7 +136,13 @@ AttributeField.propTypes = {
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
   attributes: PropTypes.array,
-  reference: PropTypes.string
+  reference: PropTypes.string,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    })
+  ),
 };
 
 export default AttributeField;

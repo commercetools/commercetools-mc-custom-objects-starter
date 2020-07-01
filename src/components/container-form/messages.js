@@ -61,6 +61,11 @@ export default defineMessages({
     description: 'Label for attributes money value',
     defaultMessage: 'Money'
   },
+  enumLabel: {
+    id: 'Container.form.type.label.enum',
+    description: 'Label for attributes enum value',
+    defaultMessage: 'List (enum)'
+  },
   objectLabel: {
     id: 'Container.form.type.label.object',
     description: 'Label for attributes object value',
@@ -95,6 +100,31 @@ export default defineMessages({
     id: 'Container.form.reference.title',
     description: 'Title for reference field',
     defaultMessage: 'Type of Reference'
+  },
+  enumOptionsTitle: {
+    id: 'Container.form.enumOptions.title',
+    description: 'Title for enum options fields',
+    defaultMessage: 'List Options'
+  },
+  keyLabel: {
+    id: 'Container.form.enum.key.label',
+    description: 'Label for enum key label',
+    defaultMessage: 'Key'
+  },
+  labelLabel: {
+    id: 'Container.form.enum.label.label',
+    description: 'Label for enum label label', // ha ha
+    defaultMessage: 'Label'
+  },
+  addLabel: {
+    id: 'Container.form.add.button',
+    description: 'Label for add button',
+    defaultMessage: 'Add'
+  },
+  removeLabel: {
+    id: 'Container.form.remove.button',
+    description: 'Label for remove button',
+    defaultMessage: 'Remove'
   },
   submitButton: {
     id: 'Container.form.button.submit',

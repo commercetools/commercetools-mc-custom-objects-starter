@@ -7,6 +7,7 @@ import AttributeGroup from './attribute-group';
 import ObjectAttributes from './object-attributes';
 import ReferenceAttribute from './reference-attribute';
 import Attribute from './attribute';
+import EnumAttributes from './enum-attributes';
 
 const mockValue = {
   name: faker.random.words(),
@@ -43,6 +44,12 @@ describe('attribute group', () => {
     const value = { ...mockValue, type: TYPES.Reference, reference: '' };
     const wrapper = loadAttributeGroup(value);
     expect(wrapper.find(ReferenceAttribute).exists()).toEqual(true);
+  });
+
+  it('when value type is enum, should display enum options', () => {
+    const value = { ...mockValue, type: TYPES.Enum, enum: [] };
+    const wrapper = loadAttributeGroup(value);
+    expect(wrapper.find(EnumAttributes).exists()).toEqual(true);
   });
 
   describe('when attribute value changes', () => {
@@ -133,11 +140,42 @@ describe('attribute group', () => {
           .handleChange(event);
       });
 
-      it('should call handle change with empty attribute value', () => {
+      it('should call handle change with empty reference value', () => {
         expect(mocks.handleChange).toHaveBeenCalledWith({
           target: {
             name: `${mocks.name}.${ATTRIBUTES.Reference}`,
             value: ''
+          }
+        });
+      });
+
+      it('should call handle change with attribute type change', () => {
+        expect(mocks.handleChange).toHaveBeenCalledWith(event);
+      });
+    });
+
+    describe('with attribute type of enum', () => {
+      const event = {
+        target: {
+          name: `${mocks.name}.${ATTRIBUTES.Type}`,
+          value: TYPES.Enum
+        }
+      };
+      let wrapper;
+
+      beforeEach(() => {
+        wrapper = loadAttributeGroup(value);
+        wrapper
+          .find(Attribute)
+          .props()
+          .handleChange(event);
+      });
+
+      it('should call handle change with empty enum value', () => {
+        expect(mocks.handleChange).toHaveBeenCalledWith({
+          target: {
+            name: `${mocks.name}.${ATTRIBUTES.Enum}`,
+            value: [{ value: '', label: '' }]
           }
         });
       });

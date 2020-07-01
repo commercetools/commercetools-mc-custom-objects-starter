@@ -112,6 +112,7 @@ const Form = ({
                     type={attribute.type}
                     attributes={attribute.attributes}
                     reference={attribute.reference}
+                    options={attribute.enum}
                     name={name}
                     title={attribute.name}
                     isRequired={attribute.required}

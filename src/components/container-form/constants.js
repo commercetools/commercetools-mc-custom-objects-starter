@@ -3,6 +3,7 @@ export const TYPES = {
   Number: 'Number',
   Boolean: 'Boolean',
   Money: 'Money',
+  Enum: 'Enum',
   Object: 'Object',
   Reference: 'Reference'
 };
@@ -38,5 +39,6 @@ export const ATTRIBUTES = {
   Required: 'required',
   Set: 'set',
   Attributes: 'attributes',
-  Reference: 'reference'
+  Reference: 'reference',
+  Enum: 'enum'
 };

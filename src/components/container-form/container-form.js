@@ -39,11 +39,24 @@ const ContainerForm = ({ container, onSubmit }) => {
     type: stringSchema,
     set: yup.bool(),
     required: yup.bool(),
+    attributes: yup.array(yup.lazy(() => yup.object(attributeSchema))),
     reference: yup.string().when('type', {
       is: val => val === TYPES.Reference,
       then: stringSchema
     }),
-    attributes: yup.array(yup.lazy(() => yup.object(attributeSchema)))
+    enum: yup.array().when('type', {
+      is: val => val === TYPES.Enum,
+      then: yup.array(
+        yup.object({
+          value: yup
+            .string()
+            .required(intl.formatMessage(messages.requiredFieldError)),
+          label: yup
+            .string()
+            .required(intl.formatMessage(messages.requiredFieldError))
+        })
+      )
+    })
   };
   const validationSchema = yup.object({
     key: stringSchema,

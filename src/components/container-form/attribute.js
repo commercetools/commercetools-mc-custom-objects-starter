@@ -29,6 +29,10 @@ const typeOptions = [
     value: TYPES.Money
   },
   {
+    label: <FormattedMessage {...messages.enumLabel} />,
+    value: TYPES.Enum
+  },
+  {
     label: <FormattedMessage {...messages.objectLabel} />,
     value: TYPES.Object
   },

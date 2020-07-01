@@ -8,6 +8,7 @@ import { ATTRIBUTES, TYPES } from './constants';
 // eslint-disable-next-line import/no-cycle
 import ObjectAttributes from './object-attributes';
 import ReferenceAttribute from './reference-attribute';
+import EnumAttributes from './enum-attributes';
 
 const AttributeGroup = ({
   name,
@@ -43,6 +44,13 @@ const AttributeGroup = ({
             value: ''
           }
         });
+      } else if (eventValue === TYPES.Enum) {
+        handleChange({
+          target: {
+            name: `${name}.${ATTRIBUTES.Enum}`,
+            value: [{ value: '', label: '' }]
+          }
+        });
       }
     }
     handleChange(event);
@@ -62,8 +70,8 @@ const AttributeGroup = ({
       {value.type === TYPES.Object && (
         <ObjectAttributes
           object={value.name}
-          name={name}
-          value={value.attributes}
+          name={`${name}.${ATTRIBUTES.Attributes}`}
+          value={get(value, ATTRIBUTES.Attributes)}
           touched={get(touched, ATTRIBUTES.Attributes, [])}
           errors={get(errors, ATTRIBUTES.Attributes, [])}
           handleBlur={handleBlur}
@@ -72,10 +80,20 @@ const AttributeGroup = ({
       )}
       {value.type === TYPES.Reference && (
         <ReferenceAttribute
-          name={name}
-          value={value.reference}
+          name={`${name}.${ATTRIBUTES.Reference}`}
+          value={get(value, ATTRIBUTES.Reference)}
           touched={get(touched, ATTRIBUTES.Reference, false)}
           errors={get(errors, ATTRIBUTES.Reference, {})}
+          handleBlur={handleBlur}
+          handleChange={handleChange}
+        />
+      )}
+      {value.type === TYPES.Enum && (
+        <EnumAttributes
+          name={`${name}.${ATTRIBUTES.Enum}`}
+          value={get(value, ATTRIBUTES.Enum)}
+          touched={get(touched, ATTRIBUTES.Enum, [])}
+          errors={get(errors, ATTRIBUTES.Enum, [])}
           handleBlur={handleBlur}
           handleChange={handleChange}
         />

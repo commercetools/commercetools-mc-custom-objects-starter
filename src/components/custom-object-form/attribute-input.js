@@ -7,7 +7,8 @@ import {
   CheckboxInput,
   TextInput,
   NumberInput,
-  MoneyInput
+  MoneyInput,
+  SelectInput
 } from '@commercetools-uikit/inputs';
 import { ErrorMessage } from '@commercetools-uikit/messages';
 import Spacings from '@commercetools-uikit/spacings';
@@ -24,7 +25,10 @@ const AttributeInput = ({
   errors,
   onChange,
   onBlur,
-  attributes
+  isRequired,
+  isSet,
+  attributes,
+  options
 }) => {
   const { project } = useApplicationContext();
   const { currencies } = project;
@@ -104,6 +108,26 @@ const AttributeInput = ({
         </Spacings.Stack>
       );
 
+    case TYPES.Enum: {
+      return (
+        <Spacings.Stack scale="xs">
+          <SelectInput
+            data-testid="field-type-enum"
+            name={name}
+            options={options}
+            value={value}
+            isClearable={!isRequired && !isSet}
+            hasError={!!(touched && errors)}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+          {touched && errors && (
+            <ErrorMessage data-testid="field-error">{errors}</ErrorMessage>
+          )}
+        </Spacings.Stack>
+      );
+    }
+
     case TYPES.Reference: {
       const refTouched = get(touched, 'id');
       const refErrors = get(errors, 'id');
@@ -136,11 +160,13 @@ const AttributeInput = ({
                   data-testid={`field-type-object-${index}`}
                   key={index}
                   type={attribute.type}
-                  attributes={attribute.attributes}
-                  reference={attribute.reference}
                   name={`${name}.${attributeName}`}
                   title={attribute.name}
+                  attributes={attribute.attributes}
+                  reference={attribute.reference}
                   isRequired={attribute.required}
+                  isSet={attribute.isSet}
+                  options={attribute.enum}
                   value={get(value, attributeName)}
                   touched={get(touched, attributeName)}
                   errors={get(errors, attributeName)}
@@ -167,7 +193,15 @@ AttributeInput.propTypes = {
   errors: PropTypes.any,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
-  attributes: PropTypes.array
+  isRequired: PropTypes.bool,
+  isSet: PropTypes.bool,
+  attributes: PropTypes.array,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string
+    })
+  )
 };
 
 export default AttributeInput;

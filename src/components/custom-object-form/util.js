@@ -9,6 +9,7 @@ export const getValue = (type, attributes, reference, currencies) => {
   switch (type) {
     case TYPES.String:
     case TYPES.Number:
+    case TYPES.Enum:
       return '';
 
     case TYPES.Boolean:
@@ -72,6 +73,8 @@ const getValidation = ({ attributes, required, set }, method, messages) => {
     validation = validation.required(
       <FormattedMessage {...messages.required} />
     );
+  } else {
+    validation = validation.nullable();
   }
 
   return set ? yup.array(validation) : validation;
@@ -80,6 +83,7 @@ const getValidation = ({ attributes, required, set }, method, messages) => {
 const getValidationByType = (attribute, messages) => {
   switch (attribute.type) {
     case TYPES.String:
+    case TYPES.Enum:
       return getValidation(attribute, 'string', messages);
 
     case TYPES.Number:

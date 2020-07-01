@@ -26,7 +26,7 @@ const ObjectAttributes = ({
   return (
     <div className={styles.nested}>
       <FieldArray
-        name={`${name}.attributes`}
+        name={name}
         render={({ push, remove }) => (
           <Spacings.Stack>
             <FieldLabel
@@ -55,7 +55,7 @@ const ObjectAttributes = ({
               value.map((objectValue, objectIndex) => (
                 <AttributeGroup
                   key={objectIndex}
-                  name={`${name}.attributes.${objectIndex}`}
+                  name={`${name}.${objectIndex}`}
                   index={objectIndex}
                   value={objectValue}
                   touched={get(touched, objectIndex, {})}
