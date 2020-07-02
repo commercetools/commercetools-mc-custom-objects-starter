@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import faker from 'faker';
 import first from 'lodash/first';
 import last from 'lodash/last';
+import startCase from 'lodash/startCase';
 import times from 'lodash/times';
 import { useQuery, setQuery } from '@apollo/react-hooks';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
@@ -17,10 +18,11 @@ import { COLUMN_KEYS } from './column-definitions';
 
 const containerContext = generateContainerContext();
 
+const valueKey = faker.random.word();
 const generateCustomObject = () => ({
   container: faker.random.words(),
   key: faker.random.word(),
-  value: faker.random.words(),
+  value: { [valueKey]: faker.random.words() },
   lastModifiedAt: faker.date.recent(),
 });
 
@@ -180,63 +182,111 @@ describe('custom objects list', () => {
       expect(actual.props.value).toEqual(lastModifiedAt);
     });
 
-    it('when custom object value is a string, should render value for value column', () => {
-      setQuery({ data });
-      const { value } = first(data.customObjects.results);
-      const wrapper = loadCustomObjectsList();
-      const actual = wrapper
-        .find(PaginatedTable)
-        .props()
-        .itemRenderer({ rowIndex: 0, columnKey: COLUMN_KEYS.VALUE });
-      expect(actual).toEqual(value.toString());
-    });
-
-    it('when custom object value is a number, should render string value for value column', () => {
-      const value = faker.random.number({ min: 1, max: 10 });
-      const customObject = {
-        ...generateCustomObject(),
-        value,
+    describe('value column', () => {
+      const renderValueColumn = (results) => {
+        setQuery({ data: results });
+        const wrapper = loadCustomObjectsList();
+        return shallow(
+          wrapper
+            .find(PaginatedTable)
+            .props()
+            .itemRenderer({ rowIndex: 0, columnKey: COLUMN_KEYS.VALUE })
+        );
       };
-      setQuery({
-        data: {
+
+      it('should render custom object key in start case format', () => {
+        const actual = renderValueColumn(data);
+        expect(actual.find('[data-testid="value-title"]').html()).toContain(
+          startCase(valueKey)
+        );
+      });
+
+      it('when custom object key value is a string, should render string value', () => {
+        const { value } = first(data.customObjects.results);
+        const actual = renderValueColumn(data);
+        expect(actual.text()).toContain(value[valueKey]);
+      });
+
+      it('when custom object key value is a number, should render number as string value', () => {
+        const value = faker.random.number({ min: 1, max: 10 });
+        const customObject = {
+          ...generateCustomObject(),
+          value: {
+            [valueKey]: value,
+          },
+        };
+        const actual = renderValueColumn({
           customObjects: {
             total: 1,
             count: 1,
             offset: 0,
             results: [customObject],
           },
-        },
+        });
+        expect(actual.text()).toContain(value);
       });
-      const wrapper = loadCustomObjectsList();
-      const actual = wrapper
-        .find(PaginatedTable)
-        .props()
-        .itemRenderer({ rowIndex: 0, columnKey: COLUMN_KEYS.VALUE });
-      expect(actual).toEqual(value.toString());
-    });
 
-    it('when custom object value is a boolean, should render string value for value column', () => {
-      const value = faker.random.boolean();
-      const customObject = {
-        ...generateCustomObject(),
-        value,
-      };
-      setQuery({
-        data: {
+      it('when custom object key value is a boolean, should render boolean value as string value', () => {
+        const value = faker.random.boolean();
+        const customObject = {
+          ...generateCustomObject(),
+          value: {
+            [valueKey]: value,
+          },
+        };
+        const actual = renderValueColumn({
           customObjects: {
             total: 1,
             count: 1,
             offset: 0,
             results: [customObject],
           },
-        },
+        });
+        expect(actual.text()).toContain(value);
       });
-      const wrapper = loadCustomObjectsList();
-      const actual = wrapper
-        .find(PaginatedTable)
-        .props()
-        .itemRenderer({ rowIndex: 0, columnKey: COLUMN_KEYS.VALUE });
-      expect(actual).toEqual(value.toString());
+
+      it('when custom object key value is an object, should render object values', () => {
+        const value = faker.random.boolean();
+        const customObject = {
+          ...generateCustomObject(),
+          value: {
+            [valueKey]: { value },
+          },
+        };
+        const actual = renderValueColumn({
+          customObjects: {
+            total: 1,
+            count: 1,
+            offset: 0,
+            results: [customObject],
+          },
+        });
+        expect(actual.find('[data-testid="object-value"]').exists()).toEqual(
+          true
+        );
+      });
+
+      it('when custom object key value is an array, should render each list item', () => {
+        const value = faker.random.boolean();
+        const list = [value, value];
+        const customObject = {
+          ...generateCustomObject(),
+          value: {
+            [valueKey]: list,
+          },
+        };
+        const actual = renderValueColumn({
+          customObjects: {
+            total: 1,
+            count: 1,
+            offset: 0,
+            results: [customObject],
+          },
+        });
+        expect(actual.find('[data-testid="list-value"]').length).toEqual(
+          list.length
+        );
+      });
     });
   });
 

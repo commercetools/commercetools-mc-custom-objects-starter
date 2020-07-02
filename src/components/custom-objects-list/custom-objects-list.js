@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { useQuery } from '@apollo/react-hooks';
-import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
+import isPlainObject from 'lodash/isPlainObject';
 import map from 'lodash/map';
 import startCase from 'lodash/startCase';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
@@ -39,6 +40,46 @@ const CustomObjectsList = ({ match, history }) => {
     skip: !hasContainers,
   });
 
+  function renderValue(value) {
+    if (isPlainObject(value)) {
+      return (
+        <div data-testid="object-value" className={`${styles.nested}`}>
+          {renderObject(value)}
+        </div>
+      );
+    }
+
+    if (isArray(value)) {
+      return (
+        <div className={styles.nested}>
+          {map(value, (val, index) => (
+            <div
+              data-testid="list-value"
+              className={styles.listItem}
+              key={index}
+            >
+              {renderValue(val)}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return value.toString();
+  }
+
+  function renderObject(value) {
+    return map(value, (val, key) => (
+      <div key={key} className={styles.item}>
+        <Text.Body data-testid="value-title" isBold as="span">
+          {startCase(key)}:
+        </Text.Body>
+        &nbsp;
+        {renderValue(val)}
+      </div>
+    ));
+  }
+
   function renderItem(results, { rowIndex, columnKey }) {
     const customObject = results[rowIndex];
     const { CONTAINER, KEY, VALUE, MODIFIED } = COLUMN_KEYS;
@@ -49,21 +90,8 @@ const CustomObjectsList = ({ match, history }) => {
       case KEY:
         return customObject.key;
       case VALUE: {
-        const { value } = customObject;
-        return isObject(value) ? (
-          <>
-            {map(value, (val, key) => (
-              <div key={key}>
-                <Text.Body isBold as="span">
-                  {startCase(key)}:
-                </Text.Body>
-                &nbsp;
-                {isObject(val) ? JSON.stringify(val) : val.toString()}
-              </div>
-            ))}
-          </>
-        ) : (
-          value.toString()
+        return (
+          <div className={styles.value}>{renderObject(customObject.value)}</div>
         );
       }
       case MODIFIED:
