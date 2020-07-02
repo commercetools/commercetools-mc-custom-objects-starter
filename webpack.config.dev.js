@@ -5,11 +5,11 @@ const distPath = path.resolve(__dirname, 'dist');
 const entryPoint = path.resolve(__dirname, 'src/index.js');
 const sourceFolders = [
   path.resolve(__dirname, 'src'),
-  path.resolve(__dirname, '../core')
+  path.resolve(__dirname, '../core'),
 ];
 
 module.exports = createWebpackConfigForDevelopment({
   distPath,
   entryPoint,
-  sourceFolders
+  sourceFolders,
 });

@@ -31,7 +31,7 @@ AttributeLabel.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
-  reference: PropTypes.string
+  reference: PropTypes.string,
 };
 
 export default AttributeLabel;

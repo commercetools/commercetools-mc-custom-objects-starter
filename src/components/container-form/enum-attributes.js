@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { FieldArray } from 'formik';
 import {
   SecondaryButton,
-  SecondaryIconButton
+  SecondaryIconButton,
 } from '@commercetools-uikit/buttons';
 import Constraints from '@commercetools-uikit/constraints';
 import { customProperties } from '@commercetools-uikit/design-system';
@@ -25,7 +25,7 @@ const EnumAttributes = ({
   errors,
   touched,
   handleChange,
-  handleBlur
+  handleBlur,
 }) => {
   const intl = useIntl();
   return (
@@ -130,23 +130,23 @@ EnumAttributes.propTypes = {
   value: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,
-      label: PropTypes.string
+      label: PropTypes.string,
     })
   ).isRequired,
   errors: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,
-      label: PropTypes.string
+      label: PropTypes.string,
     })
   ),
   touched: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.bool,
-      label: PropTypes.bool
+      label: PropTypes.bool,
     })
   ),
   handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired
+  handleBlur: PropTypes.func.isRequired,
 };
 
 export default EnumAttributes;

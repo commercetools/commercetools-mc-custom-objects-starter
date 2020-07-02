@@ -6,7 +6,10 @@ import { FormattedMessage } from 'react-intl';
 import { getMutation, setMutation } from '@apollo/react-hooks';
 import { mockShowNotification } from '@commercetools-frontend/actions-global';
 import * as ContainerContext from '../../context/container-context';
-import { generateContainerContext, generateCustomObject } from '../../test-util';
+import {
+  generateContainerContext,
+  generateCustomObject,
+} from '../../test-util';
 import UpdateCustomObject from '../update-custom-object.rest.graphql';
 import CustomObjectForm from '../custom-object-form';
 import EditCustomObject from './edit-custom-object';
@@ -17,22 +20,19 @@ const container = kebabCase(faker.random.words());
 
 const formValues = {
   container,
-  value: {}
+  value: {},
 };
 
 const mocks = {
   customObject: generateCustomObject(),
-  onComplete: jest.fn()
+  onComplete: jest.fn(),
 };
 
 const loadEditCustomObject = () => shallow(<EditCustomObject {...mocks} />);
 
 describe('edit custom object', () => {
   const submitForm = async (wrapper, values = formValues) =>
-    wrapper
-      .find(CustomObjectForm)
-      .props()
-      .onSubmit(values);
+    wrapper.find(CustomObjectForm).props().onSubmit(values);
 
   beforeEach(() => {
     jest
@@ -48,8 +48,8 @@ describe('edit custom object', () => {
     submitForm(wrapper);
     expect(mutation).toHaveBeenCalledWith({
       variables: {
-        body: formValues
-      }
+        body: formValues,
+      },
     });
   });
 
@@ -64,7 +64,7 @@ describe('edit custom object', () => {
             {...messages.editError}
             values={{ message: error.message }}
           />
-        )
+        ),
       })
     );
   });
@@ -81,7 +81,7 @@ describe('edit custom object', () => {
 
     it('should display success message', () => {
       expect(mockShowNotification).toHaveBeenCalledWith({
-        text: <FormattedMessage {...messages.editSuccess} />
+        text: <FormattedMessage {...messages.editSuccess} />,
       });
     });
 

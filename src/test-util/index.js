@@ -15,10 +15,10 @@ export const generateContainer = () => ({
       name: faker.random.words(),
       type: faker.random.arrayElement(Object.values(TYPES)),
       set: faker.random.boolean(),
-      required: faker.random.boolean()
-    }))
+      required: faker.random.boolean(),
+    })),
   },
-  lastModifiedAt: faker.date.recent()
+  lastModifiedAt: faker.date.recent(),
 });
 
 export const generateContainers = (
@@ -28,8 +28,8 @@ export const generateContainers = (
     count: total,
     total,
     offset: 0,
-    results: times(total, generateContainer)
-  }
+    results: times(total, generateContainer),
+  },
 });
 
 export const generateFormValues = () => ({
@@ -38,8 +38,8 @@ export const generateFormValues = () => ({
     name: faker.random.word(),
     type: faker.random.arrayElement(Object.values(TYPES)),
     required: faker.random.boolean(),
-    set: faker.random.boolean()
-  }))
+    set: faker.random.boolean(),
+  })),
 });
 
 export const generateCustomObject = () => ({
@@ -47,7 +47,7 @@ export const generateCustomObject = () => ({
   version: faker.random.number({ min: 1, max: 10 }),
   container: kebabCase(faker.random.words()),
   key: faker.random.word(),
-  value: {}
+  value: {},
 });
 
 export const generateContainerContext = () => {
@@ -57,6 +57,6 @@ export const generateContainerContext = () => {
     containers,
     where: `container in (${map(containers, ({ key }) => `"${key}"`).join(
       ','
-    )})`
+    )})`,
   };
 };

@@ -9,7 +9,7 @@ const useContainerContext = () => {
     containers,
     where: `container in (${map(containers, ({ key }) => `"${key}"`).join(
       ','
-    )})`
+    )})`,
   };
 };
 const ContainerProvider = ContainerContext.Provider;

@@ -15,22 +15,19 @@ const formValues = generateFormValues();
 const mocks = {
   match: {
     params: {
-      projectKey: 'test-project'
-    }
+      projectKey: 'test-project',
+    },
   },
   history: {
-    push: jest.fn()
-  }
+    push: jest.fn(),
+  },
 };
 
 const loadCreateContainer = () => shallow(<CreateContainer {...mocks} />);
 
 describe('create container', () => {
   const submitForm = async (wrapper, values = formValues) =>
-    wrapper
-      .find(ContainerForm)
-      .props()
-      .onSubmit(values);
+    wrapper.find(ContainerForm).props().onSubmit(values);
 
   beforeEach(() => {
     mockShowNotification.mockClear();
@@ -48,10 +45,10 @@ describe('create container', () => {
           container: CONTAINER,
           key: formValues.key,
           value: {
-            attributes: formValues.attributes
-          }
-        }
-      }
+            attributes: formValues.attributes,
+          },
+        },
+      },
     });
   });
 
@@ -66,7 +63,7 @@ describe('create container', () => {
             {...messages.createError}
             values={{ message: error.message }}
           />
-        )
+        ),
       })
     );
   });
@@ -83,7 +80,7 @@ describe('create container', () => {
 
     it('should display success message', () => {
       expect(mockShowNotification).toHaveBeenCalledWith({
-        text: <FormattedMessage {...messages.createSuccess} />
+        text: <FormattedMessage {...messages.createSuccess} />,
       });
     });
 

@@ -19,15 +19,15 @@ const initializeCustomObjectValues = (customObject, containers, currencies) => {
     // combining empty attribute values with saved values in case schema changed
     value: {
       ...getAttributeValues(attributes, currencies),
-      ...customObject.value
-    }
+      ...customObject.value,
+    },
   };
 };
 
 const initializeEmptyValues = () => ({
   container: '',
   key: '',
-  value: {}
+  value: {},
 });
 
 const CustomObjectForm = ({ containers, customObject, onSubmit }) => {
@@ -40,12 +40,12 @@ const CustomObjectForm = ({ containers, customObject, onSubmit }) => {
     : initializeEmptyValues();
 
   const stringSchema = yup.string().required({
-    required: intl.formatMessage(messages.requiredFieldError)
+    required: intl.formatMessage(messages.requiredFieldError),
   });
   const baseValidationSchema = {
     container: stringSchema,
     key: stringSchema,
-    value: yup.object()
+    value: yup.object(),
   };
   const [validationSchema, setValidationSchema] = useState(
     yup.object(baseValidationSchema)
@@ -54,7 +54,7 @@ const CustomObjectForm = ({ containers, customObject, onSubmit }) => {
   function onAttributesChange(attributes) {
     if (attributes) {
       const valueSchema = getAttributeValidation(attributes, {
-        required: messages.requiredFieldError
+        required: messages.requiredFieldError,
       });
       setValidationSchema(
         yup.object({ ...baseValidationSchema, value: yup.object(valueSchema) })
@@ -66,7 +66,7 @@ const CustomObjectForm = ({ containers, customObject, onSubmit }) => {
     return onSubmit({
       container: JSON.parse(container).key,
       key,
-      value
+      value,
     });
   }
 
@@ -77,7 +77,7 @@ const CustomObjectForm = ({ containers, customObject, onSubmit }) => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      {props => {
+      {(props) => {
         React.useEffect(() => {
           onAttributesChange(props.values.attributes); // eslint-disable-line react/prop-types
         }, [props.values.attributes]); // eslint-disable-line react/prop-types
@@ -92,14 +92,14 @@ CustomObjectForm.propTypes = {
   containers: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired
+      key: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
   customObject: PropTypes.shape({
     key: PropTypes.string.isRequired,
-    value: PropTypes.object
+    value: PropTypes.object,
   }),
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default CustomObjectForm;

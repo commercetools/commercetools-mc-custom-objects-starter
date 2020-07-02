@@ -12,7 +12,7 @@ import { getValue } from './util';
 import AttributeInput from './attribute-input';
 
 const project = {
-  currencies: times(2, () => faker.finance.currencyCode())
+  currencies: times(2, () => faker.finance.currencyCode()),
 };
 
 const container = generateContainer();
@@ -27,10 +27,10 @@ const mocks = {
   onChange: jest.fn(),
   onBlur: jest.fn(),
   attributes: container.value.attributes,
-  reference: faker.random.arrayElement(Object.values(REFERENCE_TYPES))
+  reference: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
 };
 
-const loadAttributeField = isSet => {
+const loadAttributeField = (isSet) => {
   const value = isSet ? [''] : '';
   return shallow(<AttributeField {...mocks} isSet={isSet} value={value} />);
 };
@@ -45,16 +45,11 @@ describe('attribute field', () => {
   describe('when attribute is a set', () => {
     const fieldArrayMocks = {
       push: jest.fn(),
-      remove: jest.fn()
+      remove: jest.fn(),
     };
 
-    const loadAttributes = wrapper =>
-      shallow(
-        wrapper
-          .find(FieldArray)
-          .props()
-          .render(fieldArrayMocks)
-      );
+    const loadAttributes = (wrapper) =>
+      shallow(wrapper.find(FieldArray).props().render(fieldArrayMocks));
 
     let attributes;
 
@@ -74,10 +69,7 @@ describe('attribute field', () => {
     });
 
     it('when add button clicked, should display an additional attribute', () => {
-      attributes
-        .find('[data-testid="add-attribute"]')
-        .props()
-        .onClick();
+      attributes.find('[data-testid="add-attribute"]').props().onClick();
       expect(fieldArrayMocks.push).toHaveBeenCalledWith(
         getValue(
           mocks.type,

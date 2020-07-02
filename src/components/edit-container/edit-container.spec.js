@@ -14,17 +14,14 @@ const formValues = generateFormValues();
 
 const mocks = {
   container: generateContainer(),
-  onComplete: jest.fn()
+  onComplete: jest.fn(),
 };
 
 const loadEditContainer = () => shallow(<EditContainer {...mocks} />);
 
 describe('edit container', () => {
   const submitForm = async (wrapper, values = formValues) =>
-    wrapper
-      .find(ContainerForm)
-      .props()
-      .onSubmit(values);
+    wrapper.find(ContainerForm).props().onSubmit(values);
 
   describe('when edit container fails', () => {
     const error = { message: 'failed' };
@@ -49,7 +46,7 @@ describe('edit container', () => {
               {...messages.editError}
               values={{ message: error.message }}
             />
-          )
+          ),
         })
       );
     });
@@ -71,7 +68,7 @@ describe('edit container', () => {
     it('should display success message', () => {
       expect(mockShowNotification).toHaveBeenCalledWith(
         {
-          text: <FormattedMessage {...messages.editSuccess} />
+          text: <FormattedMessage {...messages.editSuccess} />,
         },
         data
       );
@@ -89,10 +86,10 @@ describe('edit container', () => {
           container: CONTAINER,
           key: formValues.key,
           value: {
-            attributes: formValues.attributes
-          }
-        }
-      }
+            attributes: formValues.attributes,
+          },
+        },
+      },
     });
   });
 });

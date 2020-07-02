@@ -24,7 +24,7 @@ const Form = ({
   isSubmitting,
   handleBlur,
   handleChange,
-  handleSubmit
+  handleSubmit,
 }) => {
   const intl = useIntl();
   return (
@@ -80,7 +80,7 @@ const Form = ({
                           name: '',
                           type: '',
                           set: false,
-                          required: false
+                          required: false,
                         })
                       }
                     />
@@ -129,9 +129,9 @@ Form.propTypes = {
         required: PropTypes.bool,
         set: PropTypes.bool,
         attributes: PropTypes.array,
-        reference: PropTypes.string
+        reference: PropTypes.string,
       }).isRequired
-    ).isRequired
+    ).isRequired,
   }).isRequired,
   touched: PropTypes.shape({
     key: PropTypes.bool,
@@ -142,9 +142,9 @@ Form.propTypes = {
         required: PropTypes.bool,
         set: PropTypes.bool,
         attributes: PropTypes.array,
-        reference: PropTypes.bool
+        reference: PropTypes.bool,
       })
-    )
+    ),
   }),
   errors: PropTypes.shape({
     key: PropTypes.object,
@@ -153,16 +153,16 @@ Form.propTypes = {
         name: PropTypes.object,
         type: PropTypes.object,
         attributes: PropTypes.array,
-        reference: PropTypes.object
+        reference: PropTypes.object,
       })
-    )
+    ),
   }),
   dirty: PropTypes.bool,
   isValid: PropTypes.bool,
   isSubmitting: PropTypes.bool,
   handleBlur: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
 };
 
 export default Form;

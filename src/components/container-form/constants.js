@@ -5,7 +5,7 @@ export const TYPES = {
   Money: 'Money',
   Enum: 'Enum',
   Object: 'Object',
-  Reference: 'Reference'
+  Reference: 'Reference',
 };
 
 export const REFERENCE_TYPES = {
@@ -30,7 +30,7 @@ export const REFERENCE_TYPES = {
   Store: 'store',
   TaxCategory: 'tax-category',
   Type: 'type',
-  Zone: 'zone'
+  Zone: 'zone',
 };
 
 export const ATTRIBUTES = {
@@ -40,5 +40,5 @@ export const ATTRIBUTES = {
   Set: 'set',
   Attributes: 'attributes',
   Reference: 'reference',
-  Enum: 'enum'
+  Enum: 'enum',
 };

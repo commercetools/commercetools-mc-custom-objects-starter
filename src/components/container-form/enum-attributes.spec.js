@@ -8,11 +8,11 @@ import EnumAttributes from './enum-attributes';
 const mocks = {
   name: kebabCase(faker.random.words()),
   handleChange: jest.fn(),
-  handleBlur: jest.fn()
+  handleBlur: jest.fn(),
 };
 const fieldArrayMocks = {
   remove: jest.fn(),
-  push: jest.fn()
+  push: jest.fn(),
 };
 
 const emptyValue = { value: '', label: '' };
@@ -27,37 +27,28 @@ const loadEnumAttributes = ({ value = [emptyValue], touched, errors }) => {
     />
   );
 
-  return shallow(
-    wrapper
-      .find(FieldArray)
-      .props()
-      .render(fieldArrayMocks)
-  );
+  return shallow(wrapper.find(FieldArray).props().render(fieldArrayMocks));
 };
 
-const removeButton = index => `[data-testid="remove-enum-option-${index}"]`;
-const valueInput = index => `[data-testid="option-value-${index}"]`;
-const valueInputError = index => `[data-testid="option-value-error-${index}"]`;
-const labelInput = index => `[data-testid="option-label-${index}"]`;
-const labelInputError = index => `[data-testid="option-label-error-${index}"]`;
+const removeButton = (index) => `[data-testid="remove-enum-option-${index}"]`;
+const valueInput = (index) => `[data-testid="option-value-${index}"]`;
+const valueInputError = (index) =>
+  `[data-testid="option-value-error-${index}"]`;
+const labelInput = (index) => `[data-testid="option-label-${index}"]`;
+const labelInputError = (index) =>
+  `[data-testid="option-label-error-${index}"]`;
 
 describe('enum attributes', () => {
   it('when add button clicked, should display an additional option', () => {
     const wrapper = loadEnumAttributes({});
-    wrapper
-      .find('[data-testid="add-enum-option"]')
-      .props()
-      .onClick();
+    wrapper.find('[data-testid="add-enum-option"]').props().onClick();
     expect(fieldArrayMocks.push).toHaveBeenCalledWith(emptyValue);
   });
 
   it('when remove button clicked, should remove option from display', () => {
     const index = 0;
     const wrapper = loadEnumAttributes({});
-    wrapper
-      .find(removeButton(index))
-      .props()
-      .onClick();
+    wrapper.find(removeButton(index)).props().onClick();
     expect(fieldArrayMocks.remove).toHaveBeenCalledWith(index);
   });
 
@@ -115,7 +106,7 @@ describe('enum attributes', () => {
       beforeEach(() => {
         wrapper = loadEnumAttributes({
           touched: [{ value: true }],
-          errors: [{ value: error }]
+          errors: [{ value: error }],
         });
       });
 
@@ -171,7 +162,7 @@ describe('enum attributes', () => {
       beforeEach(() => {
         wrapper = loadEnumAttributes({
           touched: [{ label: true }],
-          errors: [{ label: error }]
+          errors: [{ label: error }],
         });
       });
 

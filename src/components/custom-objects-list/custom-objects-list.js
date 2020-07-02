@@ -32,11 +32,11 @@ const CustomObjectsList = ({ match, history }) => {
   const [variables, setVariables] = useState({
     ...DEFAULT_VARIABLES,
     sort: `${sort} ${direction}`,
-    where
+    where,
   });
   const { data, error } = useQuery(GetCustomObjects, {
     variables,
-    skip: !hasContainers
+    skip: !hasContainers,
   });
 
   function renderItem(results, { rowIndex, columnKey }) {
@@ -104,7 +104,7 @@ const CustomObjectsList = ({ match, history }) => {
     setDirection(sortDirection);
     getCustomObjects({
       sort: `${column} ${sortDirection}`,
-      ...DEFAULT_VARIABLES
+      ...DEFAULT_VARIABLES,
     });
   }
 
@@ -124,7 +124,7 @@ const CustomObjectsList = ({ match, history }) => {
 
   const containerOptions = map(containers, ({ key }) => ({
     label: key,
-    value: key
+    value: key,
   }));
 
   return (
@@ -200,7 +200,7 @@ const CustomObjectsList = ({ match, history }) => {
           <PaginatedTable
             columns={columnDefinitions}
             items={results}
-            itemRenderer={item => renderItem(results, item)}
+            itemRenderer={(item) => renderItem(results, item)}
             registerMeasurementCache={setMeasurementCache}
             rowCount={count}
             total={total}
@@ -229,11 +229,11 @@ const CustomObjectsList = ({ match, history }) => {
 CustomObjectsList.displayName = 'CustomObjectsList';
 CustomObjectsList.propTypes = {
   match: PropTypes.shape({
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
   }).isRequired,
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default CustomObjectsList;

@@ -7,7 +7,7 @@ import { SelectInput } from '@commercetools-uikit/inputs';
 import Grid from '@commercetools-uikit/grid';
 import {
   Pagination,
-  ViewHeader
+  ViewHeader,
 } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
 import { generateContainers } from '../../test-util';
@@ -17,8 +17,8 @@ import { DEFAULT_VARIABLES, FIELDS, PAGE_SIZE } from './constants';
 
 const mocks = {
   match: {
-    url: faker.internet.url()
-  }
+    url: faker.internet.url(),
+  },
 };
 
 const loadContainerList = () => shallow(<ContainerList {...mocks} />);
@@ -29,8 +29,8 @@ describe('container list', () => {
     expect(useQuery).toHaveBeenCalledWith(GetContainers, {
       variables: {
         ...DEFAULT_VARIABLES,
-        sort: `${FIELDS.KEY} ${SORT_OPTIONS.ASC}`
-      }
+        sort: `${FIELDS.KEY} ${SORT_OPTIONS.ASC}`,
+      },
     });
   });
 
@@ -121,10 +121,7 @@ describe('container list', () => {
   it('when next pagination button clicked, should query for next page', () => {
     setQuery({ data: generateContainers() });
     const wrapper = loadContainerList();
-    wrapper
-      .find(Pagination)
-      .props()
-      .next();
+    wrapper.find(Pagination).props().next();
     const result = last(useQuery.mock.calls)[1];
     expect(result.variables.offset).toEqual(PAGE_SIZE);
   });
@@ -134,10 +131,7 @@ describe('container list', () => {
   it('when previous pagination button clicked, should query for previous page', () => {
     setQuery({ data: generateContainers() });
     const wrapper = loadContainerList();
-    wrapper
-      .find(Pagination)
-      .props()
-      .previous();
+    wrapper.find(Pagination).props().previous();
     const result = last(useQuery.mock.calls)[1];
     expect(result.variables.offset).toEqual(-PAGE_SIZE);
   });

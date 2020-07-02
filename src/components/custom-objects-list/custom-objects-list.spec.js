@@ -21,7 +21,7 @@ const generateCustomObject = () => ({
   container: faker.random.words(),
   key: faker.random.word(),
   value: faker.random.words(),
-  lastModifiedAt: faker.date.recent()
+  lastModifiedAt: faker.date.recent(),
 });
 
 const generateCustomObjects = (
@@ -31,17 +31,17 @@ const generateCustomObjects = (
     count: total,
     total,
     offset: 0,
-    results: times(total, generateCustomObject)
-  }
+    results: times(total, generateCustomObject),
+  },
 });
 
 const mocks = {
   match: {
-    url: faker.internet.url()
+    url: faker.internet.url(),
   },
   history: {
-    push: jest.fn()
-  }
+    push: jest.fn(),
+  },
 };
 
 const createButton = '[data-testid="create-custom-object"]';
@@ -67,9 +67,9 @@ describe('custom objects list', () => {
       variables: {
         ...DEFAULT_VARIABLES,
         sort: `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`,
-        where: containerContext.where
+        where: containerContext.where,
       },
-      skip: false
+      skip: false,
     });
   });
 
@@ -195,7 +195,7 @@ describe('custom objects list', () => {
       const value = faker.random.number({ min: 1, max: 10 });
       const customObject = {
         ...generateCustomObject(),
-        value
+        value,
       };
       setQuery({
         data: {
@@ -203,9 +203,9 @@ describe('custom objects list', () => {
             total: 1,
             count: 1,
             offset: 0,
-            results: [customObject]
-          }
-        }
+            results: [customObject],
+          },
+        },
       });
       const wrapper = loadCustomObjectsList();
       const actual = wrapper
@@ -219,7 +219,7 @@ describe('custom objects list', () => {
       const value = faker.random.boolean();
       const customObject = {
         ...generateCustomObject(),
-        value
+        value,
       };
       setQuery({
         data: {
@@ -227,9 +227,9 @@ describe('custom objects list', () => {
             total: 1,
             count: 1,
             offset: 0,
-            results: [customObject]
-          }
-        }
+            results: [customObject],
+          },
+        },
       });
       const wrapper = loadCustomObjectsList();
       const actual = wrapper
@@ -250,10 +250,7 @@ describe('custom objects list', () => {
     });
 
     it('when container selected, should query for custom objects in selected container', () => {
-      wrapper
-        .find(filter)
-        .props()
-        .onChange({ target: { value } });
+      wrapper.find(filter).props().onChange({ target: { value } });
       const result = last(useQuery.mock.calls)[1];
       expect(result.variables.where).toEqual(`container="${value}"`);
     });
@@ -271,10 +268,7 @@ describe('custom objects list', () => {
   it('when next pagination button clicked, should query for next page', () => {
     setQuery({ data: generateCustomObjects() });
     const wrapper = loadCustomObjectsList();
-    wrapper
-      .find(PaginatedTable)
-      .props()
-      .next();
+    wrapper.find(PaginatedTable).props().next();
     const result = last(useQuery.mock.calls)[1];
     expect(result.variables.offset).toEqual(PAGE_SIZE);
   });
@@ -284,10 +278,7 @@ describe('custom objects list', () => {
   it('when previous pagination button clicked, should query for previous page', () => {
     setQuery({ data: generateCustomObjects() });
     const wrapper = loadCustomObjectsList();
-    wrapper
-      .find(PaginatedTable)
-      .props()
-      .previous();
+    wrapper.find(PaginatedTable).props().previous();
     const result = last(useQuery.mock.calls)[1];
     expect(result.variables.offset).toEqual(-PAGE_SIZE);
   });
@@ -311,10 +302,7 @@ describe('custom objects list', () => {
     const customObject = data.customObjects.results[0];
     setQuery({ data });
     const wrapper = loadCustomObjectsList();
-    wrapper
-      .find(PaginatedTable)
-      .props()
-      .onRowClick({}, 0);
+    wrapper.find(PaginatedTable).props().onRowClick({}, 0);
     expect(mocks.history.push).toHaveBeenCalledWith(
       `${mocks.match.url}/${customObject.id}/general`
     );
@@ -349,7 +337,7 @@ describe('custom objects list', () => {
         .mockImplementation(() => ({
           hasContainers: false,
           containers: [],
-          where: ''
+          where: '',
         }));
     });
 

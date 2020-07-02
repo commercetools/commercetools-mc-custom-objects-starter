@@ -13,7 +13,7 @@ import {
   TabContainer,
   TabHeader,
   View,
-  ViewHeader
+  ViewHeader,
 } from '@custom-applications-local/core/components';
 import { useShowSideNotification } from '@custom-applications-local/core/hooks';
 import { ROOT_PATH } from '../../constants';
@@ -38,12 +38,12 @@ const CustomObjectDetails = ({ match, history }) => {
 
   const { data, error, refetch } = useQuery(GetCustomObject, {
     variables: {
-      id: match.params.id
-    }
+      id: match.params.id,
+    },
   });
   const [deleteCustomObject] = useMutation(DeleteCustomObject, {
     variables: {
-      id: match.params.id
+      id: match.params.id,
     },
     onCompleted() {
       showSuccessNotification();
@@ -51,7 +51,7 @@ const CustomObjectDetails = ({ match, history }) => {
     },
     onError() {
       showErrorNotification();
-    }
+    },
   });
 
   const { customObject } = data || {};
@@ -126,13 +126,13 @@ CustomObjectDetails.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
-      projectKey: PropTypes.string.isRequired
+      projectKey: PropTypes.string.isRequired,
     }).isRequired,
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
   }).isRequired,
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default CustomObjectDetails;

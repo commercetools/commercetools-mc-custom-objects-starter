@@ -6,7 +6,7 @@ import {
   getMutation,
   setMutation,
   setQuery,
-  useQuery
+  useQuery,
 } from '@apollo/react-hooks';
 import { FormattedMessage } from 'react-intl';
 import { mockShowNotification } from '@commercetools-frontend/actions-global';
@@ -23,13 +23,13 @@ const mocks = {
   match: {
     params: {
       id: faker.random.uuid(),
-      projectKey: 'test-project'
+      projectKey: 'test-project',
     },
-    url: faker.internet.url()
+    url: faker.internet.url(),
   },
   history: {
-    push: jest.fn()
-  }
+    push: jest.fn(),
+  },
 };
 
 const customObject = generateCustomObject();
@@ -41,7 +41,7 @@ describe('custom object details', () => {
   it('should query for custom object by id', () => {
     loadCustomObjectDetails();
     expect(useQuery).toHaveBeenCalledWith(GetCustomObject, {
-      variables: { id: mocks.match.params.id }
+      variables: { id: mocks.match.params.id },
     });
   });
 
@@ -62,7 +62,7 @@ describe('custom object details', () => {
   });
 
   describe('delete custom object', () => {
-    const loadCommands = wrapper =>
+    const loadCommands = (wrapper) =>
       shallow(wrapper.find(ViewHeader).prop('commands'));
 
     beforeEach(() => {
@@ -74,13 +74,10 @@ describe('custom object details', () => {
       const wrapper = loadCustomObjectDetails();
       const commands = loadCommands(wrapper);
       const mutation = getMutation(DeleteCustomObject);
-      await commands
-        .find(ConfirmationDialog)
-        .props()
-        .onConfirm();
+      await commands.find(ConfirmationDialog).props().onConfirm();
 
       expect(mutation).toHaveBeenCalledWith({
-        variables: { version: customObject.version }
+        variables: { version: customObject.version },
       });
     });
 
@@ -89,15 +86,12 @@ describe('custom object details', () => {
         setMutation({ data: {} });
         const wrapper = loadCustomObjectDetails();
         const commands = loadCommands(wrapper);
-        await commands
-          .find(ConfirmationDialog)
-          .props()
-          .onConfirm();
+        await commands.find(ConfirmationDialog).props().onConfirm();
       });
 
       it('should show success notification', () => {
         expect(mockShowNotification).toHaveBeenCalledWith({
-          text: <FormattedMessage {...messages.deleteSuccess} />
+          text: <FormattedMessage {...messages.deleteSuccess} />,
         });
       });
 
@@ -119,14 +113,11 @@ describe('custom object details', () => {
 
       it('should show error notification', async () => {
         try {
-          await commands
-            .find(ConfirmationDialog)
-            .props()
-            .onConfirm();
+          await commands.find(ConfirmationDialog).props().onConfirm();
         } catch (error) {
           // eslint-disable-next-line jest/no-try-expect
           expect(mockShowNotification).toHaveBeenCalledWith({
-            text: <FormattedMessage {...messages.deleteError} />
+            text: <FormattedMessage {...messages.deleteError} />,
           });
         }
       });

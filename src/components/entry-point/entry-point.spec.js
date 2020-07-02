@@ -6,11 +6,11 @@ import { ApplicationCustomObjects } from './entry-point';
 import { ROOT_PATH } from '../../constants';
 
 const environment = {
-  mcApiUrl: 'https://mc-api.commercetools.co'
+  mcApiUrl: 'https://mc-api.commercetools.co',
 };
 
 const project = {
-  key: 'test-project'
+  key: 'test-project',
 };
 
 jest.mock('apollo-link-rest');

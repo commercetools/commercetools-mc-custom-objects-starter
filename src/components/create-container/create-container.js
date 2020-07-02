@@ -5,14 +5,14 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { useShowNotification } from '@commercetools-frontend/actions-global';
 import {
   DOMAINS,
-  NOTIFICATION_KINDS_SIDE
+  NOTIFICATION_KINDS_SIDE,
 } from '@commercetools-frontend/constants';
 import Spacings from '@commercetools-uikit/spacings';
 import {
   BackToList,
   TabContainer,
   View,
-  ViewHeader
+  ViewHeader,
 } from '@custom-applications-local/core/components';
 import { useShowSideNotification } from '@custom-applications-local/core/hooks';
 import { CONTAINER, ROOT_PATH } from '../../constants';
@@ -29,7 +29,7 @@ const CreateContainer = ({ match, history }) => {
   );
   const showErrorNotification = useShowNotification({
     kind: NOTIFICATION_KINDS_SIDE.error,
-    domain: DOMAINS.SIDE
+    domain: DOMAINS.SIDE,
   });
   const [createContainer] = useMutation(CreateContainerCustomObject, {
     onCompleted() {
@@ -40,9 +40,9 @@ const CreateContainer = ({ match, history }) => {
       showErrorNotification({
         text: (
           <FormattedMessage {...messages.createError} values={{ message }} />
-        )
+        ),
       });
-    }
+    },
   });
 
   function onSubmit(values) {
@@ -54,10 +54,10 @@ const CreateContainer = ({ match, history }) => {
           container: CONTAINER,
           key,
           value: {
-            attributes
-          }
-        }
-      }
+            attributes,
+          },
+        },
+      },
     });
   }
 
@@ -84,12 +84,12 @@ CreateContainer.displayName = 'CreateContainer';
 CreateContainer.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      projectKey: PropTypes.string.isRequired
-    }).isRequired
+      projectKey: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default CreateContainer;

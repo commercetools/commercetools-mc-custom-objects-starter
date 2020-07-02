@@ -8,7 +8,7 @@ import {
   TextInput,
   NumberInput,
   MoneyInput,
-  SelectInput
+  SelectInput,
 } from '@commercetools-uikit/inputs';
 import { ErrorMessage } from '@commercetools-uikit/messages';
 import Spacings from '@commercetools-uikit/spacings';
@@ -28,7 +28,7 @@ const AttributeInput = ({
   isRequired,
   isSet,
   attributes,
-  options
+  options,
 }) => {
   const { project } = useApplicationContext();
   const { currencies } = project;
@@ -199,9 +199,9 @@ AttributeInput.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,
-      label: PropTypes.string
+      label: PropTypes.string,
     })
-  )
+  ),
 };
 
 export default AttributeInput;

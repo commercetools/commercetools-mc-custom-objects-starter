@@ -16,28 +16,25 @@ import messages from './messages';
 const containerContext = generateContainerContext();
 
 const formValues = {
-  container: kebabCase(faker.random.words())
+  container: kebabCase(faker.random.words()),
 };
 
 const mocks = {
   match: {
     params: {
-      projectKey: 'test-project'
-    }
+      projectKey: 'test-project',
+    },
   },
   history: {
-    push: jest.fn()
-  }
+    push: jest.fn(),
+  },
 };
 
 const loadCreateCustomObject = () => shallow(<CreateCustomObject {...mocks} />);
 
 describe('create custom object', () => {
   const submitForm = async (wrapper, values = formValues) =>
-    wrapper
-      .find(CustomObjectForm)
-      .props()
-      .onSubmit(values);
+    wrapper.find(CustomObjectForm).props().onSubmit(values);
 
   beforeEach(() => {
     jest
@@ -54,8 +51,8 @@ describe('create custom object', () => {
     submitForm(wrapper);
     expect(mutation).toHaveBeenCalledWith({
       variables: {
-        body: formValues
-      }
+        body: formValues,
+      },
     });
   });
 
@@ -70,7 +67,7 @@ describe('create custom object', () => {
             {...messages.createError}
             values={{ message: error.message }}
           />
-        )
+        ),
       })
     );
   });
@@ -87,7 +84,7 @@ describe('create custom object', () => {
 
     it('should display success message', () => {
       expect(mockShowNotification).toHaveBeenCalledWith({
-        text: <FormattedMessage {...messages.createSuccess} />
+        text: <FormattedMessage {...messages.createSuccess} />,
       });
     });
 

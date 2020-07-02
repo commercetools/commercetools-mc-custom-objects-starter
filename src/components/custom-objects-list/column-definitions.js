@@ -6,30 +6,30 @@ export const COLUMN_KEYS = {
   CONTAINER: 'container',
   KEY: 'key',
   VALUE: 'value',
-  MODIFIED: 'lastModifiedAt'
+  MODIFIED: 'lastModifiedAt',
 };
 
 export const columnDefinitions = [
   {
     key: COLUMN_KEYS.CONTAINER,
     isSortable: true,
-    label: <FormattedMessage {...messages.containerColumn} />
+    label: <FormattedMessage {...messages.containerColumn} />,
   },
   {
     key: COLUMN_KEYS.KEY,
     isSortable: true,
     flexGrow: 1,
-    label: <FormattedMessage {...messages.keyColumn} />
+    label: <FormattedMessage {...messages.keyColumn} />,
   },
   {
     key: COLUMN_KEYS.VALUE,
     flexGrow: 1,
-    label: <FormattedMessage {...messages.valueColumn} />
+    label: <FormattedMessage {...messages.valueColumn} />,
   },
   {
     key: COLUMN_KEYS.MODIFIED,
     isSortable: true,
     flexGrow: 1,
-    label: <FormattedMessage {...messages.lastModifiedAtColumn} />
-  }
+    label: <FormattedMessage {...messages.lastModifiedAtColumn} />,
+  },
 ];

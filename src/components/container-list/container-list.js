@@ -16,7 +16,7 @@ import {
   Pagination,
   TabContainer,
   View,
-  ViewHeader
+  ViewHeader,
 } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
 import GetContainers from '../get-custom-objects.rest.graphql';
@@ -26,24 +26,24 @@ import messages from './messages';
 const sortOptions = [
   {
     label: <FormattedMessage {...messages.newestFirstLabel} />,
-    value: `${FIELDS.CREATED} ${SORT_OPTIONS.DESC}`
+    value: `${FIELDS.CREATED} ${SORT_OPTIONS.DESC}`,
   },
   {
     label: <FormattedMessage {...messages.oldestFirstLabel} />,
-    value: `${FIELDS.CREATED} ${SORT_OPTIONS.ASC}`
+    value: `${FIELDS.CREATED} ${SORT_OPTIONS.ASC}`,
   },
   {
     label: <FormattedMessage {...messages.lastModifiedLabel} />,
-    value: `${FIELDS.LAST_MODIFIED} ${SORT_OPTIONS.DESC}`
+    value: `${FIELDS.LAST_MODIFIED} ${SORT_OPTIONS.DESC}`,
   },
   {
     label: <FormattedMessage {...messages.alphabeticalAscLabel} />,
-    value: `${FIELDS.KEY} ${SORT_OPTIONS.ASC}`
+    value: `${FIELDS.KEY} ${SORT_OPTIONS.ASC}`,
   },
   {
     label: <FormattedMessage {...messages.alphabeticalDescLabel} />,
-    value: `${FIELDS.KEY} ${SORT_OPTIONS.DESC}`
-  }
+    value: `${FIELDS.KEY} ${SORT_OPTIONS.DESC}`,
+  },
 ];
 
 const ContainerList = ({ match }) => {
@@ -51,11 +51,11 @@ const ContainerList = ({ match }) => {
   const [sort, setSort] = useState(`${FIELDS.KEY} ${SORT_OPTIONS.ASC}`);
   const [variables, setVariables] = useState({
     ...DEFAULT_VARIABLES,
-    sort
+    sort,
   });
 
   const { data, error } = useQuery(GetContainers, {
-    variables
+    variables,
   });
 
   function handleSortChange(event) {
@@ -63,7 +63,7 @@ const ContainerList = ({ match }) => {
     setSort(value);
     setVariables({
       ...DEFAULT_VARIABLES,
-      sort: value
+      sort: value,
     });
   }
 
@@ -146,7 +146,7 @@ const ContainerList = ({ match }) => {
                         <FormattedMessage
                           data-testid="container-attributes"
                           values={{
-                            total: value.attributes.length
+                            total: value.attributes.length,
                           }}
                           {...messages.attributesLabel}
                         />
@@ -178,7 +178,7 @@ const ContainerList = ({ match }) => {
 };
 ContainerList.displayName = 'ContainerList';
 ContainerList.propTypes = {
-  match: PropTypes.shape({ url: PropTypes.string.isRequired }).isRequired
+  match: PropTypes.shape({ url: PropTypes.string.isRequired }).isRequired,
 };
 
 export default ContainerList;

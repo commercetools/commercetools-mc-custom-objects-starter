@@ -13,7 +13,7 @@ const mockValue = {
   name: faker.random.words(),
   type: faker.random.arrayElement(Object.values(TYPES)),
   required: faker.random.boolean(),
-  set: faker.random.boolean()
+  set: faker.random.boolean(),
 };
 
 const mocks = {
@@ -23,7 +23,7 @@ const mocks = {
   handleBlur: jest.fn(),
   handleChange: jest.fn(),
   remove: jest.fn(),
-  removeDisabled: faker.random.boolean()
+  removeDisabled: faker.random.boolean(),
 };
 
 const loadAttributeGroup = (value = mockValue) =>
@@ -59,14 +59,11 @@ describe('attribute group', () => {
       const event = {
         target: {
           name: `${mocks.name}.${ATTRIBUTES.Required}`,
-          value: faker.random.boolean()
-        }
+          value: faker.random.boolean(),
+        },
       };
       const wrapper = loadAttributeGroup(value);
-      wrapper
-        .find(Attribute)
-        .props()
-        .handleChange(event);
+      wrapper.find(Attribute).props().handleChange(event);
       expect(mocks.handleChange).toHaveBeenCalledWith(event);
     });
 
@@ -74,14 +71,11 @@ describe('attribute group', () => {
       const event = {
         target: {
           name: `${mocks.name}.${ATTRIBUTES.Type}`,
-          value: TYPES.Boolean
-        }
+          value: TYPES.Boolean,
+        },
       };
       const wrapper = loadAttributeGroup(value);
-      wrapper
-        .find(Attribute)
-        .props()
-        .handleChange(event);
+      wrapper.find(Attribute).props().handleChange(event);
       expect(mocks.handleChange).toHaveBeenCalledWith(event);
     });
 
@@ -89,17 +83,14 @@ describe('attribute group', () => {
       const event = {
         target: {
           name: `${mocks.name}.${ATTRIBUTES.Type}`,
-          value: TYPES.Object
-        }
+          value: TYPES.Object,
+        },
       };
       let wrapper;
 
       beforeEach(() => {
         wrapper = loadAttributeGroup(value);
-        wrapper
-          .find(Attribute)
-          .props()
-          .handleChange(event);
+        wrapper.find(Attribute).props().handleChange(event);
       });
 
       it('should call handle change with empty attribute value', () => {
@@ -111,10 +102,10 @@ describe('attribute group', () => {
                 name: '',
                 type: '',
                 set: false,
-                required: false
-              }
-            ]
-          }
+                required: false,
+              },
+            ],
+          },
         });
       });
 
@@ -127,25 +118,22 @@ describe('attribute group', () => {
       const event = {
         target: {
           name: `${mocks.name}.${ATTRIBUTES.Type}`,
-          value: TYPES.Reference
-        }
+          value: TYPES.Reference,
+        },
       };
       let wrapper;
 
       beforeEach(() => {
         wrapper = loadAttributeGroup(value);
-        wrapper
-          .find(Attribute)
-          .props()
-          .handleChange(event);
+        wrapper.find(Attribute).props().handleChange(event);
       });
 
       it('should call handle change with empty reference value', () => {
         expect(mocks.handleChange).toHaveBeenCalledWith({
           target: {
             name: `${mocks.name}.${ATTRIBUTES.Reference}`,
-            value: ''
-          }
+            value: '',
+          },
         });
       });
 
@@ -158,25 +146,22 @@ describe('attribute group', () => {
       const event = {
         target: {
           name: `${mocks.name}.${ATTRIBUTES.Type}`,
-          value: TYPES.Enum
-        }
+          value: TYPES.Enum,
+        },
       };
       let wrapper;
 
       beforeEach(() => {
         wrapper = loadAttributeGroup(value);
-        wrapper
-          .find(Attribute)
-          .props()
-          .handleChange(event);
+        wrapper.find(Attribute).props().handleChange(event);
       });
 
       it('should call handle change with empty enum value', () => {
         expect(mocks.handleChange).toHaveBeenCalledWith({
           target: {
             name: `${mocks.name}.${ATTRIBUTES.Enum}`,
-            value: [{ value: '', label: '' }]
-          }
+            value: [{ value: '', label: '' }],
+          },
         });
       });
 

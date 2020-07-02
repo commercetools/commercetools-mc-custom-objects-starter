@@ -5,11 +5,11 @@ export const DATE_FORMAT = {
   hour: 'numeric',
   minute: 'numeric',
   hour12: true,
-  timeZoneName: 'short'
+  timeZoneName: 'short',
 };
 
 export const PAGE_SIZE = 20;
 export const DEFAULT_VARIABLES = {
   limit: PAGE_SIZE,
-  offset: 0
+  offset: 0,
 };

@@ -28,15 +28,15 @@ const Form = ({
   handleBlur,
   handleChange,
   handleSubmit,
-  setFieldValue
+  setFieldValue,
 }) => {
   const intl = useIntl();
   const { project } = useApplicationContext();
   const { currencies } = project;
 
-  const containerOptions = map(containers, container => ({
+  const containerOptions = map(containers, (container) => ({
     label: container.key,
-    value: JSON.stringify(container)
+    value: JSON.stringify(container),
   }));
 
   React.useEffect(() => {
@@ -144,30 +144,30 @@ Form.propTypes = {
   containers: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired
+      key: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,
   initialValues: PropTypes.shape({
     container: PropTypes.string,
     key: PropTypes.string,
     value: PropTypes.object,
-    attributes: PropTypes.array
+    attributes: PropTypes.array,
   }).isRequired,
   values: PropTypes.shape({
     container: PropTypes.string,
     key: PropTypes.string,
     value: PropTypes.object,
-    attributes: PropTypes.array
+    attributes: PropTypes.array,
   }).isRequired,
   touched: PropTypes.shape({
     container: PropTypes.bool,
     key: PropTypes.bool,
-    value: PropTypes.object
+    value: PropTypes.object,
   }),
   errors: PropTypes.shape({
     container: PropTypes.object,
     key: PropTypes.object,
-    value: PropTypes.object
+    value: PropTypes.object,
   }),
   dirty: PropTypes.bool,
   isValid: PropTypes.bool,
@@ -175,7 +175,7 @@ Form.propTypes = {
   handleBlur: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  setFieldValue: PropTypes.func.isRequired
+  setFieldValue: PropTypes.func.isRequired,
 };
 
 export default Form;

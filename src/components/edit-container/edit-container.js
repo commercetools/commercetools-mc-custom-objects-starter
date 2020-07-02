@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { useShowNotification } from '@commercetools-frontend/actions-global';
 import {
   DOMAINS,
-  NOTIFICATION_KINDS_SIDE
+  NOTIFICATION_KINDS_SIDE,
 } from '@commercetools-frontend/constants';
 import { useShowSideNotification } from '@custom-applications-local/core/hooks';
 import { CONTAINER } from '../../constants';
@@ -20,15 +20,15 @@ const EditContainer = ({ container, onComplete }) => {
   );
   const showErrorNotification = useShowNotification({
     kind: NOTIFICATION_KINDS_SIDE.error,
-    domain: DOMAINS.SIDE
+    domain: DOMAINS.SIDE,
   });
   const [updateContainer] = useMutation(UpdateContainer, {
     onCompleted: showSuccessNotification,
     onError({ message }) {
       showErrorNotification({
-        text: <FormattedMessage {...messages.editError} values={{ message }} />
+        text: <FormattedMessage {...messages.editError} values={{ message }} />,
       });
-    }
+    },
   });
 
   function onSubmit(values) {
@@ -39,10 +39,10 @@ const EditContainer = ({ container, onComplete }) => {
           container: CONTAINER,
           key,
           value: {
-            attributes
-          }
-        }
-      }
+            attributes,
+          },
+        },
+      },
     }).then(onComplete);
   }
 
@@ -60,12 +60,12 @@ EditContainer.propTypes = {
           set: PropTypes.bool,
           required: PropTypes.bool,
           attributes: PropTypes.array,
-          reference: PropTypes.string
+          reference: PropTypes.string,
         }).isRequired
-      ).isRequired
-    }).isRequired
+      ).isRequired,
+    }).isRequired,
   }).isRequired,
-  onComplete: PropTypes.func.isRequired
+  onComplete: PropTypes.func.isRequired,
 };
 
 export default EditContainer;

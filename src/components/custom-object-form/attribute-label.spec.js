@@ -7,7 +7,7 @@ import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
 import AttributeLabel from './attribute-label';
 
 const mocks = {
-  title: faker.random.words()
+  title: faker.random.words(),
 };
 
 const loadAttributeLabel = (type, isRequired, reference) =>

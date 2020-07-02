@@ -20,7 +20,7 @@ const ObjectAttributes = ({
   touched,
   errors,
   handleBlur,
-  handleChange
+  handleChange,
 }) => {
   const intl = useIntl();
   return (
@@ -46,7 +46,7 @@ const ObjectAttributes = ({
                     name: '',
                     type: '',
                     set: false,
-                    required: false
+                    required: false,
                   })
                 }
               />
@@ -83,7 +83,7 @@ ObjectAttributes.propTypes = {
       required: PropTypes.bool,
       set: PropTypes.bool,
       attributes: PropTypes.array,
-      reference: PropTypes.string
+      reference: PropTypes.string,
     })
   ).isRequired,
   touched: PropTypes.arrayOf(
@@ -93,7 +93,7 @@ ObjectAttributes.propTypes = {
       required: PropTypes.bool,
       set: PropTypes.bool,
       attributes: PropTypes.array,
-      reference: PropTypes.bool
+      reference: PropTypes.bool,
     })
   ),
   errors: PropTypes.arrayOf(
@@ -101,11 +101,11 @@ ObjectAttributes.propTypes = {
       name: PropTypes.object,
       type: PropTypes.object,
       attributes: PropTypes.array,
-      reference: PropTypes.object
+      reference: PropTypes.object,
     })
   ),
   handleBlur: PropTypes.func.isRequired,
-  handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired,
 };
 
 export default ObjectAttributes;

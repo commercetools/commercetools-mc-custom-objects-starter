@@ -18,13 +18,13 @@ export const getValue = (type, attributes, reference, currencies) => {
     case TYPES.Money:
       return {
         amount: '',
-        currencyCode: currencies[0]
+        currencyCode: currencies[0],
       };
 
     case TYPES.Reference:
       return {
         typeId: reference,
-        id: ''
+        id: '',
       };
 
     case TYPES.Object:
@@ -57,7 +57,7 @@ export const getAttributeValues = (attributes, currencies) =>
         nested,
         reference,
         currencies
-      )
+      ),
     }),
     {}
   );
@@ -95,13 +95,13 @@ const getValidationByType = (attribute, messages) => {
     case TYPES.Money:
       return yup.object({
         amount: getValidation(attribute, 'string', messages),
-        currencyCode: getValidation(attribute, 'string', messages)
+        currencyCode: getValidation(attribute, 'string', messages),
       });
 
     case TYPES.Reference:
       return yup.object({
         typeId: yup.string(),
-        id: getValidation(attribute, 'string', messages)
+        id: getValidation(attribute, 'string', messages),
       });
 
     case TYPES.Object:
@@ -117,7 +117,7 @@ export const getAttributeValidation = (attributes, messages) => {
     attributes,
     (obj, attribute) => ({
       ...obj,
-      [camelCase(attribute.name)]: getValidationByType(attribute, messages)
+      [camelCase(attribute.name)]: getValidationByType(attribute, messages),
     }),
     {}
   );

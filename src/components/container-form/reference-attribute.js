@@ -8,9 +8,9 @@ import { REFERENCE_TYPES } from './constants';
 import messages from './messages';
 import styles from './nested-attributes.mod.css';
 
-const options = map(REFERENCE_TYPES, type => ({
+const options = map(REFERENCE_TYPES, (type) => ({
   label: type,
-  value: type
+  value: type,
 }));
 
 const ReferenceAttribute = ({
@@ -19,7 +19,7 @@ const ReferenceAttribute = ({
   errors,
   touched,
   handleChange,
-  handleBlur
+  handleBlur,
 }) => {
   return (
     <div className={styles.nested}>
@@ -47,7 +47,7 @@ ReferenceAttribute.propTypes = {
   errors: PropTypes.object,
   touched: PropTypes.bool,
   handleChange: PropTypes.func.isRequired,
-  handleBlur: PropTypes.func.isRequired
+  handleBlur: PropTypes.func.isRequired,
 };
 
 export default ReferenceAttribute;

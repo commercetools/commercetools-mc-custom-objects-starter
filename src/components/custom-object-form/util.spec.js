@@ -15,8 +15,8 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.String
-        }
+          type: TYPES.String,
+        },
       ];
       const values = { [camelCase(name)]: '' };
       expect(getAttributeValues(attributes)).toEqual(values);
@@ -27,8 +27,8 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.Number
-        }
+          type: TYPES.Number,
+        },
       ];
       const values = { [camelCase(name)]: '' };
       expect(getAttributeValues(attributes)).toEqual(values);
@@ -39,8 +39,8 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.Boolean
-        }
+          type: TYPES.Boolean,
+        },
       ];
       const values = { [camelCase(name)]: false };
       expect(getAttributeValues(attributes)).toEqual(values);
@@ -52,11 +52,11 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.Money
-        }
+          type: TYPES.Money,
+        },
       ];
       const values = {
-        [camelCase(name)]: { amount: '', currencyCode: currencies[0] }
+        [camelCase(name)]: { amount: '', currencyCode: currencies[0] },
       };
       expect(getAttributeValues(attributes, currencies)).toEqual(values);
     });
@@ -71,8 +71,8 @@ describe('attribute utilities', () => {
         {
           name,
           type: TYPES.Reference,
-          reference
-        }
+          reference,
+        },
       ];
       const values = { [camelCase(name)]: { typeId: reference, id: '' } };
       expect(getAttributeValues(attributes)).toEqual(values);
@@ -83,19 +83,19 @@ describe('attribute utilities', () => {
       const nestedAttributes = [
         {
           name: `${name}-nested`,
-          type: TYPES.String
-        }
+          type: TYPES.String,
+        },
       ];
       const attributes = [
         {
           name,
           type: TYPES.Object,
-          attributes: nestedAttributes
-        }
+          attributes: nestedAttributes,
+        },
       ];
       const value = { [camelCase(`${name}-nested`)]: '' };
       const values = {
-        [camelCase(name)]: value
+        [camelCase(name)]: value,
       };
       expect(getAttributeValues(attributes)).toEqual(values);
     });
@@ -106,8 +106,8 @@ describe('attribute utilities', () => {
         {
           name,
           type: TYPES.String,
-          set: true
-        }
+          set: true,
+        },
       ];
       const values = { [camelCase(name)]: [''] };
       expect(getAttributeValues(attributes)).toEqual(values);
@@ -120,8 +120,8 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.String
-        }
+          type: TYPES.String,
+        },
       ];
       const validation = { [camelCase(name)]: yup.string().nullable() };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
@@ -134,8 +134,8 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.Enum
-        }
+          type: TYPES.Enum,
+        },
       ];
       const validation = { [camelCase(name)]: yup.string().nullable() };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
@@ -148,8 +148,8 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.Number
-        }
+          type: TYPES.Number,
+        },
       ];
       const validation = { [camelCase(name)]: yup.number().nullable() };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
@@ -162,8 +162,8 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.Boolean
-        }
+          type: TYPES.Boolean,
+        },
       ];
       const validation = { [camelCase(name)]: yup.boolean().nullable() };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
@@ -176,14 +176,14 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: TYPES.Money
-        }
+          type: TYPES.Money,
+        },
       ];
       const validation = {
         [camelCase(name)]: yup.object({
           amount: yup.string().nullable(),
-          currencyCode: yup.string().nullable()
-        })
+          currencyCode: yup.string().nullable(),
+        }),
       };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
         JSON.stringify(validation)
@@ -199,14 +199,14 @@ describe('attribute utilities', () => {
         {
           name,
           type: TYPES.Reference,
-          reference
-        }
+          reference,
+        },
       ];
       const validation = {
         [camelCase(name)]: yup.object({
           typeId: yup.string(),
-          id: yup.string().nullable()
-        })
+          id: yup.string().nullable(),
+        }),
       };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
         JSON.stringify(validation)
@@ -218,24 +218,21 @@ describe('attribute utilities', () => {
       const nestedAttributes = [
         {
           name: `${name}-nested`,
-          type: TYPES.String
-        }
+          type: TYPES.String,
+        },
       ];
       const attributes = [
         {
           name,
           type: TYPES.Object,
-          attributes: nestedAttributes
-        }
+          attributes: nestedAttributes,
+        },
       ];
       const nestedValidation = {
-        [camelCase(`${name}-nested`)]: yup.string().nullable()
+        [camelCase(`${name}-nested`)]: yup.string().nullable(),
       };
       const validation = {
-        [camelCase(name)]: yup
-          .object()
-          .shape(nestedValidation)
-          .nullable()
+        [camelCase(name)]: yup.object().shape(nestedValidation).nullable(),
       };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
         JSON.stringify(validation)
@@ -247,8 +244,8 @@ describe('attribute utilities', () => {
       const attributes = [
         {
           name,
-          type: 'banana'
-        }
+          type: 'banana',
+        },
       ];
       const validation = { [camelCase(name)]: null };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
@@ -262,11 +259,11 @@ describe('attribute utilities', () => {
         {
           name,
           type: TYPES.String,
-          set: true
-        }
+          set: true,
+        },
       ];
       const validation = {
-        [camelCase(name)]: yup.array(yup.string().nullable())
+        [camelCase(name)]: yup.array(yup.string().nullable()),
       };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
         JSON.stringify(validation)
@@ -279,18 +276,18 @@ describe('attribute utilities', () => {
         {
           name,
           type: TYPES.String,
-          required: true
-        }
+          required: true,
+        },
       ];
       const validation = {
         [camelCase(name)]: yup
           .string()
-          .required(<FormattedMessage {...messages.requiredFieldError} />)
+          .required(<FormattedMessage {...messages.requiredFieldError} />),
       };
       expect(
         JSON.stringify(
           getAttributeValidation(attributes, {
-            required: messages.requiredFieldError
+            required: messages.requiredFieldError,
           })
         )
       ).toEqual(JSON.stringify(validation));

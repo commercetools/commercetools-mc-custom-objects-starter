@@ -9,7 +9,7 @@ import { TYPES } from './constants';
 
 const initializeContainerValues = ({ key, value }) => ({
   key,
-  attributes: value.attributes
+  attributes: value.attributes,
 });
 
 const initializeEmptyValues = () => ({
@@ -19,9 +19,9 @@ const initializeEmptyValues = () => ({
       name: '',
       type: '',
       set: false,
-      required: false
-    }
-  ]
+      required: false,
+    },
+  ],
 });
 
 const ContainerForm = ({ container, onSubmit }) => {
@@ -32,7 +32,7 @@ const ContainerForm = ({ container, onSubmit }) => {
     : initializeEmptyValues();
 
   const stringSchema = yup.string().required({
-    required: intl.formatMessage(messages.requiredFieldError)
+    required: intl.formatMessage(messages.requiredFieldError),
   });
   const attributeSchema = {
     name: stringSchema,
@@ -41,11 +41,11 @@ const ContainerForm = ({ container, onSubmit }) => {
     required: yup.bool(),
     attributes: yup.array(yup.lazy(() => yup.object(attributeSchema))),
     reference: yup.string().when('type', {
-      is: val => val === TYPES.Reference,
-      then: stringSchema
+      is: (val) => val === TYPES.Reference,
+      then: stringSchema,
     }),
     enum: yup.array().when('type', {
-      is: val => val === TYPES.Enum,
+      is: (val) => val === TYPES.Enum,
       then: yup.array(
         yup.object({
           value: yup
@@ -53,14 +53,14 @@ const ContainerForm = ({ container, onSubmit }) => {
             .required(intl.formatMessage(messages.requiredFieldError)),
           label: yup
             .string()
-            .required(intl.formatMessage(messages.requiredFieldError))
+            .required(intl.formatMessage(messages.requiredFieldError)),
         })
-      )
-    })
+      ),
+    }),
   };
   const validationSchema = yup.object({
     key: stringSchema,
-    attributes: yup.array(yup.object(attributeSchema))
+    attributes: yup.array(yup.object(attributeSchema)),
   });
 
   return (
@@ -68,16 +68,16 @@ const ContainerForm = ({ container, onSubmit }) => {
       enableReinitialize
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={values => onSubmit(values)}
+      onSubmit={(values) => onSubmit(values)}
     >
-      {props => <Form {...props} />}
+      {(props) => <Form {...props} />}
     </Formik>
   );
 };
 ContainerForm.displayName = 'ContainerForm';
 ContainerForm.propTypes = {
   container: PropTypes.object,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContainerForm;

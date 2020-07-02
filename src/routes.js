@@ -28,19 +28,19 @@ PageUnauthorized.displayName = 'PageUnauthorized';
 
 const ApplicationRoutes = ({ match }) => {
   const canManageProducts = useIsAuthorized({
-    demandedPermissions: [PERMISSIONS.ManageProducts]
+    demandedPermissions: [PERMISSIONS.ManageProducts],
   });
   const canManageOrders = useIsAuthorized({
-    demandedPermissions: [PERMISSIONS.ManageOrders]
+    demandedPermissions: [PERMISSIONS.ManageOrders],
   });
   const canManageCustomers = useIsAuthorized({
-    demandedPermissions: [PERMISSIONS.ManageCustomers]
+    demandedPermissions: [PERMISSIONS.ManageCustomers],
   });
   const canManageCustomObjects =
     canManageProducts && canManageOrders && canManageCustomers;
 
   const { data, loading } = useQuery(GetContainers, {
-    variables: { limit: 500, offset: 0, where: `container="${CONTAINER}"` }
+    variables: { limit: 500, offset: 0, where: `container="${CONTAINER}"` },
   });
 
   if (!canManageCustomObjects) {
@@ -59,25 +59,25 @@ const ApplicationRoutes = ({ match }) => {
       <Switch>
         <Route
           path={`${match.path}/containers/new`}
-          render={props => <CreateContainer {...props} />}
+          render={(props) => <CreateContainer {...props} />}
         />
         <Route
           path={`${match.path}/containers/:id`}
-          render={props => <ContainerDetails {...props} />}
+          render={(props) => <ContainerDetails {...props} />}
         />
         <Route
           path={`${match.path}/containers`}
-          render={props => <ContainerList {...props} />}
+          render={(props) => <ContainerList {...props} />}
         />
         <Route
           path={`${match.path}/new`}
-          render={props => <CreateCustomObject {...props} />}
+          render={(props) => <CreateCustomObject {...props} />}
         />
         <Route
           path={`${match.path}/:id`}
-          render={props => <CustomObjectDetails {...props} />}
+          render={(props) => <CustomObjectDetails {...props} />}
         />
-        <Route render={props => <CustomObjectsList {...props} />} />
+        <Route render={(props) => <CustomObjectsList {...props} />} />
       </Switch>
     </ContainerProvider>
   );
@@ -88,9 +88,9 @@ ApplicationRoutes.propTypes = {
   match: PropTypes.shape({
     path: PropTypes.string,
     params: PropTypes.shape({
-      projectKey: PropTypes.string.isRequired
-    }).isRequired
-  }).isRequired
+      projectKey: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default ApplicationRoutes;

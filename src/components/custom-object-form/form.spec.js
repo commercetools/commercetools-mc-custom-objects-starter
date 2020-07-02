@@ -9,21 +9,21 @@ import Form from './form';
 import { getAttributeValues } from './util';
 
 const project = {
-  currencies: times(2, () => faker.finance.currencyCode())
+  currencies: times(2, () => faker.finance.currencyCode()),
 };
 
 const containers = generateContainers(2);
 const emptyValues = {
   container: '',
   key: '',
-  value: {}
+  value: {},
 };
 
 const mocks = {
   containers: containers.customObjects.results.map(({ id, key, value }) => ({
     id,
     key,
-    value
+    value,
   })),
   touched: {},
   errors: {},
@@ -33,7 +33,7 @@ const mocks = {
   handleBlur: jest.fn(),
   handleChange: jest.fn(),
   handleSubmit: jest.fn(),
-  setFieldValue: jest.fn()
+  setFieldValue: jest.fn(),
 };
 
 const loadForm = (initialValues = emptyValues, values = emptyValues) =>
@@ -72,7 +72,7 @@ describe('form', () => {
     beforeEach(() => {
       const wrapper = loadForm();
       wrapper.setProps({
-        values: { ...emptyValues, container: JSON.stringify(container) }
+        values: { ...emptyValues, container: JSON.stringify(container) },
       });
     });
 
@@ -103,10 +103,13 @@ describe('form', () => {
     beforeEach(() => {
       const wrapper = loadForm({
         ...emptyValues,
-        container: JSON.stringify(initialContainer)
+        container: JSON.stringify(initialContainer),
       });
       wrapper.setProps({
-        values: { ...emptyValues, container: JSON.stringify(selectedContainer) }
+        values: {
+          ...emptyValues,
+          container: JSON.stringify(selectedContainer),
+        },
       });
     });
 
@@ -136,14 +139,14 @@ describe('form', () => {
       id: faker.random.uuid(),
       container: JSON.stringify(initialContainer),
       values: {
-        comment: faker.random.words()
-      }
+        comment: faker.random.words(),
+      },
     };
 
     beforeEach(() => {
       const wrapper = loadForm(initialValues);
       wrapper.setProps({
-        values: { ...emptyValues, container: JSON.stringify(initialContainer) }
+        values: { ...emptyValues, container: JSON.stringify(initialContainer) },
       });
     });
 

@@ -18,7 +18,7 @@ const AttributeGroup = ({
   handleBlur,
   handleChange,
   remove,
-  removeDisabled
+  removeDisabled,
 }) => {
   function onChange(event) {
     const { name: eventName, value: eventValue } = event.target;
@@ -32,24 +32,24 @@ const AttributeGroup = ({
                 name: '',
                 type: '',
                 set: false,
-                required: false
-              }
-            ]
-          }
+                required: false,
+              },
+            ],
+          },
         });
       } else if (eventValue === TYPES.Reference) {
         handleChange({
           target: {
             name: `${name}.${ATTRIBUTES.Reference}`,
-            value: ''
-          }
+            value: '',
+          },
         });
       } else if (eventValue === TYPES.Enum) {
         handleChange({
           target: {
             name: `${name}.${ATTRIBUTES.Enum}`,
-            value: [{ value: '', label: '' }]
-          }
+            value: [{ value: '', label: '' }],
+          },
         });
       }
     }
@@ -110,7 +110,7 @@ AttributeGroup.propTypes = {
     required: PropTypes.bool,
     set: PropTypes.bool,
     attributes: PropTypes.array,
-    reference: PropTypes.string
+    reference: PropTypes.string,
   }).isRequired,
   touched: PropTypes.shape({
     name: PropTypes.bool,
@@ -118,18 +118,18 @@ AttributeGroup.propTypes = {
     required: PropTypes.bool,
     set: PropTypes.bool,
     attributes: PropTypes.array,
-    reference: PropTypes.bool
+    reference: PropTypes.bool,
   }),
   errors: PropTypes.shape({
     name: PropTypes.object,
     type: PropTypes.object,
     attributes: PropTypes.array,
-    reference: PropTypes.object
+    reference: PropTypes.object,
   }),
   handleBlur: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
-  removeDisabled: PropTypes.bool
+  removeDisabled: PropTypes.bool,
 };
 
 export default AttributeGroup;

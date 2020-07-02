@@ -14,32 +14,32 @@ import styles from './attribute.mod.css';
 const typeOptions = [
   {
     label: <FormattedMessage {...messages.stringLabel} />,
-    value: TYPES.String
+    value: TYPES.String,
   },
   {
     label: <FormattedMessage {...messages.numberLabel} />,
-    value: TYPES.Number
+    value: TYPES.Number,
   },
   {
     label: <FormattedMessage {...messages.booleanLabel} />,
-    value: TYPES.Boolean
+    value: TYPES.Boolean,
   },
   {
     label: <FormattedMessage {...messages.moneyLabel} />,
-    value: TYPES.Money
+    value: TYPES.Money,
   },
   {
     label: <FormattedMessage {...messages.enumLabel} />,
-    value: TYPES.Enum
+    value: TYPES.Enum,
   },
   {
     label: <FormattedMessage {...messages.objectLabel} />,
-    value: TYPES.Object
+    value: TYPES.Object,
   },
   {
     label: <FormattedMessage {...messages.referenceLabel} />,
-    value: TYPES.Reference
-  }
+    value: TYPES.Reference,
+  },
 ];
 
 const Attribute = ({
@@ -50,7 +50,7 @@ const Attribute = ({
   handleChange,
   handleBlur,
   removeDisabled,
-  remove
+  remove,
 }) => {
   const intl = useIntl();
   return (
@@ -123,22 +123,22 @@ Attribute.propTypes = {
     name: PropTypes.string,
     type: PropTypes.string,
     required: PropTypes.bool,
-    set: PropTypes.bool
+    set: PropTypes.bool,
   }).isRequired,
   touched: PropTypes.shape({
     name: PropTypes.bool,
     type: PropTypes.bool,
     required: PropTypes.bool,
-    set: PropTypes.bool
+    set: PropTypes.bool,
   }).isRequired,
   errors: PropTypes.shape({
     name: PropTypes.object,
-    type: PropTypes.object
+    type: PropTypes.object,
   }).isRequired,
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   removeDisabled: PropTypes.bool,
-  remove: PropTypes.func.isRequired
+  remove: PropTypes.func.isRequired,
 };
 
 export default Attribute;
