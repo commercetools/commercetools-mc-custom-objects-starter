@@ -39,6 +39,7 @@ const ObjectAttributes = ({
             />
             <Constraints.Horizontal constraint="scale">
               <SecondaryButton
+                data-testid="add-attribute"
                 label={intl.formatMessage(messages.addAttributeButton)}
                 iconLeft={<PlusBoldIcon />}
                 onClick={() =>
@@ -51,21 +52,21 @@ const ObjectAttributes = ({
                 }
               />
             </Constraints.Horizontal>
-            {value &&
-              value.map((objectValue, objectIndex) => (
-                <AttributeGroup
-                  key={objectIndex}
-                  name={`${name}.${objectIndex}`}
-                  index={objectIndex}
-                  value={objectValue}
-                  touched={get(touched, objectIndex, {})}
-                  errors={get(errors, objectIndex, {})}
-                  handleBlur={handleBlur}
-                  handleChange={handleChange}
-                  remove={() => remove(objectIndex)}
-                  removeDisabled={objectIndex === 0 && value.length === 1}
-                />
-              ))}
+            {value.map((objectValue, objectIndex) => (
+              <AttributeGroup
+                data-testid={`attribute-${objectIndex}`}
+                key={objectIndex}
+                name={`${name}.${objectIndex}`}
+                index={objectIndex}
+                value={objectValue}
+                touched={get(touched, objectIndex, {})}
+                errors={get(errors, objectIndex, {})}
+                handleBlur={handleBlur}
+                handleChange={handleChange}
+                remove={() => remove(objectIndex)}
+                removeDisabled={objectIndex === 0 && value.length === 1}
+              />
+            ))}
           </Spacings.Stack>
         )}
       />

@@ -58,7 +58,7 @@ describe('enum attributes', () => {
     expect(wrapper.find(removeButton(index)).prop('isDisabled')).toEqual(true);
   });
 
-  it('when multiple option in value, should display remove button', () => {
+  it('when multiple option in value, should enable remove button', () => {
     const index = 0;
     const wrapper = loadEnumAttributes({ value: [emptyValue, emptyValue] });
     expect(wrapper.find(removeButton(index)).prop('isDisabled')).toEqual(false);
