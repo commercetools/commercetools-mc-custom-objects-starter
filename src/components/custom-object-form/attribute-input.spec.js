@@ -4,6 +4,8 @@ import faker from 'faker';
 import camelCase from 'lodash/camelCase';
 import times from 'lodash/times';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
+import momentTZ from 'moment-timezone';
 import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
 import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
 import AttributeInput from './attribute-input';
@@ -14,6 +16,9 @@ import AttributeField from './attribute-field';
 
 const project = {
   currencies: times(2, () => faker.finance.currencyCode()),
+};
+const user = {
+  timeZone: faker.random.arrayElement(momentTZ.tz.names()),
 };
 
 const mocks = {
@@ -51,7 +56,7 @@ describe('attribute input', () => {
   beforeAll(() => {
     jest
       .spyOn(ApplicationContext, 'useApplicationContext')
-      .mockImplementation(() => ({ project }));
+      .mockImplementation(() => ({ project, user }));
   });
 
   describe('string type', () => {
@@ -336,6 +341,204 @@ describe('attribute input', () => {
           errors: {
             amount: <FormattedMessage {...messages.requiredFieldError} />,
           },
+        });
+      });
+
+      it('input should have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(true);
+      });
+
+      it('should display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(true);
+      });
+    });
+  });
+
+  describe('date type', () => {
+    const type = TYPES.Date;
+    const input = '[data-testid="field-type-date"]';
+    const value = moment(faker.date.recent()).format('YYYY-MM-DD');
+
+    it('should display date input', () => {
+      const wrapper = loadAttributeInput({ type, value });
+      expect(wrapper.find(input).exists()).toEqual(true);
+    });
+
+    describe('when input touched without error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({ type, value, touched: true });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input not touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: false,
+          errors: <FormattedMessage {...messages.requiredFieldError} />,
+        });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: true,
+          errors: <FormattedMessage {...messages.requiredFieldError} />,
+        });
+      });
+
+      it('input should have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(true);
+      });
+
+      it('should display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(true);
+      });
+    });
+  });
+
+  describe('time type', () => {
+    const type = TYPES.Time;
+    const input = '[data-testid="field-type-time"]';
+    const value = moment(faker.date.recent()).format('h:mm A');
+
+    it('should display time input', () => {
+      const wrapper = loadAttributeInput({ type, value });
+      expect(wrapper.find(input).exists()).toEqual(true);
+    });
+
+    describe('when input touched without error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({ type, value, touched: true });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input not touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: false,
+          errors: <FormattedMessage {...messages.requiredFieldError} />,
+        });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: true,
+          errors: <FormattedMessage {...messages.requiredFieldError} />,
+        });
+      });
+
+      it('input should have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(true);
+      });
+
+      it('should display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(true);
+      });
+    });
+  });
+
+  describe('datetime type', () => {
+    const type = TYPES.DateTime;
+    const input = '[data-testid="field-type-datetime"]';
+    const value = faker.date.recent().toISOString();
+
+    it('should display datetime input', () => {
+      const wrapper = loadAttributeInput({ type, value });
+      expect(wrapper.find(input).exists()).toEqual(true);
+    });
+
+    describe('when input touched without error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({ type, value, touched: true });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input not touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: false,
+          errors: <FormattedMessage {...messages.requiredFieldError} />,
+        });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: true,
+          errors: <FormattedMessage {...messages.requiredFieldError} />,
         });
       });
 

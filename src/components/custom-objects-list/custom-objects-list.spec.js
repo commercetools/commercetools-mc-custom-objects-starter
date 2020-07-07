@@ -5,6 +5,8 @@ import first from 'lodash/first';
 import last from 'lodash/last';
 import startCase from 'lodash/startCase';
 import times from 'lodash/times';
+import moment from 'moment';
+import { FormattedDate } from 'react-intl';
 import { useQuery, setQuery } from '@apollo/react-hooks';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import { PaginatedTable } from '@custom-applications-local/core/components';
@@ -13,7 +15,12 @@ import { generateContainerContext } from '../../test-util';
 import * as ContainerContext from '../../context/container-context';
 import GetCustomObjects from '../get-custom-objects.rest.graphql';
 import CustomObjectsList from './custom-objects-list';
-import { DEFAULT_VARIABLES, PAGE_SIZE } from './constants';
+import {
+  DATE_FORMAT,
+  DATE_TIME_FORMAT,
+  DEFAULT_VARIABLES,
+  PAGE_SIZE,
+} from './constants';
 import { COLUMN_KEYS } from './column-definitions';
 
 const containerContext = generateContainerContext();
@@ -209,6 +216,69 @@ describe('custom objects list', () => {
 
       it('when custom object key value is a number, should render number as string value', () => {
         const value = faker.random.number({ min: 1, max: 10 });
+        const customObject = {
+          ...generateCustomObject(),
+          value: {
+            [valueKey]: value,
+          },
+        };
+        const actual = renderValueColumn({
+          customObjects: {
+            total: 1,
+            count: 1,
+            offset: 0,
+            results: [customObject],
+          },
+        });
+        expect(actual.text()).toContain(value);
+      });
+
+      it('when custom object key value is a date, should render formatted date', () => {
+        const value = moment(faker.date.recent()).format('YYYY-MM-DD');
+        const customObject = {
+          ...generateCustomObject(),
+          value: {
+            [valueKey]: value,
+          },
+        };
+        const actual = renderValueColumn({
+          customObjects: {
+            total: 1,
+            count: 1,
+            offset: 0,
+            results: [customObject],
+          },
+        });
+        expect(actual.find(FormattedDate).props()).toEqual({
+          value,
+          ...DATE_FORMAT,
+        });
+      });
+
+      it('when custom object key value is a datetime, should render formatted datetime', () => {
+        const value = faker.date.recent().toISOString();
+        const customObject = {
+          ...generateCustomObject(),
+          value: {
+            [valueKey]: value,
+          },
+        };
+        const actual = renderValueColumn({
+          customObjects: {
+            total: 1,
+            count: 1,
+            offset: 0,
+            results: [customObject],
+          },
+        });
+        expect(actual.find(FormattedDate).props()).toEqual({
+          value,
+          ...DATE_TIME_FORMAT,
+        });
+      });
+
+      it('when custom object key value is a time, should render time as a string value', () => {
+        const value = moment(faker.date.recent()).format('h:mm A');
         const customObject = {
           ...generateCustomObject(),
           value: {

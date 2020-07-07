@@ -5,10 +5,13 @@ import get from 'lodash/get';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import {
   CheckboxInput,
-  TextInput,
-  NumberInput,
+  DateInput,
+  DateTimeInput,
   MoneyInput,
+  NumberInput,
   SelectInput,
+  TextInput,
+  TimeInput,
 } from '@commercetools-uikit/inputs';
 import { ErrorMessage } from '@commercetools-uikit/messages';
 import Spacings from '@commercetools-uikit/spacings';
@@ -30,8 +33,9 @@ const AttributeInput = ({
   attributes,
   options,
 }) => {
-  const { project } = useApplicationContext();
+  const { project, user } = useApplicationContext();
   const { currencies } = project;
+  const { timeZone } = user;
 
   switch (type) {
     case TYPES.String:
@@ -108,6 +112,59 @@ const AttributeInput = ({
         </Spacings.Stack>
       );
 
+    case TYPES.Date:
+      return (
+        <Spacings.Stack scale="xs">
+          <DateInput
+            data-testid="field-type-date"
+            name={name}
+            value={value}
+            hasError={!!(touched && errors)}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+          {touched && errors && (
+            <ErrorMessage data-testid="field-error">{errors}</ErrorMessage>
+          )}
+        </Spacings.Stack>
+      );
+
+    case TYPES.Time:
+      return (
+        <Spacings.Stack scale="xs">
+          <TimeInput
+            data-testid="field-type-time"
+            timeZone={timeZone}
+            name={name}
+            value={value}
+            hasError={!!(touched && errors)}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+          {touched && errors && (
+            <ErrorMessage data-testid="field-error">{errors}</ErrorMessage>
+          )}
+        </Spacings.Stack>
+      );
+
+    case TYPES.DateTime:
+      return (
+        <Spacings.Stack scale="xs">
+          <DateTimeInput
+            data-testid="field-type-datetime"
+            timeZone={timeZone}
+            name={name}
+            value={value}
+            hasError={!!(touched && errors)}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+          {touched && errors && (
+            <ErrorMessage data-testid="field-error">{errors}</ErrorMessage>
+          )}
+        </Spacings.Stack>
+      );
+
     case TYPES.Enum: {
       return (
         <Spacings.Stack scale="xs">
@@ -165,7 +222,7 @@ const AttributeInput = ({
                   attributes={attribute.attributes}
                   reference={attribute.reference}
                   isRequired={attribute.required}
-                  isSet={attribute.isSet}
+                  isSet={attribute.set}
                   options={attribute.enum}
                   value={get(value, attributeName)}
                   touched={get(touched, attributeName)}

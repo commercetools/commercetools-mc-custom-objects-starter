@@ -29,6 +29,18 @@ const typeOptions = [
     value: TYPES.Money,
   },
   {
+    label: <FormattedMessage {...messages.dateLabel} />,
+    value: TYPES.Date,
+  },
+  {
+    label: <FormattedMessage {...messages.timeLabel} />,
+    value: TYPES.Time,
+  },
+  {
+    label: <FormattedMessage {...messages.dateTimeLabel} />,
+    value: TYPES.DateTime,
+  },
+  {
     label: <FormattedMessage {...messages.enumLabel} />,
     value: TYPES.Enum,
   },

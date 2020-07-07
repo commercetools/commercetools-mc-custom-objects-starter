@@ -1,4 +1,4 @@
-export const DATE_FORMAT = {
+export const DATE_TIME_FORMAT = {
   year: 'numeric',
   month: 'numeric',
   day: 'numeric',
@@ -6,6 +6,11 @@ export const DATE_FORMAT = {
   minute: 'numeric',
   hour12: true,
   timeZoneName: 'short',
+};
+export const DATE_FORMAT = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
 };
 
 export const PAGE_SIZE = 20;

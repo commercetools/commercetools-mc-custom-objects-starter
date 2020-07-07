@@ -61,6 +61,21 @@ export default defineMessages({
     description: 'Label for attributes money value',
     defaultMessage: 'Money',
   },
+  dateLabel: {
+    id: 'Container.form.type.label.date',
+    description: 'Label for attributes date value',
+    defaultMessage: 'Date',
+  },
+  timeLabel: {
+    id: 'Container.form.type.label.time',
+    description: 'Label for attributes time value',
+    defaultMessage: 'Time',
+  },
+  dateTimeLabel: {
+    id: 'Container.form.type.label.dateTime',
+    description: 'Label for attributes date time value',
+    defaultMessage: 'Date and Time',
+  },
   enumLabel: {
     id: 'Container.form.type.label.enum',
     description: 'Label for attributes enum value',

@@ -9,6 +9,9 @@ export const getValue = (type, attributes, reference, currencies) => {
   switch (type) {
     case TYPES.String:
     case TYPES.Number:
+    case TYPES.Date:
+    case TYPES.Time:
+    case TYPES.DateTime:
     case TYPES.Enum:
       return '';
 
@@ -84,6 +87,7 @@ const getValidationByType = (attribute, messages) => {
   switch (attribute.type) {
     case TYPES.String:
     case TYPES.Enum:
+    case TYPES.Time:
       return getValidation(attribute, 'string', messages);
 
     case TYPES.Number:
@@ -97,6 +101,10 @@ const getValidationByType = (attribute, messages) => {
         amount: getValidation(attribute, 'string', messages),
         currencyCode: getValidation(attribute, 'string', messages),
       });
+
+    case TYPES.Date:
+    case TYPES.DateTime:
+      return getValidation(attribute, 'date', messages);
 
     case TYPES.Reference:
       return yup.object({

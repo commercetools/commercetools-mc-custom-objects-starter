@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { useQuery } from '@apollo/react-hooks';
+import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
+import isString from 'lodash/isString';
 import map from 'lodash/map';
 import startCase from 'lodash/startCase';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
@@ -18,7 +20,7 @@ import { PaginatedTable } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
 import { useContainerContext } from '../../context';
 import GetCustomObjects from '../get-custom-objects.rest.graphql';
-import { DATE_FORMAT, DEFAULT_VARIABLES } from './constants';
+import { DATE_FORMAT, DATE_TIME_FORMAT, DEFAULT_VARIABLES } from './constants';
 import { columnDefinitions, COLUMN_KEYS } from './column-definitions';
 import messages from './messages';
 import styles from './custom-objects-list.mod.css';
@@ -63,6 +65,12 @@ const CustomObjectsList = ({ match, history }) => {
           ))}
         </div>
       );
+    }
+
+    const dateRegex = /\d{4}-\d{2}-\d{2}/;
+    if (isString(value) && value.match(dateRegex)) {
+      const format = includes(value, 'T') ? DATE_TIME_FORMAT : DATE_FORMAT;
+      return <FormattedDate value={value} {...format} />;
     }
 
     return value.toString();

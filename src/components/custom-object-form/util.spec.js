@@ -61,6 +61,42 @@ describe('attribute utilities', () => {
       expect(getAttributeValues(attributes, currencies)).toEqual(values);
     });
 
+    it('when attribute is a date type, should return empty string as initial value', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.Date,
+        },
+      ];
+      const values = { [camelCase(name)]: '' };
+      expect(getAttributeValues(attributes)).toEqual(values);
+    });
+
+    it('when attribute is a time type, should return empty string as initial value', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.Time,
+        },
+      ];
+      const values = { [camelCase(name)]: '' };
+      expect(getAttributeValues(attributes)).toEqual(values);
+    });
+
+    it('when attribute is a datetime type, should return empty string as initial value', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.DateTime,
+        },
+      ];
+      const values = { [camelCase(name)]: '' };
+      expect(getAttributeValues(attributes)).toEqual(values);
+    });
+
     // commercetools reference type: https://docs.commercetools.com/http-api-types#references
     it('when attribute is a reference type, should return a reference type with id as an empty string as initial value', () => {
       const name = faker.random.words();
@@ -185,6 +221,48 @@ describe('attribute utilities', () => {
           currencyCode: yup.string().nullable(),
         }),
       };
+      expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
+        JSON.stringify(validation)
+      );
+    });
+
+    it('when attribute is a date type, should return yup date as validation', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.Date,
+        },
+      ];
+      const validation = { [camelCase(name)]: yup.date().nullable() };
+      expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
+        JSON.stringify(validation)
+      );
+    });
+
+    it('when attribute is a datetime type, should return yup date as validation', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.DateTime,
+        },
+      ];
+      const validation = { [camelCase(name)]: yup.date().nullable() };
+      expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
+        JSON.stringify(validation)
+      );
+    });
+
+    it('when attribute is a time type, should return yup string as validation', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.Time,
+        },
+      ];
+      const validation = { [camelCase(name)]: yup.string().nullable() };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
         JSON.stringify(validation)
       );
