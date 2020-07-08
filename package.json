@@ -8,7 +8,7 @@
     "start": "mc-scripts start",
     "start:prod:local": "NODE_ENV=production mc-http-server --config=$(pwd)/env.json --use-local-assets",
     "compile-html:aws": "mc-scripts compile-html --headers=$(pwd)/production-aws.headers.json --config=$(pwd)/production-aws.env.json --use-local-assets --transformer $(pwd)/config/transformer-aws.js",
-    "compile-html:firebase": "mc-scripts compile-html --headers=$(pwd)/production-firebase.headers.json --config=$(pwd)/production-firebase.env.json --use-local-assets --transformer $(pwd)/config/transformer-firebase.js",
+    "compile-html:firebase": "cross-env FIREBASE_TARGET=custom-objects mc-scripts compile-html --headers=$(pwd)/production-firebase.headers.json --config=$(pwd)/production-firebase.env.json --use-local-assets --transformer $(pwd)/config/transformer-firebase.js",
     "precommit": "lint-staged",
     "i18n:build": "mc-scripts extract-intl --output-path=$(pwd)/src/i18n/data '{src,../core}/**/!(*.spec).js' --build-translations",
     "lint": "jest --projects jest.eslint.config.js jest.eslint-graphql.config.js jest.stylelint.config.js",
