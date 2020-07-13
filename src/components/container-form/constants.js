@@ -8,6 +8,7 @@ export const TYPES = {
   Time: 'Time',
   DateTime: 'DateTime',
   Enum: 'Enum',
+  LocalizedEnum: 'LocalizedEnum',
   Object: 'Object',
   Reference: 'Reference',
 };
@@ -45,4 +46,5 @@ export const ATTRIBUTES = {
   Attributes: 'attributes',
   Reference: 'reference',
   Enum: 'enum',
+  LocalizedEnum: 'lenum',
 };

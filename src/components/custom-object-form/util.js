@@ -22,6 +22,7 @@ export const getValue = (
     case TYPES.Time:
     case TYPES.DateTime:
     case TYPES.Enum:
+    case TYPES.LocalizedEnum:
       return '';
 
     case TYPES.LocalizedString:
@@ -114,6 +115,7 @@ const getValidationByType = (
   switch (type) {
     case TYPES.String:
     case TYPES.Enum:
+    case TYPES.LocalizedEnum:
     case TYPES.Time:
       return getValidation('string', required, messages);
 

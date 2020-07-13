@@ -17,6 +17,7 @@ import AttributeField from './attribute-field';
 const dataLocale = faker.random.locale();
 const project = {
   currencies: times(2, () => faker.finance.currencyCode()),
+  languages: times(2, () => faker.random.locale()),
 };
 const user = {
   timeZone: faker.random.arrayElement(momentTZ.tz.names()),
@@ -806,7 +807,8 @@ describe('attribute input', () => {
       type,
       attributes,
       faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
-      project.currencies
+      project.currencies,
+      project.languages
     );
 
     it('should display attribute fields', () => {

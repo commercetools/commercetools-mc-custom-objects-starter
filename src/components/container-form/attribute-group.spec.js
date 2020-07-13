@@ -1,13 +1,19 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import kebabCase from 'lodash/kebabCase';
 import faker from 'faker';
+import kebabCase from 'lodash/kebabCase';
+import times from 'lodash/times';
+import * as AppContext from '@commercetools-frontend/application-shell-connectors';
+import { LocalizedTextInput } from '@commercetools-uikit/inputs';
 import { ATTRIBUTES, TYPES } from './constants';
 import AttributeGroup from './attribute-group';
 import ObjectAttributes from './object-attributes';
 import ReferenceAttribute from './reference-attribute';
 import Attribute from './attribute';
 import EnumAttributes from './enum-attributes';
+import LocalizedEnumAttributes from './localized-enum-attributes';
+
+const project = { languages: times(2, faker.random.locale()) };
 
 const mockValue = {
   name: faker.random.words(),
@@ -31,6 +37,9 @@ const loadAttributeGroup = (value = mockValue) =>
 
 describe('attribute group', () => {
   beforeEach(() => {
+    jest.spyOn(AppContext, 'useApplicationContext').mockImplementation(() => ({
+      project,
+    }));
     mocks.handleChange.mockClear();
   });
 
@@ -50,6 +59,12 @@ describe('attribute group', () => {
     const value = { ...mockValue, type: TYPES.Enum, enum: [] };
     const wrapper = loadAttributeGroup(value);
     expect(wrapper.find(EnumAttributes).exists()).toEqual(true);
+  });
+
+  it('when value type is localized enum, should display enum options', () => {
+    const value = { ...mockValue, type: TYPES.LocalizedEnum, lenum: [] };
+    const wrapper = loadAttributeGroup(value);
+    expect(wrapper.find(LocalizedEnumAttributes).exists()).toEqual(true);
   });
 
   describe('when attribute value changes', () => {
@@ -161,6 +176,41 @@ describe('attribute group', () => {
           target: {
             name: `${mocks.name}.${ATTRIBUTES.Enum}`,
             value: [{ value: '', label: '' }],
+          },
+        });
+      });
+
+      it('should call handle change with attribute type change', () => {
+        expect(mocks.handleChange).toHaveBeenCalledWith(event);
+      });
+    });
+
+    describe('with attribute type of localized enum', () => {
+      const event = {
+        target: {
+          name: `${mocks.name}.${ATTRIBUTES.Type}`,
+          value: TYPES.LocalizedEnum,
+        },
+      };
+      let wrapper;
+
+      beforeEach(() => {
+        wrapper = loadAttributeGroup(value);
+        wrapper.find(Attribute).props().handleChange(event);
+      });
+
+      it('should call handle change with empty enum value', () => {
+        expect(mocks.handleChange).toHaveBeenCalledWith({
+          target: {
+            name: `${mocks.name}.${ATTRIBUTES.LocalizedEnum}`,
+            value: [
+              {
+                value: '',
+                label: LocalizedTextInput.createLocalizedString(
+                  project.languages
+                ),
+              },
+            ],
           },
         });
       });

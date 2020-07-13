@@ -2,6 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import faker from 'faker';
 import camelCase from 'lodash/camelCase';
+import map from 'lodash/map';
+import reduce from 'lodash/reduce';
 import times from 'lodash/times';
 import { FieldArray } from 'formik';
 import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
@@ -15,11 +17,11 @@ const project = {
   currencies: times(2, () => faker.finance.currencyCode()),
   languages: times(2, () => faker.random.locale()),
 };
+const dataLocale = project.languages[0];
 
 const container = generateContainer();
 
 const mocks = {
-  type: faker.random.arrayElement(Object.values(TYPES)),
   title: faker.random.words(),
   isRequired: faker.random.boolean(),
   name: camelCase(faker.random.words()),
@@ -30,17 +32,26 @@ const mocks = {
   attributes: container.value.attributes,
   reference: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
 };
+const mockType = faker.random.arrayElement(Object.values(TYPES));
 
-const loadAttributeField = (isSet) => {
+const loadAttributeField = (isSet, type = mockType, options = []) => {
   const value = isSet ? [''] : '';
-  return shallow(<AttributeField {...mocks} isSet={isSet} value={value} />);
+  return shallow(
+    <AttributeField
+      {...mocks}
+      type={type}
+      value={value}
+      isSet={isSet}
+      options={options}
+    />
+  );
 };
 
 describe('attribute field', () => {
   beforeAll(() => {
     jest
       .spyOn(ApplicationContext, 'useApplicationContext')
-      .mockImplementation(() => ({ project }));
+      .mockImplementation(() => ({ project, dataLocale }));
   });
 
   describe('when attribute is a set', () => {
@@ -73,7 +84,7 @@ describe('attribute field', () => {
       attributes.find('[data-testid="add-attribute"]').props().onClick();
       expect(fieldArrayMocks.push).toHaveBeenCalledWith(
         getValue(
-          mocks.type,
+          mockType,
           mocks.attributes,
           mocks.reference,
           project.currencies,
@@ -110,5 +121,30 @@ describe('attribute field', () => {
         wrapper.find('[data-testid="single-attribute-input"]').exists()
       ).toEqual(true);
     });
+  });
+
+  it('when attribute is enum type, should directly pass options as prop to attribute input', () => {
+    const options = times(2, () => ({ value: '', label: faker.random.word() }));
+    const wrapper = loadAttributeField(false, TYPES.Enum, options);
+    expect(
+      wrapper.find('[data-testid="single-attribute-input"]').prop('options')
+    ).toEqual(options);
+  });
+
+  it('when attribute is localized enum type, should pass options with labels in data locale to attribute input', () => {
+    const label = reduce(
+      project.languages,
+      (labels, language) => ({ ...labels, [language]: faker.random.word() }),
+      {}
+    );
+    const options = times(2, () => ({ value: '', label }));
+    const mappedOptions = map(options, (option) => ({
+      value: option.value,
+      label: option.label[dataLocale],
+    }));
+    const wrapper = loadAttributeField(false, TYPES.LocalizedEnum, options);
+    expect(
+      wrapper.find('[data-testid="single-attribute-input"]').prop('options')
+    ).toEqual(mappedOptions);
   });
 });

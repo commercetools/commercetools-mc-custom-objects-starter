@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import reduce from 'lodash/reduce';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import Form from './form';
 import messages from './messages';
 import { TYPES } from './constants';
@@ -25,15 +27,16 @@ const initializeEmptyValues = () => ({
 });
 
 const ContainerForm = ({ container, onSubmit }) => {
-  const intl = useIntl();
+  const { project } = useApplicationContext();
+  const { languages } = project;
 
   const initialValues = container
     ? initializeContainerValues(container)
     : initializeEmptyValues();
 
-  const stringSchema = yup.string().required({
-    required: intl.formatMessage(messages.requiredFieldError),
-  });
+  const stringSchema = yup
+    .string()
+    .required(<FormattedMessage {...messages.requiredFieldError} />);
   const attributeSchema = {
     name: stringSchema,
     type: stringSchema,
@@ -50,10 +53,34 @@ const ContainerForm = ({ container, onSubmit }) => {
         yup.object({
           value: yup
             .string()
-            .required(intl.formatMessage(messages.requiredFieldError)),
+            .required(<FormattedMessage {...messages.requiredFieldError} />),
           label: yup
             .string()
-            .required(intl.formatMessage(messages.requiredFieldError)),
+            .required(<FormattedMessage {...messages.requiredFieldError} />),
+        })
+      ),
+    }),
+    lenum: yup.array().when('type', {
+      is: (val) => val === TYPES.LocalizedEnum,
+      then: yup.array(
+        yup.object({
+          value: yup
+            .string()
+            .required(<FormattedMessage {...messages.requiredFieldError} />),
+          label: yup.object(
+            reduce(
+              languages,
+              (name, lang) => ({
+                ...name,
+                [lang]: yup
+                  .string()
+                  .required(
+                    <FormattedMessage {...messages.requiredFieldError} />
+                  ),
+              }),
+              {}
+            )
+          ),
         })
       ),
     }),

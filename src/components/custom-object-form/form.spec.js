@@ -128,7 +128,7 @@ describe('form', () => {
     it('should set custom object value form value based on selected container', () => {
       expect(mocks.setFieldValue).toHaveBeenCalledWith(
         'value',
-        getAttributeValues(attributes, project.currencies)
+        getAttributeValues(attributes, project.currencies, project.languages)
       );
     });
   });

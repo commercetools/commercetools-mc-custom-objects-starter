@@ -49,6 +49,10 @@ const typeOptions = [
     value: TYPES.Enum,
   },
   {
+    label: <FormattedMessage {...messages.localizedEnumLabel} />,
+    value: TYPES.LocalizedEnum,
+  },
+  {
     label: <FormattedMessage {...messages.objectLabel} />,
     value: TYPES.Object,
   },

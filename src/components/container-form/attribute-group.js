@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import includes from 'lodash/includes';
+import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
+import { LocalizedTextInput } from '@commercetools-uikit/inputs';
 import Spacings from '@commercetools-uikit/spacings';
 import Attribute from './attribute';
 import { ATTRIBUTES, TYPES } from './constants';
@@ -9,6 +11,7 @@ import { ATTRIBUTES, TYPES } from './constants';
 import ObjectAttributes from './object-attributes';
 import ReferenceAttribute from './reference-attribute';
 import EnumAttributes from './enum-attributes';
+import LocalizedEnumAttributes from './localized-enum-attributes';
 
 const AttributeGroup = ({
   name,
@@ -20,6 +23,9 @@ const AttributeGroup = ({
   remove,
   removeDisabled,
 }) => {
+  const { project } = useApplicationContext();
+  const { languages } = project;
+
   function onChange(event) {
     const { name: eventName, value: eventValue } = event.target;
     if (includes(eventName, ATTRIBUTES.Type)) {
@@ -49,6 +55,18 @@ const AttributeGroup = ({
           target: {
             name: `${name}.${ATTRIBUTES.Enum}`,
             value: [{ value: '', label: '' }],
+          },
+        });
+      } else if (eventValue === TYPES.LocalizedEnum) {
+        handleChange({
+          target: {
+            name: `${name}.${ATTRIBUTES.LocalizedEnum}`,
+            value: [
+              {
+                value: '',
+                label: LocalizedTextInput.createLocalizedString(languages),
+              },
+            ],
           },
         });
       }
@@ -94,6 +112,16 @@ const AttributeGroup = ({
           value={get(value, ATTRIBUTES.Enum)}
           touched={get(touched, ATTRIBUTES.Enum, [])}
           errors={get(errors, ATTRIBUTES.Enum, [])}
+          handleBlur={handleBlur}
+          handleChange={handleChange}
+        />
+      )}
+      {value.type === TYPES.LocalizedEnum && (
+        <LocalizedEnumAttributes
+          name={`${name}.${ATTRIBUTES.LocalizedEnum}`}
+          value={get(value, ATTRIBUTES.LocalizedEnum)}
+          touched={get(touched, ATTRIBUTES.LocalizedEnum, [])}
+          errors={get(errors, ATTRIBUTES.LocalizedEnum, [])}
           handleBlur={handleBlur}
           handleChange={handleChange}
         />

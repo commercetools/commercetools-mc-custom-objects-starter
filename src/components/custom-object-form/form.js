@@ -103,7 +103,7 @@ const Form = ({
           className={styles.panel}
         >
           <div className={styles.form}>
-            {values.attributes.map((attribute, index) => {
+            {map(values.attributes, (attribute, index) => {
               const name = `value.${camelCase(attribute.name)}`;
               return (
                 <Card key={index} type="flat" className={styles['field-card']}>
@@ -112,7 +112,7 @@ const Form = ({
                     type={attribute.type}
                     attributes={attribute.attributes}
                     reference={attribute.reference}
-                    options={attribute.enum}
+                    options={attribute.enum || attribute.lenum}
                     name={name}
                     title={attribute.name}
                     isRequired={attribute.required}

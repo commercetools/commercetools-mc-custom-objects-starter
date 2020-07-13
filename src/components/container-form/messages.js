@@ -86,6 +86,11 @@ export default defineMessages({
     description: 'Label for attributes enum value',
     defaultMessage: 'List (enum)',
   },
+  localizedEnumLabel: {
+    id: 'Container.form.type.label.i18nEnum',
+    description: 'Label for attributes localized enum value',
+    defaultMessage: 'Localized List (enum)',
+  },
   objectLabel: {
     id: 'Container.form.type.label.object',
     description: 'Label for attributes object value',
@@ -135,6 +140,11 @@ export default defineMessages({
     id: 'Container.form.enum.label.label',
     description: 'Label for enum label label', // ha ha
     defaultMessage: 'Label',
+  },
+  labelLocalizedLabel: {
+    id: 'Container.form.enum.label.i18nLabel',
+    description: 'Label for enum localized label label',
+    defaultMessage: 'Label ({language})',
   },
   addLabel: {
     id: 'Container.form.add.button',

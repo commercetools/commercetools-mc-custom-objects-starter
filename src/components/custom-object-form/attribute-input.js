@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import camelCase from 'lodash/camelCase';
 import get from 'lodash/get';
+import map from 'lodash/map';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import {
   CheckboxInput,
@@ -184,7 +185,8 @@ const AttributeInput = ({
         </Spacings.Stack>
       );
 
-    case TYPES.Enum: {
+    case TYPES.Enum:
+    case TYPES.LocalizedEnum: {
       return (
         <Spacings.Stack scale="xs">
           <SelectInput
@@ -229,7 +231,7 @@ const AttributeInput = ({
       return (
         <div className={`${nestedStyles.nested}`}>
           <Spacings.Stack scale="s">
-            {attributes.map((attribute, index) => {
+            {map(attributes, (attribute, index) => {
               const attributeName = camelCase(attribute.name);
               return (
                 <AttributeField
@@ -242,7 +244,7 @@ const AttributeInput = ({
                   reference={attribute.reference}
                   isRequired={attribute.required}
                   isSet={attribute.set}
-                  options={attribute.enum}
+                  options={attribute.enum || attribute.lenum}
                   value={get(value, attributeName)}
                   touched={get(touched, attributeName)}
                   errors={get(errors, attributeName)}

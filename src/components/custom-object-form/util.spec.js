@@ -67,6 +67,30 @@ describe('attribute utilities', () => {
       expect(getAttributeValues(attributes)).toEqual(values);
     });
 
+    it('when attribute is an enum type, should return empty string as initial value', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.Enum,
+        },
+      ];
+      const values = { [camelCase(name)]: '' };
+      expect(getAttributeValues(attributes)).toEqual(values);
+    });
+
+    it('when attribute is a localized enum type, should return empty string as initial value', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.LocalizedEnum,
+        },
+      ];
+      const values = { [camelCase(name)]: '' };
+      expect(getAttributeValues(attributes)).toEqual(values);
+    });
+
     it('when attribute is a money type, should return empty amount and first currency code as initial value', () => {
       const name = faker.random.words();
       const attributes = [
@@ -233,6 +257,20 @@ describe('attribute utilities', () => {
         {
           name,
           type: TYPES.Enum,
+        },
+      ];
+      const validation = { [camelCase(name)]: yup.string().nullable() };
+      expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
+        JSON.stringify(validation)
+      );
+    });
+
+    it('when attribute is a localized enum type, should return yup string as validation', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.LocalizedEnum,
         },
       ];
       const validation = { [camelCase(name)]: yup.string().nullable() };

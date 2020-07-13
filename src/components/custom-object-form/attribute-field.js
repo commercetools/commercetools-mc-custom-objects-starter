@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import get from 'lodash/get';
+import map from 'lodash/map';
 import { useIntl } from 'react-intl';
 import { FieldArray } from 'formik';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
@@ -12,6 +13,7 @@ import Card from '@commercetools-uikit/card';
 import Constraints from '@commercetools-uikit/constraints';
 import { BinLinearIcon, PlusBoldIcon } from '@commercetools-uikit/icons';
 import Spacings from '@commercetools-uikit/spacings';
+import { TYPES } from '../container-form/constants';
 import { getValue } from './util';
 import AttributeLabel from './attribute-label';
 import AttributeInput from './attribute-input'; // eslint-disable-line import/no-cycle
@@ -34,7 +36,7 @@ const AttributeField = ({
   options,
 }) => {
   const intl = useIntl();
-  const { project } = useApplicationContext();
+  const { project, dataLocale } = useApplicationContext();
   const { currencies, languages } = project;
   const emptyValue = getValue(
     type,
@@ -43,6 +45,13 @@ const AttributeField = ({
     currencies,
     languages
   );
+  const selectOptions =
+    type === TYPES.LocalizedEnum
+      ? map(options, (option) => ({
+          value: option.value,
+          label: option.label[dataLocale],
+        }))
+      : options;
 
   return (
     <>
@@ -83,7 +92,7 @@ const AttributeField = ({
                         isRequired={isRequired}
                         isSet={isSet}
                         attributes={attributes}
-                        options={options}
+                        options={selectOptions}
                       />
                     </div>
                     <SecondaryIconButton
@@ -121,7 +130,7 @@ const AttributeField = ({
             isRequired={isRequired}
             isSet={isSet}
             attributes={attributes}
-            options={options}
+            options={selectOptions}
           />
         </Spacings.Stack>
       )}
@@ -145,7 +154,7 @@ AttributeField.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,
-      label: PropTypes.string,
+      label: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     })
   ),
 };
