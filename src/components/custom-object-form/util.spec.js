@@ -1,12 +1,17 @@
 import React from 'react';
 import faker from 'faker';
 import camelCase from 'lodash/camelCase';
+import reduce from 'lodash/reduce';
 import times from 'lodash/times';
 import * as yup from 'yup';
 import { FormattedMessage } from 'react-intl';
+import { LocalizedTextInput } from '@commercetools-uikit/inputs';
 import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
 import { getAttributeValues, getAttributeValidation } from './util';
 import messages from './messages';
+
+const currencies = times(2, () => faker.finance.currencyCode());
+const languages = times(2, () => faker.random.locale());
 
 describe('attribute utilities', () => {
   describe('attribute values', () => {
@@ -20,6 +25,22 @@ describe('attribute utilities', () => {
       ];
       const values = { [camelCase(name)]: '' };
       expect(getAttributeValues(attributes)).toEqual(values);
+    });
+
+    it('when attribute is a localized string type, should return empty localized text input value as initial value', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.LocalizedString,
+        },
+      ];
+      const values = {
+        [camelCase(name)]: LocalizedTextInput.createLocalizedString(languages),
+      };
+      expect(getAttributeValues(attributes, currencies, languages)).toEqual(
+        values
+      );
     });
 
     it('when attribute is a number type, should return empty string as initial value', () => {
@@ -47,7 +68,6 @@ describe('attribute utilities', () => {
     });
 
     it('when attribute is a money type, should return empty amount and first currency code as initial value', () => {
-      const currencies = times(2, () => faker.finance.currencyCode());
       const name = faker.random.words();
       const attributes = [
         {
@@ -151,6 +171,10 @@ describe('attribute utilities', () => {
   });
 
   describe('attribute validation', () => {
+    const errorMessages = {
+      required: messages.requiredFieldError,
+    };
+
     it('when attribute is a string type, should return yup string as validation', () => {
       const name = faker.random.words();
       const attributes = [
@@ -163,6 +187,44 @@ describe('attribute utilities', () => {
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
         JSON.stringify(validation)
       );
+    });
+
+    it('when attribute is a localized string type, should return yup object with language keys as validation', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.LocalizedString,
+        },
+      ];
+      const validation = {
+        [camelCase(name)]: yup.object(
+          reduce(
+            languages,
+            (spec, lang) => ({ ...spec, [lang]: yup.string() }),
+            {}
+          )
+        ),
+      };
+      expect(
+        JSON.stringify(getAttributeValidation(attributes, languages))
+      ).toEqual(JSON.stringify(validation));
+    });
+
+    it('when attribute is a required localized string, should return yup object with at least one language required', () => {
+      const name = faker.random.words();
+      const attributes = [
+        {
+          name,
+          type: TYPES.LocalizedString,
+          required: true,
+        },
+      ];
+      expect(
+        JSON.stringify(
+          getAttributeValidation(attributes, languages, errorMessages)
+        )
+      ).toContain('atLeastOneOf');
     });
 
     it('when attribute is an enum type, should return yup string as validation', () => {
@@ -218,7 +280,7 @@ describe('attribute utilities', () => {
       const validation = {
         [camelCase(name)]: yup.object({
           amount: yup.string().nullable(),
-          currencyCode: yup.string().nullable(),
+          currencyCode: yup.string(),
         }),
       };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
@@ -310,7 +372,7 @@ describe('attribute utilities', () => {
         [camelCase(`${name}-nested`)]: yup.string().nullable(),
       };
       const validation = {
-        [camelCase(name)]: yup.object().shape(nestedValidation).nullable(),
+        [camelCase(name)]: yup.object(nestedValidation),
       };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(
         JSON.stringify(validation)
@@ -360,13 +422,11 @@ describe('attribute utilities', () => {
       const validation = {
         [camelCase(name)]: yup
           .string()
-          .required(<FormattedMessage {...messages.requiredFieldError} />),
+          .required(<FormattedMessage {...errorMessages.requiredFieldError} />),
       };
       expect(
         JSON.stringify(
-          getAttributeValidation(attributes, {
-            required: messages.requiredFieldError,
-          })
+          getAttributeValidation(attributes, languages, errorMessages)
         )
       ).toEqual(JSON.stringify(validation));
     });

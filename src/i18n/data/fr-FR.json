@@ -22,6 +22,7 @@
   "Container.form.type.label.date": "",
   "Container.form.type.label.dateTime": "",
   "Container.form.type.label.enum": "",
+  "Container.form.type.label.i18nString": "",
   "Container.form.type.label.money": "",
   "Container.form.type.label.number": "",
   "Container.form.type.label.object": "",

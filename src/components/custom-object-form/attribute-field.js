@@ -35,7 +35,14 @@ const AttributeField = ({
 }) => {
   const intl = useIntl();
   const { project } = useApplicationContext();
-  const { currencies } = project;
+  const { currencies, languages } = project;
+  const emptyValue = getValue(
+    type,
+    attributes,
+    reference,
+    currencies,
+    languages
+  );
 
   return (
     <>
@@ -56,9 +63,7 @@ const AttributeField = ({
                   data-testid="add-attribute"
                   iconLeft={<PlusBoldIcon />}
                   label={intl.formatMessage(messages.addLabel)}
-                  onClick={() =>
-                    push(getValue(type, attributes, reference, currencies))
-                  }
+                  onClick={() => push(emptyValue)}
                 />
               </Constraints.Horizontal>
               {value.map((val, index) => (

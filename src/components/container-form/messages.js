@@ -44,7 +44,12 @@ export default defineMessages({
   stringLabel: {
     id: 'Container.form.type.label.string',
     description: 'Label for attributes string value',
-    defaultMessage: 'String',
+    defaultMessage: 'Text',
+  },
+  localizedStringLabel: {
+    id: 'Container.form.type.label.i18nString',
+    description: 'Label for attributes string value',
+    defaultMessage: 'Localized Text',
   },
   numberLabel: {
     id: 'Container.form.type.label.number',

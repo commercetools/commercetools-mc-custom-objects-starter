@@ -9,7 +9,12 @@ import { getAttributeValidation, getAttributeValues } from './util';
 import Form from './form';
 import messages from './messages';
 
-const initializeCustomObjectValues = (customObject, containers, currencies) => {
+const initializeCustomObjectValues = (
+  customObject,
+  containers,
+  currencies,
+  languages
+) => {
   const container = find(containers, { key: customObject.container });
   const attributes = container.value.attributes;
   return {
@@ -18,7 +23,7 @@ const initializeCustomObjectValues = (customObject, containers, currencies) => {
     attributes,
     // combining empty attribute values with saved values in case schema changed
     value: {
-      ...getAttributeValues(attributes, currencies),
+      ...getAttributeValues(attributes, currencies, languages),
       ...customObject.value,
     },
   };
@@ -33,10 +38,15 @@ const initializeEmptyValues = () => ({
 const CustomObjectForm = ({ containers, customObject, onSubmit }) => {
   const intl = useIntl();
   const { project } = useApplicationContext();
-  const { currencies } = project;
+  const { currencies, languages } = project;
 
   const initialValues = customObject
-    ? initializeCustomObjectValues(customObject, containers, currencies)
+    ? initializeCustomObjectValues(
+        customObject,
+        containers,
+        currencies,
+        languages
+      )
     : initializeEmptyValues();
 
   const stringSchema = yup.string().required({
@@ -53,7 +63,7 @@ const CustomObjectForm = ({ containers, customObject, onSubmit }) => {
 
   function onAttributesChange(attributes) {
     if (attributes) {
-      const valueSchema = getAttributeValidation(attributes, {
+      const valueSchema = getAttributeValidation(attributes, languages, {
         required: messages.requiredFieldError,
       });
       setValidationSchema(

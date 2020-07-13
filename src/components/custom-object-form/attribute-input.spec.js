@@ -14,6 +14,7 @@ import { generateContainer } from '../../test-util';
 import { getValue } from './util';
 import AttributeField from './attribute-field';
 
+const dataLocale = faker.random.locale();
 const project = {
   currencies: times(2, () => faker.finance.currencyCode()),
 };
@@ -56,7 +57,7 @@ describe('attribute input', () => {
   beforeAll(() => {
     jest
       .spyOn(ApplicationContext, 'useApplicationContext')
-      .mockImplementation(() => ({ project, user }));
+      .mockImplementation(() => ({ dataLocale, project, user }));
   });
 
   describe('string type', () => {
@@ -111,6 +112,76 @@ describe('attribute input', () => {
           type,
           value,
           touched: true,
+          errors: <FormattedMessage {...messages.requiredFieldError} />,
+        });
+      });
+
+      it('input should have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(true);
+      });
+
+      it('should display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(true);
+      });
+    });
+  });
+
+  describe('localized string type', () => {
+    const type = TYPES.LocalizedString;
+    const input = '[data-testid="field-type-i18n-string"]';
+    const value = { [dataLocale]: '' };
+
+    it('should display localized text input', () => {
+      const wrapper = loadAttributeInput({ type, value });
+      expect(wrapper.find(input).exists()).toEqual(true);
+    });
+
+    describe('when input touched without error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: { [dataLocale]: true },
+        });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input not touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: { [dataLocale]: false },
+          errors: <FormattedMessage {...messages.requiredFieldError} />,
+        });
+      });
+
+      it('input should not have error', () => {
+        expect(wrapper.find(input).prop('hasError')).toEqual(false);
+      });
+
+      it('should not display error', () => {
+        expect(wrapper.find(fieldErrors).exists()).toEqual(false);
+      });
+    });
+
+    describe('when input touched with error', () => {
+      let wrapper;
+      beforeEach(() => {
+        wrapper = loadAttributeInput({
+          type,
+          value,
+          touched: { [dataLocale]: true },
           errors: <FormattedMessage {...messages.requiredFieldError} />,
         });
       });

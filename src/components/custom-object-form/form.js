@@ -32,7 +32,7 @@ const Form = ({
 }) => {
   const intl = useIntl();
   const { project } = useApplicationContext();
-  const { currencies } = project;
+  const { currencies, languages } = project;
 
   const containerOptions = map(containers, (container) => ({
     label: container.key,
@@ -46,7 +46,7 @@ const Form = ({
       setFieldValue('attributes', null);
       const value =
         values.container !== initialValues.container
-          ? getAttributeValues(attributes, currencies)
+          ? getAttributeValues(attributes, currencies, languages)
           : initialValues.value;
       setFieldValue('value', value);
       setFieldValue('attributes', attributes);

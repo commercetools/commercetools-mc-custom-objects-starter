@@ -17,6 +17,10 @@ const typeOptions = [
     value: TYPES.String,
   },
   {
+    label: <FormattedMessage {...messages.localizedStringLabel} />,
+    value: TYPES.LocalizedString,
+  },
+  {
     label: <FormattedMessage {...messages.numberLabel} />,
     value: TYPES.Number,
   },

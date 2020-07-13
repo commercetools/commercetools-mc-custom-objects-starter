@@ -13,6 +13,7 @@ import AttributeInput from './attribute-input';
 
 const project = {
   currencies: times(2, () => faker.finance.currencyCode()),
+  languages: times(2, () => faker.random.locale()),
 };
 
 const container = generateContainer();
@@ -75,7 +76,8 @@ describe('attribute field', () => {
           mocks.type,
           mocks.attributes,
           mocks.reference,
-          project.currencies
+          project.currencies,
+          project.languages
         )
       );
     });

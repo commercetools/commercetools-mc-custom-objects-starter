@@ -7,6 +7,7 @@ import {
   CheckboxInput,
   DateInput,
   DateTimeInput,
+  LocalizedTextInput,
   MoneyInput,
   NumberInput,
   SelectInput,
@@ -33,7 +34,7 @@ const AttributeInput = ({
   attributes,
   options,
 }) => {
-  const { project, user } = useApplicationContext();
+  const { dataLocale, project, user } = useApplicationContext();
   const { currencies } = project;
   const { timeZone } = user;
 
@@ -50,6 +51,24 @@ const AttributeInput = ({
             onBlur={onBlur}
           />
           {touched && errors && (
+            <ErrorMessage data-testid="field-error">{errors}</ErrorMessage>
+          )}
+        </Spacings.Stack>
+      );
+
+    case TYPES.LocalizedString:
+      return (
+        <Spacings.Stack scale="xs">
+          <LocalizedTextInput
+            data-testid="field-type-i18n-string"
+            selectedLanguage={dataLocale}
+            name={name}
+            value={value}
+            hasError={!!(LocalizedTextInput.isTouched(touched) && errors)}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+          {LocalizedTextInput.isTouched(touched) && errors && (
             <ErrorMessage data-testid="field-error">{errors}</ErrorMessage>
           )}
         </Spacings.Stack>

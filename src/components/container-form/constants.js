@@ -1,5 +1,6 @@
 export const TYPES = {
   String: 'String',
+  LocalizedString: 'LocalizedString',
   Number: 'Number',
   Boolean: 'Boolean',
   Money: 'Money',

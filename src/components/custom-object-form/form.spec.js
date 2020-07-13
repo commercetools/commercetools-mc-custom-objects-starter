@@ -10,6 +10,7 @@ import { getAttributeValues } from './util';
 
 const project = {
   currencies: times(2, () => faker.finance.currencyCode()),
+  languages: times(2, () => faker.random.locale()),
 };
 
 const containers = generateContainers(2);
@@ -90,7 +91,7 @@ describe('form', () => {
     it('should set custom object value form value based on selected container', () => {
       expect(mocks.setFieldValue).toHaveBeenCalledWith(
         'value',
-        getAttributeValues(attributes, project.currencies)
+        getAttributeValues(attributes, project.currencies, project.languages)
       );
     });
   });
