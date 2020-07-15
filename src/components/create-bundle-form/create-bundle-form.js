@@ -9,8 +9,8 @@ import {
   TabContainer,
   View,
   ViewHeader
-} from '@custom-applications-local/core/components';
-import { useShowSideNotification } from '@custom-applications-local/core/hooks';
+} from '@commercetools-us-ps/mc-app-core/components';
+import { useShowSideNotification } from '@commercetools-us-ps/mc-app-core/hooks';
 import { BUNDLE_PRODUCT_TYPE, ROOT_PATH } from '../../constants';
 import BundleForm from '../bundle-form';
 import CreateBundle from './create-bundle.graphql';

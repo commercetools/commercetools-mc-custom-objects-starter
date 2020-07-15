@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import BundleImages from '@custom-applications-local/bundles-core/components/bundle-images';
+import BundleImages from '@commercetools-us-ps/mc-app-bundles-core/components/bundle-images';
 import { generateProduct } from '../../test-util';
 import { transformResults } from '../bundle-details/static-bundle-details';
 import StaticBundleImages from './static-bundle-images';

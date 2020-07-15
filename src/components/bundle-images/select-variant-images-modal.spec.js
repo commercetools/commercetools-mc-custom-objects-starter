@@ -15,7 +15,7 @@ import {
   CheckActiveIcon,
   CheckInactiveIcon
 } from '@commercetools-frontend/ui-kit';
-import { Loading } from '@custom-applications-local/core/components/states';
+import { Loading } from '@commercetools-us-ps/mc-app-core/components/states';
 import { generateProduct } from '../../test-util';
 import { getSkus } from '../../util';
 import { transformResults } from '../bundle-details/static-bundle-details';

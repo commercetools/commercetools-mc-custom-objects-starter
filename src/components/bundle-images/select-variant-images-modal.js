@@ -13,7 +13,7 @@ import {
   Text,
   Tooltip
 } from '@commercetools-frontend/ui-kit';
-import { Loading } from '@custom-applications-local/core/components/states';
+import { Loading } from '@commercetools-us-ps/mc-app-core/components/states';
 import { getSkus } from '../../util';
 import { MASTER_VARIANT_ID } from '../../constants';
 import EditBundle from '../edit-bundle-form/edit-bundle.graphql';
