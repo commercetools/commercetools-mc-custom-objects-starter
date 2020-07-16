@@ -1,0 +1,19 @@
+query GetCustomObjects($queryString: String) {
+  customObjects(qs: $queryString)
+    @rest(
+      path: "/custom-objects?{args.qs}"
+      type: "CustomObjectQueryResult"
+      method: "GET"
+    ) {
+    count
+    total
+    offset
+    results @type(name: "CustomObject") {
+      id
+      lastModifiedAt
+      container
+      key
+      value
+    }
+  }
+}

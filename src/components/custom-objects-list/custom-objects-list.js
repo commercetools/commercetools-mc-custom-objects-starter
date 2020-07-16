@@ -7,7 +7,10 @@ import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 import isString from 'lodash/isString';
 import map from 'lodash/map';
+import omit from 'lodash/omit';
 import startCase from 'lodash/startCase';
+import values from 'lodash/values';
+import { stringify } from 'qs';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import { LinkButton, SecondaryButton } from '@commercetools-uikit/buttons';
 import Card from '@commercetools-uikit/card';
@@ -19,17 +22,20 @@ import Text from '@commercetools-uikit/text';
 import { PaginatedTable } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
 import { useContainerContext } from '../../context';
-import GetCustomObjects from '../get-custom-objects.rest.graphql';
+import GetCustomObjects from './get-custom-objects.rest.graphql';
 import { DATE_FORMAT, DATE_TIME_FORMAT, DEFAULT_VARIABLES } from './constants';
 import { columnDefinitions, COLUMN_KEYS } from './column-definitions';
 import messages from './messages';
 import styles from './custom-objects-list.mod.css';
+import TextFilter from './text-filter';
 
 const CustomObjectsList = ({ match, history }) => {
   const intl = useIntl();
   const { hasContainers, containers, where } = useContainerContext();
   const [measurementCache, setMeasurementCache] = useState(null);
   const [container, setContainer] = useState('');
+  const [key, setKey] = useState('');
+  const [filters, setFilters] = useState({ where });
   const [sort, setSort] = useState(COLUMN_KEYS.MODIFIED);
   const [direction, setDirection] = useState(SORT_OPTIONS.DESC);
   const [variables, setVariables] = useState({
@@ -37,10 +43,15 @@ const CustomObjectsList = ({ match, history }) => {
     sort: `${sort} ${direction}`,
     where,
   });
+  const [queryString, setQueryString] = useState(stringify(variables));
   const { data, error } = useQuery(GetCustomObjects, {
-    variables,
+    variables: { queryString },
     skip: !hasContainers,
   });
+
+  React.useEffect(() => {
+    setQueryString(stringify(variables, { arrayFormat: 'repeat' }));
+  }, [variables]);
 
   function renderValue(value) {
     if (isPlainObject(value)) {
@@ -77,10 +88,10 @@ const CustomObjectsList = ({ match, history }) => {
   }
 
   function renderObject(value) {
-    return map(value, (val, key) => (
-      <div key={key} className={styles.item}>
+    return map(value, (val, valKey) => (
+      <div key={valKey} className={styles.item}>
         <Text.Body data-testid="value-title" isBold as="span">
-          {startCase(key)}:
+          {startCase(valKey)}:
         </Text.Body>
         &nbsp;
         {renderValue(val)}
@@ -121,7 +132,7 @@ const CustomObjectsList = ({ match, history }) => {
   }
 
   function getCustomObjects(updates) {
-    clearMeasurementCache();
+    setTimeout(() => clearMeasurementCache());
     setVariables({ ...variables, ...updates });
   }
 
@@ -144,11 +155,20 @@ const CustomObjectsList = ({ match, history }) => {
     });
   }
 
+  function filter(type, value) {
+    const newFilters = value
+      ? { ...filters, [type]: `${type}="${value}"` }
+      : omit(filters, type);
+    setFilters(newFilters);
+    getCustomObjects({
+      where: values(newFilters),
+    });
+  }
+
   function filterByContainer(event) {
     const { value } = event.target;
     setContainer(value);
-    const filter = value ? `container="${value}"` : where;
-    getCustomObjects({ where: filter });
+    filter('container', value);
   }
 
   function handleRowClick(id) {
@@ -158,9 +178,9 @@ const CustomObjectsList = ({ match, history }) => {
   const { customObjects } = data || {};
   const { results, count, total, offset } = customObjects || {};
 
-  const containerOptions = map(containers, ({ key }) => ({
-    label: key,
-    value: key,
+  const containerOptions = map(containers, ({ key: containerKey }) => ({
+    label: containerKey,
+    value: containerKey,
   }));
 
   return (
@@ -209,6 +229,16 @@ const CustomObjectsList = ({ match, history }) => {
                   value={container}
                   options={containerOptions}
                   onChange={filterByContainer}
+                />
+              </Constraints.Horizontal>
+              <Constraints.Horizontal constraint="m">
+                <TextFilter
+                  data-testid="key-filter"
+                  placeholder={intl.formatMessage(messages.key)}
+                  value={key}
+                  onChange={setKey}
+                  onSubmit={(value) => filter('key', value)}
+                  isCondensed
                 />
               </Constraints.Horizontal>
             </Spacings.Inline>

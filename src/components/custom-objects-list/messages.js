@@ -18,8 +18,23 @@ export default defineMessages({
   },
   container: {
     id: 'CustomObjectList.filter.container',
-    description: 'The label for the container input',
+    description: 'The placeholder for the container filter input',
     defaultMessage: 'Container',
+  },
+  key: {
+    id: 'CustomObjectList.filter.key',
+    description: 'The placeholder for the key filter input',
+    defaultMessage: 'Key',
+  },
+  filterButton: {
+    id: 'CustomObjectList.filter.button.label',
+    description: 'Text for search button label',
+    defaultMessage: 'Filter',
+  },
+  clearButton: {
+    id: 'CustomObjectList.filter.clear.label',
+    description: 'Text for clear filter label',
+    defaultMessage: 'Clear filter',
   },
   filter: {
     id: 'CustomObjectList.filter.label',

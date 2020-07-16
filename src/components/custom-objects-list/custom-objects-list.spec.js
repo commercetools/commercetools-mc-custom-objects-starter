@@ -6,14 +6,16 @@ import last from 'lodash/last';
 import startCase from 'lodash/startCase';
 import times from 'lodash/times';
 import moment from 'moment';
+import { stringify } from 'qs';
 import { FormattedDate } from 'react-intl';
 import { useQuery, setQuery } from '@apollo/react-hooks';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import { PaginatedTable } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
+import { mockUseEffect } from '@custom-applications-local/core/test-util';
 import { generateContainerContext } from '../../test-util';
 import * as ContainerContext from '../../context/container-context';
-import GetCustomObjects from '../get-custom-objects.rest.graphql';
+import GetCustomObjects from './get-custom-objects.rest.graphql';
 import CustomObjectsList from './custom-objects-list';
 import {
   DATE_FORMAT,
@@ -54,13 +56,15 @@ const mocks = {
 };
 
 const createButton = '[data-testid="create-custom-object"]';
-const filter = '[data-testid="container-filter"]';
+const containerFilter = '[data-testid="container-filter"]';
+const keyFilter = '[data-testid="key-filter"]';
 const noContainerError = '[data-testid="no-containers-error"]';
 
 const loadCustomObjectsList = () => shallow(<CustomObjectsList {...mocks} />);
 
 describe('custom objects list', () => {
   beforeAll(() => {
+    jest.spyOn(React, 'useEffect').mockImplementation(mockUseEffect);
     jest
       .spyOn(ContainerContext, 'useContainerContext')
       .mockImplementation(() => containerContext);
@@ -74,9 +78,11 @@ describe('custom objects list', () => {
     loadCustomObjectsList();
     expect(useQuery).toHaveBeenCalledWith(GetCustomObjects, {
       variables: {
-        ...DEFAULT_VARIABLES,
-        sort: `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`,
-        where: containerContext.where,
+        queryString: stringify({
+          ...DEFAULT_VARIABLES,
+          sort: `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`,
+          where: containerContext.where,
+        }),
       },
       skip: false,
     });
@@ -370,18 +376,48 @@ describe('custom objects list', () => {
     });
 
     it('when container selected, should query for custom objects in selected container', () => {
-      wrapper.find(filter).props().onChange({ target: { value } });
+      wrapper.find(containerFilter).props().onChange({ target: { value } });
       const result = last(useQuery.mock.calls)[1];
-      expect(result.variables.where).toEqual(`container="${value}"`);
+      expect(result.variables.queryString).toContain(
+        stringify(`where=container="${value}"`)
+      );
     });
 
     it('when container cleared, should query for custom objects in all managed containers', () => {
       wrapper
-        .find(filter)
+        .find(containerFilter)
         .props()
         .onChange({ target: { value: '' } });
       const result = last(useQuery.mock.calls)[1];
-      expect(result.variables.where).toEqual(containerContext.where);
+      expect(result.variables.queryString).toContain(
+        stringify(`where=${containerContext.where}`)
+      );
+    });
+  });
+
+  describe('key filter', () => {
+    const value = 'key-search';
+    let wrapper;
+
+    beforeEach(() => {
+      setQuery({ data: generateCustomObjects() });
+      wrapper = loadCustomObjectsList();
+    });
+
+    it('when key filter entered, should query for custom objects with key value', () => {
+      wrapper.find(keyFilter).props().onSubmit(value);
+      const result = last(useQuery.mock.calls)[1];
+      expect(result.variables.queryString).toContain(
+        stringify(`where=key="${value}"`)
+      );
+    });
+
+    it('when container cleared, should query for custom objects in all managed containers', () => {
+      wrapper.find(keyFilter).props().onSubmit('');
+      const result = last(useQuery.mock.calls)[1];
+      expect(result.variables.queryString).toContain(
+        stringify(`where=${containerContext.where}`)
+      );
     });
   });
 
@@ -390,7 +426,9 @@ describe('custom objects list', () => {
     const wrapper = loadCustomObjectsList();
     wrapper.find(PaginatedTable).props().next();
     const result = last(useQuery.mock.calls)[1];
-    expect(result.variables.offset).toEqual(PAGE_SIZE);
+    expect(result.variables.queryString).toContain(
+      stringify(`offset=${PAGE_SIZE}`)
+    );
   });
 
   // In the UI, clicking previous on the first page is disallowed, but for ease of testing
@@ -400,7 +438,9 @@ describe('custom objects list', () => {
     const wrapper = loadCustomObjectsList();
     wrapper.find(PaginatedTable).props().previous();
     const result = last(useQuery.mock.calls)[1];
-    expect(result.variables.offset).toEqual(-PAGE_SIZE);
+    expect(result.variables.queryString).toContain(
+      stringify(`offset=-${PAGE_SIZE}`)
+    );
   });
 
   it('when table column sort direction clicked, should update table sort order', () => {
@@ -412,8 +452,8 @@ describe('custom objects list', () => {
       .onSortChange(COLUMN_KEYS.MODIFIED, SORT_OPTIONS.DESC);
     wrapper.update();
     const result = last(useQuery.mock.calls)[1];
-    expect(result.variables.sort).toEqual(
-      `${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`
+    expect(result.variables.queryString).toContain(
+      stringify(`sort=${COLUMN_KEYS.MODIFIED} ${SORT_OPTIONS.DESC}`)
     );
   });
 
@@ -436,7 +476,11 @@ describe('custom objects list', () => {
     });
 
     it('should display container filter', () => {
-      expect(wrapper.find(filter).exists()).toEqual(true);
+      expect(wrapper.find(containerFilter).exists()).toEqual(true);
+    });
+
+    it('should display key filter', () => {
+      expect(wrapper.find(keyFilter).exists()).toEqual(true);
     });
 
     it('should display create custom object button', () => {
@@ -466,7 +510,7 @@ describe('custom objects list', () => {
     });
 
     it('should not display container filter', () => {
-      expect(wrapper.find(filter).exists()).toEqual(false);
+      expect(wrapper.find(containerFilter).exists()).toEqual(false);
     });
 
     it('should not display create custom object button', () => {
