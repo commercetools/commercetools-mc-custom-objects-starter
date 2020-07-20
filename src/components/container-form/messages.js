@@ -106,6 +106,12 @@ export default defineMessages({
     description: 'Title for attributes settings fields',
     defaultMessage: 'Attribute Settings',
   },
+  attributeSettingsHint: {
+    id: 'Container.form.attributeSettings.hint',
+    description: 'Hint for attributes settings fields',
+    defaultMessage:
+      'Attributes selected as "Display in List" will be shown in the value column of the Custom Objects List',
+  },
   setTitle: {
     id: 'Container.form.set.title',
     description: 'Title for attributes set field',
@@ -115,6 +121,11 @@ export default defineMessages({
     id: 'Container.form.required.title',
     description: 'Title for attributes required field',
     defaultMessage: 'Required',
+  },
+  displayTitle: {
+    id: 'Container.form.display.title',
+    description: 'Title for attributes display field',
+    defaultMessage: 'Display in List',
   },
   objectAttributesTitle: {
     id: 'Container.form.objectAttributes.title',

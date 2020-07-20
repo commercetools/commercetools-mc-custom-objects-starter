@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { SecondaryIconButton } from '@commercetools-uikit/buttons';
+import { IconButton, SecondaryIconButton } from '@commercetools-uikit/buttons';
 import { SelectField, TextField } from '@commercetools-uikit/fields';
-import FieldLabel from '@commercetools-uikit/field-label';
-import { BinLinearIcon } from '@commercetools-uikit/icons';
+import { BinLinearIcon, InformationIcon } from '@commercetools-uikit/icons';
 import { CheckboxInput } from '@commercetools-uikit/inputs';
 import Spacings from '@commercetools-uikit/spacings';
+import Text from '@commercetools-uikit/text';
+import Tooltip from '@commercetools-uikit/tooltip';
 import { ATTRIBUTES, TYPES } from './constants';
 import messages from './messages';
 import styles from './attribute.mod.css';
@@ -69,8 +70,9 @@ const Attribute = ({
   errors,
   handleChange,
   handleBlur,
-  removeDisabled,
   remove,
+  removeDisabled,
+  isDisplayed,
 }) => {
   const intl = useIntl();
   return (
@@ -102,9 +104,14 @@ const Attribute = ({
           renderError={(key, error) => error}
         />
         <Spacings.Stack scale="s">
-          <FieldLabel
-            title={<FormattedMessage {...messages.attributeSettingsTitle} />}
-          />
+          <Spacings.Inline alignItems="center">
+            <Text.Body isBold intlMessage={messages.attributeSettingsTitle} />
+            <Tooltip
+              title={<FormattedMessage {...messages.attributeSettingsHint} />}
+            >
+              <IconButton icon={<InformationIcon />} size="small" />
+            </Tooltip>
+          </Spacings.Inline>
           <Spacings.Inline alignItems="center">
             <CheckboxInput
               name={`${name}.${ATTRIBUTES.Required}`}
@@ -123,6 +130,16 @@ const Attribute = ({
               onBlur={handleBlur}
             >
               <FormattedMessage {...messages.setTitle} />
+            </CheckboxInput>
+            <CheckboxInput
+              name={`${name}.${ATTRIBUTES.Display}`}
+              value={JSON.stringify(value.display)}
+              isDisabled={isDisplayed}
+              isChecked={value.display}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            >
+              <FormattedMessage {...messages.displayTitle} />
             </CheckboxInput>
           </Spacings.Inline>
         </Spacings.Stack>
@@ -144,6 +161,7 @@ Attribute.propTypes = {
     type: PropTypes.string,
     required: PropTypes.bool,
     set: PropTypes.bool,
+    display: PropTypes.bool,
   }).isRequired,
   touched: PropTypes.shape({
     name: PropTypes.bool,
@@ -157,8 +175,9 @@ Attribute.propTypes = {
   }).isRequired,
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
-  removeDisabled: PropTypes.bool,
   remove: PropTypes.func.isRequired,
+  removeDisabled: PropTypes.bool,
+  isDisplayed: PropTypes.bool,
 };
 
 export default Attribute;

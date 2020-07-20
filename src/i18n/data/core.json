@@ -1,10 +1,12 @@
 {
   "Container.form.add.button": "Add",
   "Container.form.attributes.title": "Attributes",
+  "Container.form.attributeSettings.hint": "Attributes selected as \"Display in List\" will be shown in the value column of the Custom Objects List",
   "Container.form.attributeSettings.title": "Attribute Settings",
   "Container.form.button.addAttribute": "Add Attribute",
   "Container.form.button.removeAttribute": "Remove Attribute",
   "Container.form.button.submit": "Save",
+  "Container.form.display.title": "Display in List",
   "Container.form.enum.key.label": "Key",
   "Container.form.enum.label.i18nLabel": "Label ({language})",
   "Container.form.enum.label.label": "Label",

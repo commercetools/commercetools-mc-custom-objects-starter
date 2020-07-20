@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import faker from 'faker';
+import camelCase from 'lodash/camelCase';
 import first from 'lodash/first';
 import last from 'lodash/last';
 import startCase from 'lodash/startCase';
@@ -13,8 +14,14 @@ import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import { PaginatedTable } from '@custom-applications-local/core/components';
 import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
 import { mockUseEffect } from '@custom-applications-local/core/test-util';
-import { generateContainerContext } from '../../test-util';
+import {
+  generateAttribute,
+  generateContainer,
+  generateContainerContext,
+  generateCustomObject,
+} from '../../test-util';
 import * as ContainerContext from '../../context/container-context';
+import { TYPES } from '../container-form/constants';
 import GetCustomObjects from './get-custom-objects.rest.graphql';
 import CustomObjectsList from './custom-objects-list';
 import {
@@ -27,14 +34,6 @@ import { COLUMN_KEYS } from './column-definitions';
 
 const containerContext = generateContainerContext();
 
-const valueKey = faker.random.word();
-const generateCustomObject = () => ({
-  container: faker.random.words(),
-  key: faker.random.word(),
-  value: { [valueKey]: faker.random.words() },
-  lastModifiedAt: faker.date.recent(),
-});
-
 const generateCustomObjects = (
   total = faker.random.number({ min: 1, max: 10 })
 ) => ({
@@ -42,7 +41,9 @@ const generateCustomObjects = (
     count: total,
     total,
     offset: 0,
-    results: times(total, generateCustomObject),
+    results: times(total, () =>
+      generateCustomObject(first(containerContext.containers))
+    ),
   },
 });
 
@@ -60,17 +61,17 @@ const containerFilter = '[data-testid="container-filter"]';
 const keyFilter = '[data-testid="key-filter"]';
 const noContainerError = '[data-testid="no-containers-error"]';
 
+const containerContextSpy = jest.spyOn(ContainerContext, 'useContainerContext');
+
 const loadCustomObjectsList = () => shallow(<CustomObjectsList {...mocks} />);
 
 describe('custom objects list', () => {
   beforeAll(() => {
     jest.spyOn(React, 'useEffect').mockImplementation(mockUseEffect);
-    jest
-      .spyOn(ContainerContext, 'useContainerContext')
-      .mockImplementation(() => containerContext);
   });
 
   beforeEach(() => {
+    containerContextSpy.mockReturnValue(containerContext);
     useQuery.mockClear();
   });
 
@@ -196,7 +197,23 @@ describe('custom objects list', () => {
     });
 
     describe('value column', () => {
-      const renderValueColumn = (results) => {
+      const valueKey = camelCase(faker.random.words());
+
+      const renderValueColumn = (value) => {
+        const customObject = {
+          ...generateCustomObject(first(containerContext.containers)),
+          value: {
+            [valueKey]: value,
+          },
+        };
+        const results = {
+          customObjects: {
+            total: 1,
+            count: 1,
+            offset: 0,
+            results: [customObject],
+          },
+        };
         setQuery({ data: results });
         const wrapper = loadCustomObjectsList();
         return shallow(
@@ -208,53 +225,27 @@ describe('custom objects list', () => {
       };
 
       it('should render custom object key in start case format', () => {
-        const actual = renderValueColumn(data);
+        const actual = renderValueColumn('');
         expect(actual.find('[data-testid="value-title"]').html()).toContain(
           startCase(valueKey)
         );
       });
 
       it('when custom object key value is a string, should render string value', () => {
-        const { value } = first(data.customObjects.results);
-        const actual = renderValueColumn(data);
-        expect(actual.text()).toContain(value[valueKey]);
+        const value = faker.random.words();
+        const actual = renderValueColumn(value);
+        expect(actual.text()).toContain(value);
       });
 
       it('when custom object key value is a number, should render number as string value', () => {
         const value = faker.random.number({ min: 1, max: 10 });
-        const customObject = {
-          ...generateCustomObject(),
-          value: {
-            [valueKey]: value,
-          },
-        };
-        const actual = renderValueColumn({
-          customObjects: {
-            total: 1,
-            count: 1,
-            offset: 0,
-            results: [customObject],
-          },
-        });
+        const actual = renderValueColumn(value);
         expect(actual.text()).toContain(value);
       });
 
       it('when custom object key value is a date, should render formatted date', () => {
         const value = moment(faker.date.recent()).format('YYYY-MM-DD');
-        const customObject = {
-          ...generateCustomObject(),
-          value: {
-            [valueKey]: value,
-          },
-        };
-        const actual = renderValueColumn({
-          customObjects: {
-            total: 1,
-            count: 1,
-            offset: 0,
-            results: [customObject],
-          },
-        });
+        const actual = renderValueColumn(value);
         expect(actual.find(FormattedDate).props()).toEqual({
           value,
           ...DATE_FORMAT,
@@ -263,20 +254,7 @@ describe('custom objects list', () => {
 
       it('when custom object key value is a datetime, should render formatted datetime', () => {
         const value = faker.date.recent().toISOString();
-        const customObject = {
-          ...generateCustomObject(),
-          value: {
-            [valueKey]: value,
-          },
-        };
-        const actual = renderValueColumn({
-          customObjects: {
-            total: 1,
-            count: 1,
-            offset: 0,
-            results: [customObject],
-          },
-        });
+        const actual = renderValueColumn(value);
         expect(actual.find(FormattedDate).props()).toEqual({
           value,
           ...DATE_TIME_FORMAT,
@@ -285,58 +263,19 @@ describe('custom objects list', () => {
 
       it('when custom object key value is a time, should render time as a string value', () => {
         const value = moment(faker.date.recent()).format('h:mm A');
-        const customObject = {
-          ...generateCustomObject(),
-          value: {
-            [valueKey]: value,
-          },
-        };
-        const actual = renderValueColumn({
-          customObjects: {
-            total: 1,
-            count: 1,
-            offset: 0,
-            results: [customObject],
-          },
-        });
+        const actual = renderValueColumn(value);
         expect(actual.text()).toContain(value);
       });
 
       it('when custom object key value is a boolean, should render boolean value as string value', () => {
         const value = faker.random.boolean();
-        const customObject = {
-          ...generateCustomObject(),
-          value: {
-            [valueKey]: value,
-          },
-        };
-        const actual = renderValueColumn({
-          customObjects: {
-            total: 1,
-            count: 1,
-            offset: 0,
-            results: [customObject],
-          },
-        });
+        const actual = renderValueColumn(value);
         expect(actual.text()).toContain(value);
       });
 
       it('when custom object key value is an object, should render object values', () => {
         const value = faker.random.boolean();
-        const customObject = {
-          ...generateCustomObject(),
-          value: {
-            [valueKey]: { value },
-          },
-        };
-        const actual = renderValueColumn({
-          customObjects: {
-            total: 1,
-            count: 1,
-            offset: 0,
-            results: [customObject],
-          },
-        });
+        const actual = renderValueColumn({ value });
         expect(actual.find('[data-testid="object-value"]').exists()).toEqual(
           true
         );
@@ -345,23 +284,70 @@ describe('custom objects list', () => {
       it('when custom object key value is an array, should render each list item', () => {
         const value = faker.random.boolean();
         const list = [value, value];
-        const customObject = {
-          ...generateCustomObject(),
-          value: {
-            [valueKey]: list,
-          },
-        };
-        const actual = renderValueColumn({
-          customObjects: {
-            total: 1,
-            count: 1,
-            offset: 0,
-            results: [customObject],
-          },
-        });
+        const actual = renderValueColumn(list);
         expect(actual.find('[data-testid="list-value"]').length).toEqual(
           list.length
         );
+      });
+
+      describe('display attribute in list', () => {
+        function renderValueColumnWithContext(attributes) {
+          const container = generateContainer(attributes);
+          const context = generateContainerContext([container]);
+          containerContextSpy.mockReset();
+          containerContextSpy.mockReturnValue(context);
+          const customObject = generateCustomObject(container);
+          const results = {
+            customObjects: {
+              total: 1,
+              count: 1,
+              offset: 0,
+              results: [customObject],
+            },
+          };
+          setQuery({ data: results });
+          const wrapper = loadCustomObjectsList();
+          return shallow(
+            wrapper
+              .find(PaginatedTable)
+              .props()
+              .itemRenderer({ rowIndex: 0, columnKey: COLUMN_KEYS.VALUE })
+          );
+        }
+        const attributeValue = '[data-testid="custom-object-value"] > div';
+
+        it('when container schema has one display in list attribute, should only display that attribute', () => {
+          const attributes = [
+            generateAttribute({ display: true }),
+            generateAttribute({ display: false }),
+          ];
+          const actual = renderValueColumnWithContext(attributes);
+          expect(actual.find(attributeValue).length).toEqual(1);
+        });
+
+        it('when container schema has no display in list attributes, should display all available attribute', () => {
+          const attributes = times(2, () =>
+            generateAttribute({ display: false })
+          );
+          const actual = renderValueColumnWithContext(attributes);
+          expect(actual.find(attributeValue).length).toEqual(attributes.length);
+        });
+
+        it('when container schema has object attribute with nested display in list attributes', () => {
+          const attribute = generateAttribute({
+            type: TYPES.Object,
+            display: false,
+            displayNested: true,
+            set: false,
+          });
+          const attributes = [attribute];
+          const actual = renderValueColumnWithContext(attributes);
+          expect(
+            actual.find(
+              `${attributeValue} > [data-testid="object-value"] > div`
+            ).length
+          ).toEqual(attribute.attributes.length);
+        });
       });
     });
   });
@@ -495,14 +481,13 @@ describe('custom objects list', () => {
   describe('when container context has no containers', () => {
     let wrapper;
 
-    beforeAll(() => {
-      jest
-        .spyOn(ContainerContext, 'useContainerContext')
-        .mockImplementation(() => ({
-          hasContainers: false,
-          containers: [],
-          where: '',
-        }));
+    beforeEach(() => {
+      containerContextSpy.mockReset();
+      containerContextSpy.mockReturnValue({
+        hasContainers: false,
+        containers: [],
+        where: '',
+      });
     });
 
     beforeEach(() => {

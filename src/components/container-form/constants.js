@@ -43,6 +43,7 @@ export const ATTRIBUTES = {
   Type: 'type',
   Required: 'required',
   Set: 'set',
+  Display: 'display',
   Attributes: 'attributes',
   Reference: 'reference',
   Enum: 'enum',

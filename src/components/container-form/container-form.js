@@ -22,6 +22,7 @@ const initializeEmptyValues = () => ({
       type: '',
       set: false,
       required: false,
+      display: false,
     },
   ],
 });
@@ -42,6 +43,7 @@ const ContainerForm = ({ container, onSubmit }) => {
     type: stringSchema,
     set: yup.bool(),
     required: yup.bool(),
+    display: yup.bool(),
     attributes: yup.array(yup.lazy(() => yup.object(attributeSchema))),
     reference: yup.string().when('type', {
       is: (val) => val === TYPES.Reference,

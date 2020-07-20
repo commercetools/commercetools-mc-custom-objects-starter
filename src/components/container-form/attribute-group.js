@@ -22,6 +22,7 @@ const AttributeGroup = ({
   handleChange,
   remove,
   removeDisabled,
+  isDisplayed,
 }) => {
   const { project } = useApplicationContext();
   const { languages } = project;
@@ -71,8 +72,10 @@ const AttributeGroup = ({
         });
       }
     }
+
     handleChange(event);
   }
+
   return (
     <Spacings.Stack scale="m">
       <Attribute
@@ -84,10 +87,12 @@ const AttributeGroup = ({
         handleChange={onChange}
         remove={remove}
         removeDisabled={removeDisabled}
+        isDisplayed={isDisplayed}
       />
       {value.type === TYPES.Object && (
         <ObjectAttributes
           object={value.name}
+          isDisplayed={get(value, ATTRIBUTES.Display)}
           name={`${name}.${ATTRIBUTES.Attributes}`}
           value={get(value, ATTRIBUTES.Attributes)}
           touched={get(touched, ATTRIBUTES.Attributes, [])}
@@ -158,6 +163,7 @@ AttributeGroup.propTypes = {
   handleChange: PropTypes.func.isRequired,
   remove: PropTypes.func.isRequired,
   removeDisabled: PropTypes.bool,
+  isDisplayed: PropTypes.bool,
 };
 
 export default AttributeGroup;

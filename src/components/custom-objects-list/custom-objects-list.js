@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import { useQuery } from '@apollo/react-hooks';
+import camelCase from 'lodash/camelCase';
+import find from 'lodash/find';
 import includes from 'lodash/includes';
 import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
 import isPlainObject from 'lodash/isPlainObject';
 import isString from 'lodash/isString';
 import map from 'lodash/map';
 import omit from 'lodash/omit';
+import reduce from 'lodash/reduce';
 import startCase from 'lodash/startCase';
 import values from 'lodash/values';
 import { stringify } from 'qs';
@@ -99,6 +103,44 @@ const CustomObjectsList = ({ match, history }) => {
     ));
   }
 
+  function getDisplayAttributes(attributes) {
+    return reduce(
+      attributes,
+      (display, attribute) => {
+        if (attribute.display) {
+          display.push(camelCase(attribute.name));
+        }
+
+        if (attribute.attributes) {
+          const nested = getDisplayAttributes(attribute.attributes);
+          display.push(...nested);
+        }
+
+        return display;
+      },
+      []
+    );
+  }
+
+  function getDisplayValues(value, attributes) {
+    return reduce(
+      value,
+      (display, val, valKey) => {
+        if (includes(attributes, valKey)) {
+          return { ...display, [valKey]: val };
+        }
+        if (isPlainObject(val)) {
+          const nested = getDisplayValues(val, attributes);
+          if (!isEmpty(nested)) {
+            return { ...display, [valKey]: nested };
+          }
+        }
+        return display;
+      },
+      {}
+    );
+  }
+
   function renderItem(results, { rowIndex, columnKey }) {
     const customObject = results[rowIndex];
     const { CONTAINER, KEY, VALUE, MODIFIED } = COLUMN_KEYS;
@@ -109,15 +151,24 @@ const CustomObjectsList = ({ match, history }) => {
       case KEY:
         return customObject.key;
       case VALUE: {
+        const customObjectContainer = find(containers, {
+          key: customObject.container,
+        });
+        const displayAttributes = getDisplayAttributes(
+          customObjectContainer.value.attributes
+        );
+        const value = getDisplayValues(customObject.value, displayAttributes);
         return (
-          <div className={styles.value}>{renderObject(customObject.value)}</div>
+          <div className={styles.value} data-testid="custom-object-value">
+            {renderObject(isEmpty(value) ? customObject.value : value)}
+          </div>
         );
       }
       case MODIFIED:
         return (
           <FormattedDate
             value={new Date(customObject.lastModifiedAt)}
-            {...DATE_FORMAT}
+            {...DATE_TIME_FORMAT}
           />
         );
       default:

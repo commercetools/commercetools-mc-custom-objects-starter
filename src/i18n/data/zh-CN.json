@@ -1,10 +1,12 @@
 {
   "Container.form.add.button": "",
   "Container.form.attributes.title": "",
+  "Container.form.attributeSettings.hint": "",
   "Container.form.attributeSettings.title": "",
   "Container.form.button.addAttribute": "",
   "Container.form.button.removeAttribute": "",
   "Container.form.button.submit": "",
+  "Container.form.display.title": "",
   "Container.form.enum.key.label": "",
   "Container.form.enum.label.i18nLabel": "",
   "Container.form.enum.label.label": "",

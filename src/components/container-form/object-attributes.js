@@ -15,6 +15,7 @@ import styles from './nested-attributes.mod.css';
 
 const ObjectAttributes = ({
   object,
+  isDisplayed,
   name,
   value,
   touched,
@@ -65,6 +66,7 @@ const ObjectAttributes = ({
                 handleChange={handleChange}
                 remove={() => remove(objectIndex)}
                 removeDisabled={objectIndex === 0 && value.length === 1}
+                isDisplayed={isDisplayed}
               />
             ))}
           </Spacings.Stack>
@@ -76,6 +78,7 @@ const ObjectAttributes = ({
 ObjectAttributes.displayName = 'ObjectAttributes';
 ObjectAttributes.propTypes = {
   object: PropTypes.string.isRequired,
+  isDisplayed: PropTypes.bool,
   name: PropTypes.string.isRequired,
   value: PropTypes.arrayOf(
     PropTypes.shape({
