@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
+import startCase from 'lodash/startCase';
 import { useIntl } from 'react-intl';
 import FieldLabel from '@commercetools-uikit/field-label';
 import { TYPES } from '../container-form/constants';
@@ -12,11 +13,11 @@ const AttributeLabel = ({ type, title, isRequired, reference }) => {
     <>
       {type !== TYPES.Boolean && (
         <FieldLabel
-          title={title}
+          title={startCase(title)}
           hasRequiredIndicator={isRequired}
           hint={
             reference
-              ? `${capitalize(reference.type)} ${capitalize(
+              ? `${startCase(reference.type)} ${capitalize(
                   reference.by
                 )} ${intl.formatMessage(messages.referenceLabel)}`
               : ''

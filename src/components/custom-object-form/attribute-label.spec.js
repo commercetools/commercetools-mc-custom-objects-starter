@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import faker from 'faker';
 import capitalize from 'lodash/capitalize';
+import startCase from 'lodash/startCase';
 import FieldLabel from '@commercetools-uikit/field-label';
 import {
   REFERENCE_BY,
@@ -32,7 +33,9 @@ describe('attribute label', () => {
 
   it('when type is not boolean, should display label with title', () => {
     const wrapper = loadAttributeLabel(TYPES.String);
-    expect(wrapper.find(FieldLabel).prop('title')).toEqual(mocks.title);
+    expect(wrapper.find(FieldLabel).prop('title')).toEqual(
+      startCase(mocks.title)
+    );
   });
 
   it('when attribute is required, should display required indicator', () => {
@@ -70,7 +73,7 @@ describe('attribute label', () => {
 
     it('should display label hint with reference type', () => {
       expect(wrapper.find(FieldLabel).prop('hint')).toContain(
-        capitalize(reference.type)
+        startCase(reference.type)
       );
     });
   });
