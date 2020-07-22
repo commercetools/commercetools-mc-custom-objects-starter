@@ -7,7 +7,11 @@ import reduce from 'lodash/reduce';
 import times from 'lodash/times';
 import { FieldArray } from 'formik';
 import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
-import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
+import {
+  REFERENCE_BY,
+  REFERENCE_TYPES,
+  TYPES,
+} from '../container-form/constants';
 import AttributeField from './attribute-field';
 import { generateContainer } from '../../test-util';
 import { getValue } from './util';
@@ -30,7 +34,10 @@ const mocks = {
   onChange: jest.fn(),
   onBlur: jest.fn(),
   attributes: container.value.attributes,
-  reference: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+  reference: {
+    by: faker.random.arrayElement(Object.values(REFERENCE_BY)),
+    type: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+  },
 };
 const mockType = faker.random.arrayElement(Object.values(TYPES));
 

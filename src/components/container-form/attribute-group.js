@@ -6,7 +6,7 @@ import { useApplicationContext } from '@commercetools-frontend/application-shell
 import { LocalizedTextInput } from '@commercetools-uikit/inputs';
 import Spacings from '@commercetools-uikit/spacings';
 import Attribute from './attribute';
-import { ATTRIBUTES, TYPES } from './constants';
+import { ATTRIBUTES, REFERENCE_BY, TYPES } from './constants';
 // eslint-disable-next-line import/no-cycle
 import ObjectAttributes from './object-attributes';
 import ReferenceAttribute from './reference-attribute';
@@ -48,7 +48,10 @@ const AttributeGroup = ({
         handleChange({
           target: {
             name: `${name}.${ATTRIBUTES.Reference}`,
-            value: '',
+            value: {
+              by: REFERENCE_BY.Id,
+              type: '',
+            },
           },
         });
       } else if (eventValue === TYPES.Enum) {
@@ -105,7 +108,7 @@ const AttributeGroup = ({
         <ReferenceAttribute
           name={`${name}.${ATTRIBUTES.Reference}`}
           value={get(value, ATTRIBUTES.Reference)}
-          touched={get(touched, ATTRIBUTES.Reference, false)}
+          touched={get(touched, ATTRIBUTES.Reference, {})}
           errors={get(errors, ATTRIBUTES.Reference, {})}
           handleBlur={handleBlur}
           handleChange={handleChange}
@@ -143,7 +146,10 @@ AttributeGroup.propTypes = {
     required: PropTypes.bool,
     set: PropTypes.bool,
     attributes: PropTypes.array,
-    reference: PropTypes.string,
+    reference: PropTypes.shape({
+      by: PropTypes.string,
+      type: PropTypes.string,
+    }),
   }).isRequired,
   touched: PropTypes.shape({
     name: PropTypes.bool,
@@ -151,13 +157,19 @@ AttributeGroup.propTypes = {
     required: PropTypes.bool,
     set: PropTypes.bool,
     attributes: PropTypes.array,
-    reference: PropTypes.bool,
+    reference: PropTypes.shape({
+      by: PropTypes.bool,
+      type: PropTypes.bool,
+    }),
   }),
   errors: PropTypes.shape({
     name: PropTypes.object,
     type: PropTypes.object,
     attributes: PropTypes.array,
-    reference: PropTypes.object,
+    reference: PropTypes.shape({
+      by: PropTypes.object,
+      type: PropTypes.object,
+    }),
   }),
   handleBlur: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,

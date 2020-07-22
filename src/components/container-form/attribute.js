@@ -106,10 +106,12 @@ const Attribute = ({
         <Spacings.Stack scale="s">
           <Spacings.Inline alignItems="center">
             <Text.Body isBold intlMessage={messages.attributeSettingsTitle} />
-            <Tooltip
-              title={<FormattedMessage {...messages.attributeSettingsHint} />}
-            >
-              <IconButton icon={<InformationIcon />} size="small" />
+            <Tooltip title={intl.formatMessage(messages.attributeSettingsHint)}>
+              <IconButton
+                label={intl.formatMessage(messages.attributeSettingsTitle)}
+                icon={<InformationIcon />}
+                size="small"
+              />
             </Tooltip>
           </Spacings.Inline>
           <Spacings.Inline alignItems="center">

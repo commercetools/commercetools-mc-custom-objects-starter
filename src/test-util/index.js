@@ -4,7 +4,11 @@ import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 import times from 'lodash/times';
 import { CONTAINER } from '../constants';
-import { REFERENCE_TYPES, TYPES } from '../components/container-form/constants';
+import {
+  REFERENCE_BY,
+  REFERENCE_TYPES,
+  TYPES,
+} from '../components/container-form/constants';
 import { getAttributeValues } from '../components/custom-object-form/util';
 
 export const generateAttribute = ({
@@ -23,17 +27,20 @@ export const generateAttribute = ({
     attributes: generateAttributes(displayNested), // eslint-disable-line no-use-before-define
   }),
   ...(type === TYPES.Reference && {
-    reference: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+    reference: {
+      by: faker.random.arrayElement(Object.values(REFERENCE_BY)),
+      type: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+    },
   }),
   ...(type === TYPES.Enum && {
     enum: times(2, () => ({
-      value: faker.random.number(),
-      label: faker.random.words,
+      value: JSON.stringify(faker.random.number()),
+      label: faker.random.words(),
     })),
   }),
   ...(type === TYPES.LocalizedEnum && {
     lenum: times(2, () => ({
-      value: faker.random.number(),
+      value: JSON.stringify(faker.random.number()),
       label: reduce(
         languages,
         (label, language) => ({ ...label, [language]: faker.random.words() }),

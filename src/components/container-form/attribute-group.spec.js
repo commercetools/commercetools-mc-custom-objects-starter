@@ -5,7 +5,7 @@ import kebabCase from 'lodash/kebabCase';
 import times from 'lodash/times';
 import * as AppContext from '@commercetools-frontend/application-shell-connectors';
 import { LocalizedTextInput } from '@commercetools-uikit/inputs';
-import { ATTRIBUTES, TYPES } from './constants';
+import { ATTRIBUTES, REFERENCE_BY, TYPES } from './constants';
 import AttributeGroup from './attribute-group';
 import ObjectAttributes from './object-attributes';
 import ReferenceAttribute from './reference-attribute';
@@ -50,7 +50,11 @@ describe('attribute group', () => {
   });
 
   it('when value type is reference, should display reference attribute', () => {
-    const value = { ...mockValue, type: TYPES.Reference, reference: '' };
+    const value = {
+      ...mockValue,
+      type: TYPES.Reference,
+      reference: { by: REFERENCE_BY.Id, type: '' },
+    };
     const wrapper = loadAttributeGroup(value);
     expect(wrapper.find(ReferenceAttribute).exists()).toEqual(true);
   });
@@ -147,7 +151,10 @@ describe('attribute group', () => {
         expect(mocks.handleChange).toHaveBeenCalledWith({
           target: {
             name: `${mocks.name}.${ATTRIBUTES.Reference}`,
-            value: '',
+            value: {
+              by: REFERENCE_BY.Id,
+              type: '',
+            },
           },
         });
       });

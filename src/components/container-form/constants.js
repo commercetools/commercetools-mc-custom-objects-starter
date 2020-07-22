@@ -13,6 +13,11 @@ export const TYPES = {
   Reference: 'Reference',
 };
 
+export const REFERENCE_BY = {
+  Key: 'key',
+  Id: 'id',
+};
+
 export const REFERENCE_TYPES = {
   Cart: 'cart',
   CartDiscount: 'cart-discount',

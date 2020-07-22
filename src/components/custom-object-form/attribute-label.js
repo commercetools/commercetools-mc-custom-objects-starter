@@ -16,9 +16,9 @@ const AttributeLabel = ({ type, title, isRequired, reference }) => {
           hasRequiredIndicator={isRequired}
           hint={
             reference
-              ? `${capitalize(reference)} ${intl.formatMessage(
-                  messages.referenceLabel
-                )}`
+              ? `${capitalize(reference.type)} ${capitalize(
+                  reference.by
+                )} ${intl.formatMessage(messages.referenceLabel)}`
               : ''
           }
         />
@@ -31,7 +31,10 @@ AttributeLabel.propTypes = {
   type: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
-  reference: PropTypes.string,
+  reference: PropTypes.shape({
+    by: PropTypes.string,
+    type: PropTypes.string,
+  }),
 };
 
 export default AttributeLabel;

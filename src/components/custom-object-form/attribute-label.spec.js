@@ -3,7 +3,11 @@ import { shallow } from 'enzyme';
 import faker from 'faker';
 import capitalize from 'lodash/capitalize';
 import FieldLabel from '@commercetools-uikit/field-label';
-import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
+import {
+  REFERENCE_BY,
+  REFERENCE_TYPES,
+  TYPES,
+} from '../container-form/constants';
 import AttributeLabel from './attribute-label';
 
 const mocks = {
@@ -43,16 +47,32 @@ describe('attribute label', () => {
     );
   });
 
-  it('when attribute has reference, should display label hint with reference type', () => {
-    const reference = faker.random.arrayElement(Object.values(REFERENCE_TYPES));
-    const wrapper = loadAttributeLabel(
-      TYPES.Reference,
-      faker.random.boolean(),
-      reference
-    );
-    expect(wrapper.find(FieldLabel).prop('hint')).toContain(
-      capitalize(reference)
-    );
+  describe('when when attribute has reference', () => {
+    const reference = {
+      by: faker.random.arrayElement(Object.values(REFERENCE_BY)),
+      type: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+    };
+    let wrapper;
+
+    beforeEach(() => {
+      wrapper = loadAttributeLabel(
+        TYPES.Reference,
+        faker.random.boolean(),
+        reference
+      );
+    });
+
+    it('should display label hint with reference by', () => {
+      expect(wrapper.find(FieldLabel).prop('hint')).toContain(
+        capitalize(reference.by)
+      );
+    });
+
+    it('should display label hint with reference type', () => {
+      expect(wrapper.find(FieldLabel).prop('hint')).toContain(
+        capitalize(reference.type)
+      );
+    });
   });
 
   it('when attribute does not have reference, should not display hint', () => {

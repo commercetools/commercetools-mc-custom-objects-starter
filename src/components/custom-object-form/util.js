@@ -39,8 +39,8 @@ export const getValue = (
 
     case TYPES.Reference:
       return {
-        typeId: reference,
-        id: '',
+        typeId: reference.type,
+        [reference.by]: '',
       };
 
     case TYPES.Object:
@@ -108,7 +108,7 @@ const getLocalizedStringValidation = (languages, required, messages) => {
 };
 
 const getValidationByType = (
-  { type, required, attributes },
+  { type, required, attributes, reference },
   languages,
   messages
 ) => {
@@ -141,7 +141,7 @@ const getValidationByType = (
     case TYPES.Reference:
       return yup.object({
         typeId: yup.string(),
-        id: getValidation('string', required, messages),
+        [reference.by]: getValidation('string', required, messages),
       });
 
     case TYPES.Object:

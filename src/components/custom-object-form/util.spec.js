@@ -6,7 +6,11 @@ import times from 'lodash/times';
 import * as yup from 'yup';
 import { FormattedMessage } from 'react-intl';
 import { LocalizedTextInput } from '@commercetools-uikit/inputs';
-import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
+import {
+  REFERENCE_BY,
+  REFERENCE_TYPES,
+  TYPES,
+} from '../container-form/constants';
 import { getAttributeValues, getAttributeValidation } from './util';
 import messages from './messages';
 
@@ -142,11 +146,12 @@ describe('attribute utilities', () => {
     });
 
     // commercetools reference type: https://docs.commercetools.com/http-api-types#references
-    it('when attribute is a reference type, should return a reference type with id as an empty string as initial value', () => {
+    it('when attribute is a reference type, should return a reference type with reference by as an empty string as initial value', () => {
       const name = faker.random.words();
-      const reference = faker.random.arrayElement(
-        Object.values(REFERENCE_TYPES)
-      );
+      const reference = {
+        by: faker.random.arrayElement(Object.values(REFERENCE_BY)),
+        type: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+      };
       const attributes = [
         {
           name,
@@ -154,7 +159,9 @@ describe('attribute utilities', () => {
           reference,
         },
       ];
-      const values = { [camelCase(name)]: { typeId: reference, id: '' } };
+      const values = {
+        [camelCase(name)]: { typeId: reference.type, [reference.by]: '' },
+      };
       expect(getAttributeValues(attributes)).toEqual(values);
     });
 
@@ -370,9 +377,10 @@ describe('attribute utilities', () => {
 
     it('when attribute is a reference type, should return yup object as validation', () => {
       const name = faker.random.words();
-      const reference = faker.random.arrayElement(
-        Object.values(REFERENCE_TYPES)
-      );
+      const reference = {
+        by: faker.random.arrayElement(Object.values(REFERENCE_BY)),
+        type: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+      };
       const attributes = [
         {
           name,
@@ -383,7 +391,7 @@ describe('attribute utilities', () => {
       const validation = {
         [camelCase(name)]: yup.object({
           typeId: yup.string(),
-          id: yup.string().nullable(),
+          [reference.by]: yup.string().nullable(),
         }),
       };
       expect(JSON.stringify(getAttributeValidation(attributes))).toEqual(

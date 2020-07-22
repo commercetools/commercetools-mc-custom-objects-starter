@@ -33,6 +33,7 @@ const AttributeInput = ({
   isRequired,
   isSet,
   attributes,
+  reference,
   options,
 }) => {
   const { dataLocale, project, user } = useApplicationContext();
@@ -207,15 +208,17 @@ const AttributeInput = ({
     }
 
     case TYPES.Reference: {
-      const refTouched = get(touched, 'id');
-      const refErrors = get(errors, 'id');
+      const referenceBy = get(reference, 'by');
+      const refValue = get(value, referenceBy, '');
+      const refTouched = get(touched, referenceBy);
+      const refErrors = get(errors, referenceBy);
       const hasError = !!(refTouched && refErrors);
       return (
         <Spacings.Stack scale="xs">
           <TextInput
             data-testid="field-type-reference"
-            name={`${name}.id`}
-            value={value.id}
+            name={`${name}.${referenceBy}`}
+            value={refValue}
             hasError={hasError}
             onChange={onChange}
             onBlur={onBlur}
@@ -274,6 +277,10 @@ AttributeInput.propTypes = {
   isRequired: PropTypes.bool,
   isSet: PropTypes.bool,
   attributes: PropTypes.array,
+  reference: PropTypes.shape({
+    by: PropTypes.string,
+    type: PropTypes.string,
+  }),
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,

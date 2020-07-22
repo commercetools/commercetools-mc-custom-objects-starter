@@ -132,10 +132,20 @@ export default defineMessages({
     description: 'Title for object attributes fields',
     defaultMessage: 'Object Attributes: {name}',
   },
-  referenceTitle: {
-    id: 'Container.form.reference.title',
-    description: 'Title for reference field',
+  referenceByTitle: {
+    id: 'Container.form.reference.by.title',
+    description: 'Title for reference by field',
+    defaultMessage: 'Reference By',
+  },
+  referenceTypeTitle: {
+    id: 'Container.form.reference.type.title',
+    description: 'Title for reference type field',
     defaultMessage: 'Type of Reference',
+  },
+  referenceByHint: {
+    id: 'Container.form.reference.hint',
+    description: 'Hint for reference by field',
+    defaultMessage: 'Reference by key does not support reference expansion.',
   },
   enumOptionsTitle: {
     id: 'Container.form.enumOptions.title',

@@ -45,9 +45,12 @@ const ContainerForm = ({ container, onSubmit }) => {
     required: yup.bool(),
     display: yup.bool(),
     attributes: yup.array(yup.lazy(() => yup.object(attributeSchema))),
-    reference: yup.string().when('type', {
+    reference: yup.object().when('type', {
       is: (val) => val === TYPES.Reference,
-      then: stringSchema,
+      then: yup.object({
+        by: stringSchema,
+        type: stringSchema,
+      }),
     }),
     enum: yup.array().when('type', {
       is: (val) => val === TYPES.Enum,

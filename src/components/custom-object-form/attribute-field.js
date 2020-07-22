@@ -92,6 +92,7 @@ const AttributeField = ({
                         isRequired={isRequired}
                         isSet={isSet}
                         attributes={attributes}
+                        reference={reference}
                         options={selectOptions}
                       />
                     </div>
@@ -130,6 +131,7 @@ const AttributeField = ({
             isRequired={isRequired}
             isSet={isSet}
             attributes={attributes}
+            reference={reference}
             options={selectOptions}
           />
         </Spacings.Stack>
@@ -150,7 +152,10 @@ AttributeField.propTypes = {
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
   attributes: PropTypes.array,
-  reference: PropTypes.string,
+  reference: PropTypes.shape({
+    by: PropTypes.string,
+    type: PropTypes.string,
+  }),
   options: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string,

@@ -129,7 +129,10 @@ Form.propTypes = {
         required: PropTypes.bool,
         set: PropTypes.bool,
         attributes: PropTypes.array,
-        reference: PropTypes.string,
+        reference: PropTypes.shape({
+          by: PropTypes.string,
+          type: PropTypes.string,
+        }),
       }).isRequired
     ).isRequired,
   }).isRequired,
@@ -142,7 +145,10 @@ Form.propTypes = {
         required: PropTypes.bool,
         set: PropTypes.bool,
         attributes: PropTypes.array,
-        reference: PropTypes.bool,
+        reference: PropTypes.shape({
+          by: PropTypes.bool,
+          type: PropTypes.bool,
+        }),
       })
     ),
   }),
@@ -153,7 +159,10 @@ Form.propTypes = {
         name: PropTypes.object,
         type: PropTypes.object,
         attributes: PropTypes.array,
-        reference: PropTypes.object,
+        reference: PropTypes.shape({
+          by: PropTypes.object,
+          type: PropTypes.object,
+        }),
       })
     ),
   }),

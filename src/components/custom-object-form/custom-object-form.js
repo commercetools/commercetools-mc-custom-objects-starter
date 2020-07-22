@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import find from 'lodash/find';
+import get from 'lodash/get';
+import isPlainObject from 'lodash/isPlainObject';
+import reduce from 'lodash/reduce';
 import { useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -8,6 +11,18 @@ import { useApplicationContext } from '@commercetools-frontend/application-shell
 import { getAttributeValidation, getAttributeValues } from './util';
 import Form from './form';
 import messages from './messages';
+
+const getValueForAttributes = (value, empty) =>
+  reduce(
+    empty,
+    (result, val, key) => ({
+      ...result,
+      [key]: isPlainObject(val)
+        ? getValueForAttributes(get(value, key), val)
+        : get(value, key) || val,
+    }),
+    {}
+  );
 
 const initializeCustomObjectValues = (
   customObject,
@@ -20,12 +35,12 @@ const initializeCustomObjectValues = (
   return {
     ...customObject,
     container: JSON.stringify(container),
-    attributes,
     // combining empty attribute values with saved values in case schema changed
-    value: {
-      ...getAttributeValues(attributes, currencies, languages),
-      ...customObject.value,
-    },
+    value: getValueForAttributes(
+      customObject.value,
+      getAttributeValues(attributes, currencies, languages)
+    ),
+    attributes,
   };
 };
 

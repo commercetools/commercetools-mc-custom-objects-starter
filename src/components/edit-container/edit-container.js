@@ -60,7 +60,10 @@ EditContainer.propTypes = {
           set: PropTypes.bool,
           required: PropTypes.bool,
           attributes: PropTypes.array,
-          reference: PropTypes.string,
+          reference: PropTypes.shape({
+            by: PropTypes.string,
+            type: PropTypes.string,
+          }),
         }).isRequired
       ).isRequired,
     }).isRequired,

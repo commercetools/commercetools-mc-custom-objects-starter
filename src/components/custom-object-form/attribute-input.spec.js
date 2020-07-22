@@ -7,7 +7,11 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import momentTZ from 'moment-timezone';
 import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
-import { REFERENCE_TYPES, TYPES } from '../container-form/constants';
+import {
+  REFERENCE_BY,
+  REFERENCE_TYPES,
+  TYPES,
+} from '../container-form/constants';
 import AttributeInput from './attribute-input';
 import messages from './messages';
 import { generateContainer } from '../../test-util';
@@ -38,6 +42,7 @@ const loadAttributeInput = ({
   touched,
   errors,
   attributes,
+  reference,
   isRequired,
   isSet,
 }) =>
@@ -49,6 +54,7 @@ const loadAttributeInput = ({
       touched={touched}
       errors={errors}
       attributes={attributes}
+      reference={reference}
       isRequired={isRequired}
       isSet={isSet}
     />
@@ -732,20 +738,29 @@ describe('attribute input', () => {
   describe('reference type', () => {
     const type = TYPES.Reference;
     const input = '[data-testid="field-type-reference"]';
+    const reference = {
+      by: faker.random.arrayElement(Object.values(REFERENCE_BY)),
+      type: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
+    };
     const value = {
-      typeId: faker.random.arrayElement(Object.values(REFERENCE_TYPES)),
-      id: faker.random.uuid(),
+      typeId: reference.type,
+      [reference.by]: faker.random.uuid(),
     };
 
-    it('should display checkbox input', () => {
-      const wrapper = loadAttributeInput({ type, value });
+    it('should display reference input', () => {
+      const wrapper = loadAttributeInput({ type, reference, value });
       expect(wrapper.find(input).exists()).toEqual(true);
     });
 
     describe('when input touched without error', () => {
       let wrapper;
       beforeEach(() => {
-        wrapper = loadAttributeInput({ type, value, touched: { id: true } });
+        wrapper = loadAttributeInput({
+          type,
+          reference,
+          value,
+          touched: { [reference.by]: true },
+        });
       });
 
       it('input should not have error', () => {
@@ -762,9 +777,12 @@ describe('attribute input', () => {
       beforeEach(() => {
         wrapper = loadAttributeInput({
           type,
+          reference,
           value,
           touched: {
-            id: <FormattedMessage {...messages.requiredFieldError} />,
+            [reference.by]: (
+              <FormattedMessage {...messages.requiredFieldError} />
+            ),
           },
         });
       });
@@ -783,9 +801,14 @@ describe('attribute input', () => {
       beforeEach(() => {
         wrapper = loadAttributeInput({
           type,
+          reference,
           value,
-          touched: { id: true },
-          errors: { id: <FormattedMessage {...messages.requiredFieldError} /> },
+          touched: { [reference.by]: true },
+          errors: {
+            [reference.by]: (
+              <FormattedMessage {...messages.requiredFieldError} />
+            ),
+          },
         });
       });
 
