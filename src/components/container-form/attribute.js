@@ -75,6 +75,17 @@ const Attribute = ({
   isDisplayed,
 }) => {
   const intl = useIntl();
+  const isRequiredDisabled =
+    value.type === TYPES.Object || value.type === TYPES.Boolean;
+
+  React.useEffect(() => {
+    if (isRequiredDisabled) {
+      handleChange({
+        target: { name: `${name}.required`, value: false },
+      });
+    }
+  }, [value.type]);
+
   return (
     <Spacings.Inline alignItems="center" justifyContent="space-between">
       <div className={styles.attribute}>
@@ -116,9 +127,11 @@ const Attribute = ({
           </Spacings.Inline>
           <Spacings.Inline alignItems="center">
             <CheckboxInput
+              data-testid="attribute-required"
               name={`${name}.${ATTRIBUTES.Required}`}
               value={JSON.stringify(value.required)}
               isChecked={value.required}
+              isDisabled={isRequiredDisabled}
               onChange={handleChange}
               onBlur={handleBlur}
             >
