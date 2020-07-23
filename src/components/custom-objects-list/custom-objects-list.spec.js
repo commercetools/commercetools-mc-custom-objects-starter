@@ -319,7 +319,7 @@ describe('custom objects list', () => {
         it('when container schema has one display in list attribute, should only display that attribute', () => {
           const attributes = [
             generateAttribute({ display: true }),
-            generateAttribute({ display: false }),
+            generateAttribute({ display: false, displayNested: false }),
           ];
           const actual = renderValueColumnWithContext(attributes);
           expect(actual.find(attributeValue).length).toEqual(1);
@@ -327,7 +327,7 @@ describe('custom objects list', () => {
 
         it('when container schema has no display in list attributes, should display all available attribute', () => {
           const attributes = times(2, () =>
-            generateAttribute({ display: false })
+            generateAttribute({ display: false, displayNested: false })
           );
           const actual = renderValueColumnWithContext(attributes);
           expect(actual.find(attributeValue).length).toEqual(attributes.length);
