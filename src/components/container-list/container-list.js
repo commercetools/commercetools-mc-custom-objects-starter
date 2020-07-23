@@ -17,8 +17,8 @@ import {
   TabContainer,
   View,
   ViewHeader,
-} from '@custom-applications-local/core/components';
-import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
+} from '@commercetools-us-ps/mc-app-core/components';
+import { SORT_OPTIONS } from '@commercetools-us-ps/mc-app-core/constants';
 import GetContainers from '../get-custom-objects.rest.graphql';
 import { DEFAULT_VARIABLES, FIELDS } from './constants';
 import messages from './messages';

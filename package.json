@@ -52,6 +52,7 @@
     "@commercetools-uikit/spacings": "10.18.5",
     "@commercetools-uikit/text": "10.24.0",
     "@commercetools-uikit/tooltip": "10.23.0",
+    "@commercetools-us-ps/mc-app-core": "1.1.24",
     "@types/prop-types": "^15.7.3",
     "@types/react": "16.9.43",
     "@types/react-dom": "^16.9.8",

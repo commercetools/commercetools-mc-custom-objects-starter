@@ -11,9 +11,9 @@ import { stringify } from 'qs';
 import { FormattedDate } from 'react-intl';
 import { useQuery, setQuery } from '@apollo/react-hooks';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
-import { PaginatedTable } from '@custom-applications-local/core/components';
-import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
-import { mockUseEffect } from '@custom-applications-local/core/test-util';
+import { PaginatedTable } from '@commercetools-us-ps/mc-app-core/components';
+import { SORT_OPTIONS } from '@commercetools-us-ps/mc-app-core/constants';
+import { useEffectMock } from '@commercetools-us-ps/mc-app-core/test-util';
 import {
   generateAttribute,
   generateContainer,
@@ -67,7 +67,7 @@ const loadCustomObjectsList = () => shallow(<CustomObjectsList {...mocks} />);
 
 describe('custom objects list', () => {
   beforeAll(() => {
-    jest.spyOn(React, 'useEffect').mockImplementation(mockUseEffect);
+    jest.spyOn(React, 'useEffect').mockImplementation(useEffectMock);
   });
 
   beforeEach(() => {

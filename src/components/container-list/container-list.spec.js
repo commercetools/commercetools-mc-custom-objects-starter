@@ -8,8 +8,8 @@ import Grid from '@commercetools-uikit/grid';
 import {
   Pagination,
   ViewHeader,
-} from '@custom-applications-local/core/components';
-import { SORT_OPTIONS } from '@custom-applications-local/core/constants';
+} from '@commercetools-us-ps/mc-app-core/components';
+import { SORT_OPTIONS } from '@commercetools-us-ps/mc-app-core/constants';
 import { generateContainers } from '../../test-util';
 import GetContainers from '../get-custom-objects.rest.graphql';
 import ContainerList from './container-list';

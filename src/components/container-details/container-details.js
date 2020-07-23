@@ -14,8 +14,8 @@ import {
   TabHeader,
   View,
   ViewHeader,
-} from '@custom-applications-local/core/components';
-import { useShowSideNotification } from '@custom-applications-local/core/hooks';
+} from '@commercetools-us-ps/mc-app-core/components';
+import { useShowSideNotification } from '@commercetools-us-ps/mc-app-core/hooks';
 import { ROOT_PATH } from '../../constants';
 import EditContainer from '../edit-container';
 import GetContainer from '../get-custom-object.rest.graphql';

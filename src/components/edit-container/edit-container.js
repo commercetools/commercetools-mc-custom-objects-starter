@@ -7,7 +7,7 @@ import {
   DOMAINS,
   NOTIFICATION_KINDS_SIDE,
 } from '@commercetools-frontend/constants';
-import { useShowSideNotification } from '@custom-applications-local/core/hooks';
+import { useShowSideNotification } from '@commercetools-us-ps/mc-app-core/hooks';
 import { CONTAINER } from '../../constants';
 import UpdateContainer from '../update-custom-object.rest.graphql';
 import ContainerForm from '../container-form';

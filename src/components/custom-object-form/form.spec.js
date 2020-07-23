@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import faker from 'faker';
 import times from 'lodash/times';
 import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
-import { mockUseEffect } from '@custom-applications-local/core/test-util';
+import { useEffectMock } from '@commercetools-us-ps/mc-app-core/test-util';
 import { generateContainers } from '../../test-util';
 import Form from './form';
 import { getAttributeValues } from './util';
@@ -42,7 +42,7 @@ const loadForm = (initialValues = emptyValues, values = emptyValues) =>
 
 describe('form', () => {
   beforeAll(() => {
-    jest.spyOn(React, 'useEffect').mockImplementation(mockUseEffect);
+    jest.spyOn(React, 'useEffect').mockImplementation(useEffectMock);
     jest
       .spyOn(ApplicationContext, 'useApplicationContext')
       .mockImplementation(() => ({ project }));
