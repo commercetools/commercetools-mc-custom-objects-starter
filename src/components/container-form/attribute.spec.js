@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import faker from 'faker';
 import camelCase from 'lodash/camelCase';
-import { mockUseEffect } from '@custom-applications-local/core/test-util';
+import { useEffectMock } from '@commercetools-us-ps/mc-app-core/test-util';
 import { TYPES } from './constants';
 import Attribute from './attribute';
 
@@ -32,7 +32,7 @@ const requiredOption = '[data-testid="attribute-required"]';
 
 describe('attribute', () => {
   beforeAll(() => {
-    jest.spyOn(React, 'useEffect').mockImplementation(mockUseEffect);
+    jest.spyOn(React, 'useEffect').mockImplementation(useEffectMock);
   });
 
   beforeEach(() => {
