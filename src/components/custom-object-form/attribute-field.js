@@ -25,6 +25,7 @@ const AttributeField = ({
   title,
   isRequired,
   isSet,
+  isNestedSet,
   name,
   value,
   touched,
@@ -76,7 +77,11 @@ const AttributeField = ({
                 />
               </Constraints.Horizontal>
               {value.map((val, index) => (
-                <Card key={index} theme="dark" type="flat">
+                <Card
+                  key={index}
+                  theme={isNestedSet ? 'light' : 'dark'}
+                  type="flat"
+                >
                   <Spacings.Inline alignItems="center">
                     <div className={styles.fullWidth}>
                       <AttributeInput
@@ -91,6 +96,7 @@ const AttributeField = ({
                         onBlur={onBlur}
                         isRequired={isRequired}
                         isSet={isSet}
+                        isNestedSet={isNestedSet}
                         attributes={attributes}
                         reference={reference}
                         options={selectOptions}
@@ -145,6 +151,7 @@ AttributeField.propTypes = {
   title: PropTypes.string.isRequired,
   isRequired: PropTypes.bool,
   isSet: PropTypes.bool,
+  isNestedSet: PropTypes.bool,
   name: PropTypes.string.isRequired,
   value: PropTypes.any,
   touched: PropTypes.any,

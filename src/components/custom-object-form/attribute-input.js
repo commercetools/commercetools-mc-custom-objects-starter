@@ -32,6 +32,7 @@ const AttributeInput = ({
   onBlur,
   isRequired,
   isSet,
+  isNestedSet,
   attributes,
   reference,
   options,
@@ -247,6 +248,7 @@ const AttributeInput = ({
                   reference={attribute.reference}
                   isRequired={attribute.required}
                   isSet={attribute.set}
+                  isNestedSet={isNestedSet ? false : isSet}
                   options={attribute.enum || attribute.lenum}
                   value={get(value, attributeName)}
                   touched={get(touched, attributeName)}
@@ -276,6 +278,7 @@ AttributeInput.propTypes = {
   onBlur: PropTypes.func.isRequired,
   isRequired: PropTypes.bool,
   isSet: PropTypes.bool,
+  isNestedSet: PropTypes.bool,
   attributes: PropTypes.array,
   reference: PropTypes.shape({
     by: PropTypes.string,

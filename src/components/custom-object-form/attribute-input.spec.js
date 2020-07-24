@@ -45,6 +45,7 @@ const loadAttributeInput = ({
   reference,
   isRequired,
   isSet,
+  isNestedSet,
 }) =>
   shallow(
     <AttributeInput
@@ -57,6 +58,7 @@ const loadAttributeInput = ({
       reference={reference}
       isRequired={isRequired}
       isSet={isSet}
+      isNestedSet={isNestedSet}
     />
   );
 
@@ -834,6 +836,9 @@ describe('attribute input', () => {
       project.languages
     );
 
+    const attributeField = (index) =>
+      `[data-testid="field-type-object-${index}"]`;
+
     it('should display attribute fields', () => {
       const wrapper = loadAttributeInput({
         type,
@@ -841,6 +846,34 @@ describe('attribute input', () => {
         attributes,
       });
       expect(wrapper.find(AttributeField).length).toEqual(attributes.length);
+    });
+
+    it('when within a nested set, should pass nested set prop as false to attribute fields', () => {
+      const index = 0;
+      const wrapper = loadAttributeInput({
+        type,
+        value,
+        attributes,
+        isNestedSet: true,
+      });
+      expect(wrapper.find(attributeField(index)).prop('isNestedSet')).toEqual(
+        false
+      );
+    });
+
+    it('when not within a nested set, should pass nested set prop as is set value to attribute fields', () => {
+      const index = 0;
+      const isSet = faker.random.boolean();
+      const wrapper = loadAttributeInput({
+        type,
+        value,
+        attributes,
+        isSet,
+        isNestedSet: false,
+      });
+      expect(wrapper.find(attributeField(index)).prop('isNestedSet')).toEqual(
+        isSet
+      );
     });
   });
 

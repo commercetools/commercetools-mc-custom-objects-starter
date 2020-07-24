@@ -7,6 +7,7 @@ import reduce from 'lodash/reduce';
 import times from 'lodash/times';
 import { FieldArray } from 'formik';
 import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
+import Card from '@commercetools-uikit/card';
 import {
   REFERENCE_BY,
   REFERENCE_TYPES,
@@ -40,8 +41,17 @@ const mocks = {
   },
 };
 const mockType = faker.random.arrayElement(Object.values(TYPES));
+const fieldArrayMocks = {
+  push: jest.fn(),
+  remove: jest.fn(),
+};
 
-const loadAttributeField = (isSet, type = mockType, options = []) => {
+const loadAttributeField = ({
+  isSet = faker.random.boolean(),
+  isNestedSet = faker.random.boolean(),
+  type = mockType,
+  options = [],
+}) => {
   const value = isSet ? [''] : '';
   return shallow(
     <AttributeField
@@ -49,10 +59,14 @@ const loadAttributeField = (isSet, type = mockType, options = []) => {
       type={type}
       value={value}
       isSet={isSet}
+      isNestedSet={isNestedSet}
       options={options}
     />
   );
 };
+
+const loadAttributes = (wrapper) =>
+  shallow(wrapper.find(FieldArray).props().render(fieldArrayMocks));
 
 describe('attribute field', () => {
   beforeAll(() => {
@@ -62,18 +76,10 @@ describe('attribute field', () => {
   });
 
   describe('when attribute is a set', () => {
-    const fieldArrayMocks = {
-      push: jest.fn(),
-      remove: jest.fn(),
-    };
-
-    const loadAttributes = (wrapper) =>
-      shallow(wrapper.find(FieldArray).props().render(fieldArrayMocks));
-
     let attributes;
 
     beforeEach(() => {
-      const wrapper = loadAttributeField(true);
+      const wrapper = loadAttributeField({ isSet: true, isNestedSet: false });
       attributes = loadAttributes(wrapper);
     });
 
@@ -85,6 +91,10 @@ describe('attribute field', () => {
 
     it('should display set of attribute inputs', () => {
       expect(attributes.find(AttributeInput).length).toEqual(1);
+    });
+
+    it('should display card with dark theme', () => {
+      expect(attributes.find(Card).prop('theme')).toEqual('dark');
     });
 
     it('when add button clicked, should display an additional attribute', () => {
@@ -110,11 +120,17 @@ describe('attribute field', () => {
     });
   });
 
+  it('when attribute is a nested set, should display card with light theme', () => {
+    const wrapper = loadAttributeField({ isSet: true, isNestedSet: true });
+    const attributes = loadAttributes(wrapper);
+    expect(attributes.find(Card).prop('theme')).toEqual('light');
+  });
+
   describe('when attribute is a single item', () => {
     let wrapper;
 
     beforeEach(() => {
-      wrapper = loadAttributeField(false);
+      wrapper = loadAttributeField({ isSet: false });
     });
 
     it('should display attribute label', () => {
@@ -132,7 +148,11 @@ describe('attribute field', () => {
 
   it('when attribute is enum type, should directly pass options as prop to attribute input', () => {
     const options = times(2, () => ({ value: '', label: faker.random.word() }));
-    const wrapper = loadAttributeField(false, TYPES.Enum, options);
+    const wrapper = loadAttributeField({
+      isSet: false,
+      type: TYPES.Enum,
+      options,
+    });
     expect(
       wrapper.find('[data-testid="single-attribute-input"]').prop('options')
     ).toEqual(options);
@@ -149,7 +169,11 @@ describe('attribute field', () => {
       value: option.value,
       label: option.label[dataLocale],
     }));
-    const wrapper = loadAttributeField(false, TYPES.LocalizedEnum, options);
+    const wrapper = loadAttributeField({
+      isSet: false,
+      type: TYPES.LocalizedEnum,
+      options,
+    });
     expect(
       wrapper.find('[data-testid="single-attribute-input"]').prop('options')
     ).toEqual(mappedOptions);
