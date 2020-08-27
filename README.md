@@ -1,6 +1,6 @@
-# Bundles Custom Application
+# Custom Objects Manager
 
-This extension allows users to manage product bundles.  
+This Merchant Center custom applications is for managing custom objects.
 
 ## Start the development server
 
@@ -29,7 +29,7 @@ $ yarn build
 
 ## Deployment
 
-The skeleton includes configuration for both AWS (S3 & CloudFront) and Firebase serverless deployments built with 
+The custom application includes configuration for both AWS (S3 & CloudFront) and Firebase serverless deployments built with 
 `mc-script compile-html`. 
 
 - [Firebase](https://appkit.commercetools.com/deployment/example-firebase)

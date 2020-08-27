@@ -1,8 +1,8 @@
 module.exports = {
   runner: 'jest-runner-eslint',
   displayName: 'eslint',
-  modulePathIgnorePatterns: ['dist', 'packages-from-mc', 'coverage'],
+  modulePathIgnorePatterns: ['dist', 'coverage', 'public'],
   moduleFileExtensions: ['js'],
   testMatch: ['<rootDir>/**/*.js'],
-  watchPlugins: ['jest-plugin-filename']
+  watchPlugins: ['jest-plugin-filename'],
 };

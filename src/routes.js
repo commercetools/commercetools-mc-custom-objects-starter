@@ -3,20 +3,18 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Route, Switch } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-import { GRAPHQL_TARGETS } from '@commercetools-frontend/constants';
 import { useIsAuthorized } from '@commercetools-frontend/permissions';
 import LockedDiamondSVG from '@commercetools-frontend/assets/images/locked-diamond.svg';
 import { MaintenancePageLayout } from '@commercetools-frontend/application-components';
-import {
-  BundleProvider,
-  PathProvider,
-  GetBundleProductType
-} from '@commercetools-us-ps/mc-app-bundles-core/context';
-import Error from '@commercetools-us-ps/mc-app-core/components/states/error';
-import StaticBundlesTable from './components/bundles-table';
-import CreateBundleForm from './components/create-bundle-form';
-import StaticBundleDetails from './components/bundle-details';
-import { BUNDLE_PRODUCT_TYPE, PERMISSIONS, ROOT_PATH } from './constants';
+import CustomObjectsList from './components/custom-objects-list';
+import CreateCustomObject from './components/create-custom-object';
+import CustomObjectDetails from './components/custom-object-details';
+import ContainerList from './components/container-list';
+import CreateContainer from './components/create-container';
+import ContainerDetails from './components/container-details';
+import GetContainers from './components/get-custom-objects.rest.graphql';
+import { ContainerProvider } from './context';
+import { CONTAINER, PERMISSIONS } from './constants';
 import { messages } from './messages';
 
 const PageUnauthorized = () => (
@@ -29,19 +27,23 @@ const PageUnauthorized = () => (
 PageUnauthorized.displayName = 'PageUnauthorized';
 
 const ApplicationRoutes = ({ match }) => {
-  const canViewProducts = useIsAuthorized({
-    demandedPermissions: [PERMISSIONS.ViewProducts, PERMISSIONS.ManageProducts],
-    shouldMatchSomePermissions: true
+  const canManageProducts = useIsAuthorized({
+    demandedPermissions: [PERMISSIONS.ManageProducts],
+  });
+  const canManageOrders = useIsAuthorized({
+    demandedPermissions: [PERMISSIONS.ManageOrders],
+  });
+  const canManageCustomers = useIsAuthorized({
+    demandedPermissions: [PERMISSIONS.ManageCustomers],
+  });
+  const canManageCustomObjects =
+    canManageProducts && canManageOrders && canManageCustomers;
+
+  const { data, loading } = useQuery(GetContainers, {
+    variables: { limit: 500, offset: 0, where: `container="${CONTAINER}"` },
   });
 
-  const { data, loading, error } = useQuery(GetBundleProductType, {
-    variables: {
-      target: GRAPHQL_TARGETS.COMMERCETOOLS_PLATFORM,
-      key: BUNDLE_PRODUCT_TYPE
-    }
-  });
-
-  if (!canViewProducts) {
+  if (!canManageCustomObjects) {
     return <PageUnauthorized />;
   }
 
@@ -49,35 +51,35 @@ const ApplicationRoutes = ({ match }) => {
     return null;
   }
 
-  const { productType } = data;
-
-  if (error || !productType) {
-    return (
-      <Error
-        title={<FormattedMessage {...messages.missingBundleTitle} />}
-        message={<FormattedMessage {...messages.missingBundleMessage} />}
-      />
-    );
-  }
-
-  const { id } = productType;
+  const { customObjects } = data || {};
+  const { results } = customObjects || {};
 
   return (
-    <PathProvider value={ROOT_PATH}>
-      <BundleProvider value={id}>
-        <Switch>
-          <Route
-            path={`${match.path}/new`}
-            render={props => <CreateBundleForm {...props} />}
-          />
-          <Route
-            path={`${match.path}/:bundleId`}
-            render={props => <StaticBundleDetails {...props} />}
-          />
-          <Route render={props => <StaticBundlesTable {...props} />} />
-        </Switch>
-      </BundleProvider>
-    </PathProvider>
+    <ContainerProvider value={results}>
+      <Switch>
+        <Route
+          path={`${match.path}/containers/new`}
+          render={(props) => <CreateContainer {...props} />}
+        />
+        <Route
+          path={`${match.path}/containers/:id`}
+          render={(props) => <ContainerDetails {...props} />}
+        />
+        <Route
+          path={`${match.path}/containers`}
+          render={(props) => <ContainerList {...props} />}
+        />
+        <Route
+          path={`${match.path}/new`}
+          render={(props) => <CreateCustomObject {...props} />}
+        />
+        <Route
+          path={`${match.path}/:id`}
+          render={(props) => <CustomObjectDetails {...props} />}
+        />
+        <Route render={(props) => <CustomObjectsList {...props} />} />
+      </Switch>
+    </ContainerProvider>
   );
 };
 
@@ -86,9 +88,9 @@ ApplicationRoutes.propTypes = {
   match: PropTypes.shape({
     path: PropTypes.string,
     params: PropTypes.shape({
-      projectKey: PropTypes.string.isRequired
-    }).isRequired
-  }).isRequired
+      projectKey: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 };
 
 export default ApplicationRoutes;

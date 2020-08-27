@@ -1,5 +1,5 @@
 # source: https://api.commercetools.co/sparkles-sunrise/graphql
-# timestamp: Thu Jun 20 2019 08:30:46 GMT-0400 (Eastern Daylight Time)
+# timestamp: Tue May 12 2020 11:17:29 GMT-0400 (Eastern Daylight Time)
 
 type AbsoluteDiscountValue implements CartDiscountValue & ProductDiscountValue {
   money: [Money!]!
@@ -8,6 +8,11 @@ type AbsoluteDiscountValue implements CartDiscountValue & ProductDiscountValue {
 
 input AbsoluteDiscountValueInput {
   money: [MoneyInput!]!
+}
+
+enum ActionType {
+  Update
+  Create
 }
 
 """
@@ -71,16 +76,22 @@ input AddCategoryAsset {
   asset: AssetDraftInput!
 }
 
+input AddChannelRoles {
+  roles: [ChannelRole!]!
+}
+
 input AddCustomerAddress {
   address: AddressInput!
 }
 
 input AddCustomerBillingAddressId {
-  addressId: String!
+  addressId: String
+  addressKey: String
 }
 
 input AddCustomerShippingAddressId {
-  addressId: String!
+  addressId: String
+  addressKey: String
 }
 
 input AddCustomerStore {
@@ -108,6 +119,10 @@ input AddMyCartLineItem {
   productId: String
 }
 
+input AddMyPaymentTransaction {
+  transaction: MyTransactionDraft!
+}
+
 input AddOrderDelivery {
   items: [DeliveryItemDraftType!] = []
   parcels: [DeliveryItemDraftType!] = []
@@ -133,6 +148,17 @@ input AddOrderReturnInfo {
   items: [ReturnItemDraftType!]!
   returnDate: DateTime
   returnTrackingId: String
+}
+
+input AddPaymentInterfaceInteraction {
+  fields: [CustomFieldInput!]
+  type: ResourceIdentifierInput
+  typeKey: String
+  typeId: String
+}
+
+input AddPaymentTransaction {
+  transaction: TransactionDraft!
 }
 
 input addPlainEnumValue {
@@ -239,6 +265,7 @@ input AddressInput {
   email: String
   fax: String
   additionalAddressInfo: String
+  externalId: String
   key: String
 }
 
@@ -249,6 +276,41 @@ input AddShippingMethodShippingRate {
 
 input AddShippingMethodZone {
   zone: ResourceIdentifierInput!
+}
+
+input AddShoppingListLineItem {
+  addedAt: DateTime
+  custom: CustomFieldsDraft
+  quantity: Int = 1
+  variantId: Int
+  sku: String
+  productId: String
+}
+
+input AddShoppingListTextLineItem {
+  addedAt: DateTime
+  custom: CustomFieldsDraft
+  quantity: Int = 1
+  description: [LocalizedStringItemInputType!]
+  name: [LocalizedStringItemInputType!]!
+}
+
+input AddStateRoles {
+  roles: [StateRole!]!
+}
+
+input AddTypeEnumValue {
+  fieldName: String!
+  value: EnumValueInput!
+}
+
+input AddTypeFieldDefinition {
+  fieldDefinition: FieldDefinitionInput!
+}
+
+input AddTypeLocalizedEnumValue {
+  fieldName: String!
+  value: LocalizedEnumValueInput!
 }
 
 input AddZoneLocation {
@@ -366,11 +428,13 @@ type Asset {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
 
   """
   Custom fields are returned as a list instead of an object structure.
@@ -543,6 +607,46 @@ input AttributeTypeDraft {
   ltext: SimpleAttributeTypeDraft
 }
 
+type AuthorizationHeader implements HttpDestinationAuthentication {
+  headerValue: String!
+  type: String!
+}
+
+input AuthorizationHeaderInput {
+  headerValue: String!
+}
+
+type AWSLambdaDestination implements ExtensionDestination {
+  arn: String!
+  accessKey: String!
+  accessSecret: String!
+  type: String!
+}
+
+input AWSLambdaDestinationInput {
+  arn: String!
+  accessKey: String!
+  accessSecret: String!
+}
+
+type AzureFunctionsAuthentication implements HttpDestinationAuthentication {
+  key: String!
+  type: String!
+}
+
+input AzureFunctionsAuthenticationInput {
+  key: String!
+}
+
+type AzureServiceBusDestination implements Destination {
+  connectionString: String!
+  type: String!
+}
+
+input AzureServiceBusDestinationInput {
+  connectionString: String!
+}
+
 interface BaseMoney {
   type: String!
   currencyCode: Currency!
@@ -636,11 +740,13 @@ type Cart implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   deleteDaysAfterLastModification: Int
   id: String!
   version: Long!
@@ -718,6 +824,7 @@ type CartDiscount implements Versioned {
   ): String
   nameAllLocales: [LocalizedString!]!
   descriptionAllLocales: [LocalizedString!]
+  referenceRefs: [Reference!]!
 
   """
   This field contains non-typed data. Consider using `customFields` as a typed alternative.
@@ -737,11 +844,13 @@ type CartDiscount implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   value: CartDiscountValue!
   target: CartDiscountTarget
   id: String!
@@ -838,7 +947,6 @@ input CartDraft {
   currency: Currency!
   country: Country
   inventoryMode: InventoryMode = None
-  inventoryReservationsExpireInMinutes: Int
   custom: CustomFieldsDraft
   customerEmail: String
   shippingAddress: AddressInput
@@ -892,6 +1000,15 @@ type CartQueryResult {
   count: Int!
   total: Long!
   results: [Cart!]!
+}
+
+type CartsConfiguration {
+  deleteDaysAfterLastModification: Int
+  allowAddingUnpublishedProducts: Boolean!
+}
+
+input CartsConfigurationInput {
+  deleteDaysAfterLastModification: Int
 }
 
 input CartScoreInput {
@@ -1104,11 +1221,13 @@ type Category implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   createdBy: Initiator
   lastModifiedBy: Initiator
 
@@ -1244,11 +1363,13 @@ type CategorySearch {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
 
   """
   Custom fields are returned as a list instead of an object structure.
@@ -1402,8 +1523,21 @@ input ChangeCategorySlug {
   slug: [LocalizedStringItemInputType!]!
 }
 
+input ChangeChannelDescription {
+  description: [LocalizedStringItemInputType!]
+}
+
+input ChangeChannelKey {
+  key: String!
+}
+
+input ChangeChannelName {
+  name: [LocalizedStringItemInputType!]
+}
+
 input ChangeCustomerAddress {
-  addressId: String!
+  addressId: String
+  addressKey: String
   address: AddressInput!
 }
 
@@ -1435,6 +1569,14 @@ input changeEnumKey {
   attributeName: String!
   key: String!
   newKey: String!
+}
+
+input ChangeExtensionDestination {
+  destination: ExtensionDestinationInput!
+}
+
+input ChangeExtensionTriggers {
+  triggers: [TriggerInput!]!
 }
 
 input changeInputHint {
@@ -1484,6 +1626,25 @@ input ChangeOrderShipmentState {
 
 input ChangeOrderState {
   orderState: OrderState!
+}
+
+input ChangePaymentAmountPlanned {
+  amount: MoneyInput!
+}
+
+input ChangePaymentTransactionInteractionId {
+  transactionId: String!
+  interactionId: String!
+}
+
+input ChangePaymentTransactionState {
+  transactionId: String!
+  state: TransactionState!
+}
+
+input ChangePaymentTransactionTimestamp {
+  transactionId: String!
+  timestamp: DateTime!
 }
 
 input changePlainEnumValueLabel {
@@ -1567,6 +1728,10 @@ input ChangeProductSlug {
   staged: Boolean = true
 }
 
+input ChangeProjectSettingsCartsConfiguration {
+  cartsConfiguration: CartsConfigurationInput!
+}
+
 input ChangeProjectSettingsCountries {
   countries: [Country!]!
 }
@@ -1591,6 +1756,10 @@ input ChangeProjectSettingsName {
   name: String!
 }
 
+input ChangeProjectSettingsShoppingListsConfiguration {
+  shoppingListsConfiguration: ShoppingListsConfigurationInput!
+}
+
 input ChangeShippingMethodIsDefault {
   isDefault: Boolean!
 }
@@ -1603,12 +1772,107 @@ input ChangeShippingMethodTaxCategory {
   taxCategory: ResourceIdentifierInput!
 }
 
+input ChangeShoppingListLineItemQuantity {
+  lineItemId: String!
+  quantity: Int!
+}
+
+input ChangeShoppingListLineItemsOrder {
+  lineItemOrder: [String!]!
+}
+
+input ChangeShoppingListName {
+  name: [LocalizedStringItemInputType!]!
+}
+
+input ChangeShoppingListTextLineItemName {
+  textLineItemId: String!
+  name: [LocalizedStringItemInputType!]!
+}
+
+input ChangeShoppingListTextLineItemQuantity {
+  textLineItemId: String!
+  quantity: Int!
+}
+
+input ChangeShoppingListTextLineItemsOrder {
+  textLineItemOrder: [String!]!
+}
+
+input ChangeStateInitial {
+  initial: Boolean!
+}
+
+input ChangeStateKey {
+  key: String!
+}
+
+input ChangeStateType {
+  type: StateType!
+}
+
+type ChangeSubscription {
+  resourceTypeId: String!
+}
+
+input ChangeSubscriptionDestination {
+  destination: DestinationInput!
+}
+
+input ChangeSubscriptionInput {
+  resourceTypeId: String!
+}
+
+input ChangeTypeEnumValueLabel {
+  fieldName: String!
+  value: EnumValueInput!
+}
+
+input ChangeTypeEnumValueOrder {
+  fieldName: String!
+  keys: [String!]!
+}
+
+input ChangeTypeFieldDefinitionOrder {
+  fieldNames: [String!]!
+}
+
+input ChangeTypeInputHint {
+  fieldName: String!
+  inputHint: TextInputHint!
+}
+
+input ChangeTypeKey {
+  key: String!
+}
+
+input ChangeTypeLabel {
+  fieldName: String!
+  label: [LocalizedStringItemInputType!]!
+}
+
+input ChangeTypeLocalizedEnumValueLabel {
+  fieldName: String!
+  value: LocalizedEnumValueInput!
+}
+
+input ChangeTypeLocalizedEnumValueOrder {
+  fieldName: String!
+  keys: [String!]!
+}
+
+input ChangeTypeName {
+  name: [LocalizedStringItemInputType!]!
+}
+
 input ChangeZoneName {
   name: String!
 }
 
-type Channel implements Versioned {
+type Channel implements Versioned & ReviewTarget {
   id: String!
+  typeId: String!
+    @deprecated(reason: "Use 'channelRef' to fetch the reference.")
   version: Long!
   key: String!
   roles: [ChannelRole!]!
@@ -1637,8 +1901,10 @@ type Channel implements Versioned {
   ): String
   descriptionAllLocales: [LocalizedString!]
   address: Address
+  geoLocation: Geometry
   createdAt: DateTime!
   lastModifiedAt: DateTime!
+  reviewRatingStatistics: ReviewRatingStatistics
 
   """
   This field contains non-typed data. Consider using `customFields` as a typed alternative.
@@ -1658,13 +1924,25 @@ type Channel implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   createdBy: Initiator
   lastModifiedBy: Initiator
+}
+
+input ChannelDraft {
+  key: String!
+  roles: [ChannelRole!]!
+  name: [LocalizedStringItemInputType!]
+  description: [LocalizedStringItemInputType!]
+  custom: CustomFieldsDraft
+  address: AddressInput
+  geoLocation: GeometryInput
 }
 
 type ChannelQueryResult {
@@ -1710,6 +1988,19 @@ enum ChannelRole {
   Primary
 }
 
+input ChannelUpdateAction {
+  addRoles: AddChannelRoles
+  changeDescription: ChangeChannelDescription
+  changeKey: ChangeChannelKey
+  changeName: ChangeChannelName
+  removeRoles: RemoveChannelRoles
+  setAddress: SetChannelAddress
+  setCustomField: SetChannelCustomField
+  setCustomType: SetChannelCustomType
+  setGeoLocation: SetChannelGeoLocation
+  setRoles: SetChannelRoles
+}
+
 type ClassificationShippingRateInput implements ShippingRateInput {
   key: String!
   type: String!
@@ -1731,6 +2022,15 @@ input ClassificationShippingRateInputDraft {
   key: String!
 }
 
+type CloudEventsSubscriptionsFormat implements NotificationFormat {
+  type: String!
+  cloudEventsVersion: String!
+}
+
+input CloudEventsSubscriptionsFormatInput {
+  cloudEventsVersion: String!
+}
+
 """
 [ISO 3166-1](http://en.wikipedia.org/wiki/ISO_3166-1) country code.
 """
@@ -1744,6 +2044,9 @@ input CreateApiClient {
 input CreateStore {
   key: String!
   name: [LocalizedStringItemInputType!]
+  languages: [Locale!]
+  distributionChannels: [ResourceIdentifierInput!]
+  supplyChannels: [ResourceIdentifierInput!]
 }
 
 input CreateZone {
@@ -1810,11 +2113,13 @@ type Customer implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   id: String!
   version: Long!
   createdAt: DateTime!
@@ -1849,6 +2154,18 @@ interface CustomerActiveCartInterface {
   customerActiveCart(customerId: String!): Cart
 }
 
+type CustomerEmailToken implements Versioned {
+  customerId: String!
+  expiresAt: DateTime!
+  value: String!
+  id: String!
+  version: Long!
+  createdAt: DateTime!
+  lastModifiedAt: DateTime!
+  createdBy: Initiator
+  lastModifiedBy: Initiator
+}
+
 """
 A customer can be a member in a customer group (e.g. reseller, gold member). A
 customer group can be used in price calculations with special prices being
@@ -1856,6 +2173,8 @@ assigned to certain customer groups.
 """
 type CustomerGroup implements Versioned {
   id: String!
+  typeId: String!
+    @deprecated(reason: "Use 'customerGroupRef' to fetch the reference.")
   version: Long!
   name: String!
   key: String
@@ -1880,11 +2199,13 @@ type CustomerGroup implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   createdBy: Initiator
   lastModifiedBy: Initiator
 
@@ -1926,6 +2247,51 @@ input CustomerGroupUpdateAction {
   setKey: SetCustomerGroupKey
   setCustomType: SetCustomerGroupCustomType
   setCustomField: SetCustomerGroupCustomField
+}
+
+type CustomerPasswordToken implements Versioned {
+  customerId: String!
+  expiresAt: DateTime!
+  value: String!
+  id: String!
+  version: Long!
+  createdAt: DateTime!
+  lastModifiedAt: DateTime!
+  createdBy: Initiator
+  lastModifiedBy: Initiator
+}
+
+"""
+Fields to access customer accounts. Includes direct access to a single customer and searching for customers.
+"""
+interface CustomerQueryInterface {
+  customer(
+    """
+    Queries a customer with specified email token
+    """
+    emailToken: String
+
+    """
+    Queries a customer with specified password token
+    """
+    passwordToken: String
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Customer
+  customers(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): CustomerQueryResult!
 }
 
 type CustomerQueryResult {
@@ -1995,6 +2361,7 @@ input CustomerSignMeUpDraft {
   locale: Locale
   salutation: String
   key: String
+  stores: [ResourceIdentifierInput!]
 }
 
 input CustomerSignUpDraft {
@@ -2036,21 +2403,13 @@ input CustomerSignUpDraft {
   locale: Locale
   salutation: String
   key: String
+  stores: [ResourceIdentifierInput!]
   customerNumber: String
   anonymousCartId: String
   externalId: String
   customerGroup: ResourceIdentifierInput
   isEmailVerified: Boolean
   anonymousId: String
-  stores: [ResourceIdentifierInput!]
-}
-
-type CustomerToken {
-  id: String!
-  customerId: String!
-  createdAt: DateTime!
-  expiresAt: DateTime!
-  value: String!
 }
 
 input CustomerUpdateAction {
@@ -2088,15 +2447,29 @@ interface CustomField {
   name: String!
 }
 
+"""
+A key-value pair representing the field name and value of one single custom field.
+
+The value of this custom field consists of escaped JSON based on the FieldDefinition of the Type.
+
+Examples for `value`:
+
+* FieldType `String`: `"\"This is a string\""`
+* FieldType `DateTimeType`: `"\"2001-09-11T14:00:00.000Z\""`
+* FieldType `Number`: `"4"`
+* FieldType `Set` with an elementType of `String`: `"[\"This is a string\", \"This is another string\"]"`
+* FieldType `Reference`: `"{\"id\", \"b911b62d-353a-4388-93ee-8d488d9af962\", \"typeId\", \"product\"}"`
+"""
 input CustomFieldInput {
   name: String!
 
   """
-  The value of this custom field as escaped JSON., based on the FieldDefinition of the Type.
+  The value of this custom field consists of escaped JSON based on the FieldDefinition of the Type.
 
-  Examples:
+  Examples for `value`:
 
   * FieldType `String`: `"\"This is a string\""`
+  * FieldType `DateTimeType`: `"\"2001-09-11T14:00:00.000Z\""`
   * FieldType `Number`: `"4"`
   * FieldType `Set` with an elementType of `String`: `"[\"This is a string\", \"This is another string\"]"`
   * FieldType `Reference`: `"{\"id\", \"b911b62d-353a-4388-93ee-8d488d9af962\", \"typeId\", \"product\"}"`
@@ -2109,6 +2482,35 @@ input CustomFieldsDraft {
   typeKey: String
   type: ResourceIdentifierInput
   fields: [CustomFieldInput!]
+}
+
+type CustomFieldsType {
+  typeRef: Reference!
+  type: TypeDefinition
+
+  """
+  This field contains non-typed data. For a typed alternative, have a look at `customFields`.
+  """
+  customFieldsRaw(
+    """
+    The names of the custom fields to include.
+
+    If neither `includeNames` nor `excludeNames` are provided, then all custom fields are returned.
+    """
+    includeNames: [String!]
+
+    """
+    The names of the custom fields to exclude.
+
+    If neither `includeNames` nor `excludeNames` are provided, then all custom fields are returned.
+    """
+    excludeNames: [String!]
+  ): [RawCustomField!]
+
+  """
+  This field would contain type data
+  """
+  customFields: Type!
 }
 
 """
@@ -2158,11 +2560,13 @@ type CustomLineItem {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   shippingDetails: ItemShippingDetails
 
   """
@@ -2217,6 +2621,11 @@ input CustomLineItemsTargetInput {
   predicate: String!
 }
 
+type CustomSuggestTokenizer implements SuggestTokenizer {
+  inputs: [String!]!
+  type: String!
+}
+
 input CustomSuggestTokenizerInput {
   text: String!
   suggestTokenizer: BaseSearchKeywordInput
@@ -2268,6 +2677,14 @@ type DateType implements FieldType {
   name: String!
 }
 
+"""
+Product Type
+"""
+type DefaultProductTypeProductType implements ProductType {
+  productTypeId: String!
+  ProductTypeAttribute: LocalizedStringAttribute
+}
+
 type Delivery {
   id: String!
   createdAt: DateTime!
@@ -2284,6 +2701,18 @@ type DeliveryItem {
 input DeliveryItemDraftType {
   id: String!
   quantity: Long!
+}
+
+interface Destination {
+  type: String!
+}
+
+input DestinationInput {
+  SQS: SQSDestinationInput
+  SNS: SNSDestinationInput
+  AzureServiceBus: AzureServiceBusDestinationInput
+  EventGrid: EventGridDestinationInput
+  GoogleCloudPubSub: GoogleCloudPubSubDestinationInput
 }
 
 type Dimensions {
@@ -2334,6 +2763,7 @@ type DiscountCode implements Versioned {
     acceptLanguage: [Locale!]
   ): String
   cartDiscounts: [CartDiscount!]!
+  referenceRefs: [Reference!]!
   nameAllLocales: [LocalizedString!]
   descriptionAllLocales: [LocalizedString!]
 
@@ -2355,11 +2785,13 @@ type DiscountCode implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
 
   """
   How many times this discount code was applied (only applications that were part of a successful checkout are considered)
@@ -2509,6 +2941,40 @@ input DiscountedProductPriceValueInput {
   discount: ReferenceInput!
 }
 
+"""
+Link to a parent dynamic bundle product by custom ID
+"""
+type dynamic_bundle_parent_child_linkType implements Type {
+  typeRef: Reference!
+  type: TypeDefinition!
+  external_id: StringField
+  parent: StringField
+}
+
+"""
+The category included in a dynamic bundle
+"""
+type DynamicBundleChildCategoryProductType implements ProductType {
+  productTypeId: String!
+  category_ref: ReferenceAttribute
+  min_quantity: NumberAttribute
+  max_quantity: NumberAttribute
+  additional_charge: BooleanAttribute
+  category_path: StringAttribute
+}
+
+"""
+A dynamic bundle of product categories
+"""
+type DynamicBundleParentProductType implements ProductType {
+  productTypeId: String!
+  categories: [DynamicBundleChildCategoryProductType!]
+  min_quantity: NumberAttribute
+  max_quantity: NumberAttribute
+  dynamic_price: BooleanAttribute
+  category_search: [StringAttribute!]
+}
+
 type EnumAttribute implements Attribute {
   key: String!
   label: String!
@@ -2554,6 +3020,65 @@ input EnumTypeDraft {
 type EnumValue {
   key: String!
   label: String!
+}
+
+input EnumValueInput {
+  key: String!
+  label: String!
+}
+
+type EventGridDestination implements Destination {
+  uri: String!
+  accessKey: String!
+  type: String!
+}
+
+input EventGridDestinationInput {
+  uri: String!
+  accessKey: String!
+}
+
+type Extension implements Versioned {
+  key: String
+  destination: ExtensionDestination!
+  triggers: [Trigger!]!
+  timeoutInMs: Int
+  id: String!
+  version: Long!
+  createdAt: DateTime!
+  lastModifiedAt: DateTime!
+  createdBy: Initiator
+  lastModifiedBy: Initiator
+}
+
+interface ExtensionDestination {
+  type: String!
+}
+
+input ExtensionDestinationInput {
+  HTTP: HttpDestinationInput
+  AWSLambda: AWSLambdaDestinationInput
+}
+
+input ExtensionDraft {
+  key: String
+  destination: ExtensionDestinationInput!
+  triggers: [TriggerInput!]!
+  timeoutInMs: Int
+}
+
+type ExtensionQueryResult {
+  offset: Int!
+  count: Int!
+  total: Long!
+  results: [Extension!]!
+}
+
+input ExtensionUpdateAction {
+  changeDestination: ChangeExtensionDestination
+  changeTriggers: ChangeExtensionTriggers
+  setKey: SetExtensionKey
+  setTimeoutInMs: SetExtensionTimeoutInMs
 }
 
 type ExternalDiscountValue implements ProductDiscountValue {
@@ -2615,8 +3140,70 @@ type FieldDefinition {
   type: FieldType!
 }
 
+input FieldDefinitionInput {
+  type: FieldTypeInput!
+  name: String!
+  label: [LocalizedStringItemInputType!]!
+  required: Boolean!
+  inputHint: TextInputHint!
+}
+
 interface FieldType {
   name: String!
+}
+
+input FieldTypeEnumTypeDraft {
+  values: [EnumValueInput!]!
+}
+
+input FieldTypeInput {
+  Set: FieldTypeSetTypeDraft
+  String: SimpleFieldTypeDraft
+  LocalizedString: SimpleFieldTypeDraft
+  Number: SimpleFieldTypeDraft
+  Money: SimpleFieldTypeDraft
+  Date: SimpleFieldTypeDraft
+  Time: SimpleFieldTypeDraft
+  DateTime: SimpleFieldTypeDraft
+  Boolean: SimpleFieldTypeDraft
+  Enum: FieldTypeEnumTypeDraft
+  LocalizedEnum: FieldTypeLocalizedEnumTypeDraft
+  Reference: FieldTypeReferenceTypeDraft
+}
+
+input FieldTypeLocalizedEnumTypeDraft {
+  values: [LocalizedEnumValueInput!]!
+}
+
+input FieldTypeReferenceTypeDraft {
+  referenceTypeId: String!
+}
+
+input FieldTypeSetElementTypeDraft {
+  String: SimpleFieldTypeDraft
+  LocalizedString: SimpleFieldTypeDraft
+  Number: SimpleFieldTypeDraft
+  Money: SimpleFieldTypeDraft
+  Date: SimpleFieldTypeDraft
+  Time: SimpleFieldTypeDraft
+  DateTime: SimpleFieldTypeDraft
+  Boolean: SimpleFieldTypeDraft
+  Enum: FieldTypeEnumTypeDraft
+  LocalizedEnum: FieldTypeLocalizedEnumTypeDraft
+  Reference: FieldTypeReferenceTypeDraft
+}
+
+input FieldTypeSetTypeDraft {
+  elementType: FieldTypeSetElementTypeDraft!
+}
+
+interface Geometry {
+  type: String!
+}
+
+input GeometryInput {
+  type: String!
+  coordinates: [Float!]
 }
 
 type GiftLineItemValue implements CartDiscountValue {
@@ -2634,6 +3221,17 @@ input GiftLineItemValueInput {
   supplyChannel: ResourceIdentifierInput
 }
 
+type GoogleCloudPubSubDestination implements Destination {
+  projectId: String!
+  topic: String!
+  type: String!
+}
+
+input GoogleCloudPubSubDestinationInput {
+  projectId: String!
+  topic: String!
+}
+
 type HighPrecisionMoney implements BaseMoney {
   type: String!
   currencyCode: Currency!
@@ -2647,6 +3245,26 @@ input HighPrecisionMoneyInput {
   preciseAmount: Long!
   fractionDigits: Int!
   centAmount: Long
+}
+
+type HttpDestination implements ExtensionDestination {
+  type: String!
+  url: String!
+  authentication: HttpDestinationAuthentication
+}
+
+interface HttpDestinationAuthentication {
+  type: String!
+}
+
+input HttpDestinationAuthenticationInput {
+  AuthorizationHeader: AuthorizationHeaderInput
+  AzureFunctions: AzureFunctionsAuthenticationInput
+}
+
+input HttpDestinationInput {
+  url: String!
+  authentication: HttpDestinationAuthenticationInput
 }
 
 type Image {
@@ -2680,13 +3298,41 @@ type Initiator {
   clientId: String
 }
 
-type InStore implements CartQueryInterface & CustomerActiveCartInterface & OrderQueryInterface & MeFieldInterface {
+type InStore implements CartQueryInterface & CustomerActiveCartInterface & OrderQueryInterface & CustomerQueryInterface & ShippingMethodsByCartInterface & MeFieldInterface {
   """
   This field can only be used with an access token created with the password flow or with an anonymous session.
 
   It gives access to the data that is specific to the customer or the anonymous session linked to the access token.
   """
   me: InStoreMe!
+  shippingMethodsByCart(id: String!): [ShippingMethod!]!
+  customer(
+    """
+    Queries a customer with specified email token
+    """
+    emailToken: String
+
+    """
+    Queries a customer with specified password token
+    """
+    passwordToken: String
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Customer
+  customers(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): CustomerQueryResult!
   cart(id: String!): Cart
   carts(
     where: String
@@ -2711,6 +3357,7 @@ type InStore implements CartQueryInterface & CustomerActiveCartInterface & Order
 }
 
 type InStoreMe implements MeQueryInterface {
+  customer: Customer
   cart(id: String!): Cart
   carts(
     where: String
@@ -2732,6 +3379,23 @@ type InStoreMe implements MeQueryInterface {
     limit: Int
     offset: Int
   ): OrderQueryResult!
+  shoppingList(
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): ShoppingList
+  shoppingLists(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): ShoppingListQueryResult!
 }
 
 type InterfaceInteractionsRaw {
@@ -2766,11 +3430,12 @@ Inventory allows you to track stock quantity per SKU and optionally per supply c
 """
 type InventoryEntry implements Versioned {
   sku: String!
-  supplyChannel: Reference
   quantityOnStock: Long!
   availableQuantity: Long!
   restockableInDays: Int
   expectedDelivery: DateTime
+  supplyChannel: Channel
+  supplyChannelRef: Reference
 
   """
   This field contains non-typed data. Consider using `customFields` as a typed alternative.
@@ -2790,11 +3455,13 @@ type InventoryEntry implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   id: String!
   version: Long!
   createdAt: DateTime!
@@ -2923,6 +3590,16 @@ A key that references a resource.
 scalar KeyReferenceInput
 
 """
+Link to a parent product by custom ID
+"""
+type line_item_parent_child_associationType implements Type {
+  typeRef: Reference!
+  type: TypeDefinition!
+  external_id: StringField
+  parent: StringField
+}
+
+"""
 A line item is a snapshot of a product variant at the time it was added to the cart.
 
 Since a product variant may change at any time, the ProductVariant data is copied into the field variant.
@@ -2974,6 +3651,7 @@ type LineItem {
   distributionChannel: Channel
   distributionChannelRef: Reference
   discountedPricePerQuantity: [DiscountedLineItemPriceForQuantity!]!
+  lineItemMode: LineItemMode!
   priceMode: LineItemPriceMode!
 
   """
@@ -2994,11 +3672,13 @@ type LineItem {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   shippingDetails: ItemShippingDetails
   inventoryMode: ItemShippingDetails
 
@@ -3034,6 +3714,23 @@ input LineItemDraft {
   externalTaxRate: ExternalTaxRateDraft
   externalPrice: BaseMoneyInput
   externalTotalPrice: ExternalLineItemTotalPriceDraft
+}
+
+enum LineItemMode {
+  """
+  The line item was added automatically, because a discount has added a free gift to the cart.
+  The quantity can not be increased, and it won’t be merged when the same product variant is added.
+  If the gift is removed, an entry is added to the "refusedGifts" array and the discount won’t be applied again
+  to the cart. The price can not be changed externally.
+  All other updates, such as the ones related to custom fields, can be used.
+  """
+  GiftLineItem
+
+  """
+  The line item was added during cart creation or with the update action addLineItem. Its quantity can be
+  changed without restrictions.
+  """
+  Standard
 }
 
 enum LineItemPriceMode {
@@ -3288,6 +3985,23 @@ type Me implements MeQueryInterface {
     limit: Int
     offset: Int
   ): OrderQueryResult!
+  shoppingList(
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): ShoppingList
+  shoppingLists(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): ShoppingListQueryResult!
 }
 
 """
@@ -3319,6 +4033,23 @@ interface MeQueryInterface {
     limit: Int
     offset: Int
   ): OrderQueryResult!
+  shoppingList(
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): ShoppingList
+  shoppingLists(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): ShoppingListQueryResult!
 }
 
 type MessagesConfiguration {
@@ -3329,6 +4060,16 @@ type MessagesConfiguration {
 input MessagesConfigurationDraft {
   enabled: Boolean!
   deleteDaysAfterCreation: Int!
+}
+
+type MessageSubscription {
+  resourceTypeId: String!
+  types: [String!]!
+}
+
+input MessageSubscriptionInput {
+  resourceTypeId: String!
+  types: [String!]
 }
 
 type Money implements BaseMoney {
@@ -3370,6 +4111,21 @@ input MoneyInput {
 
 type MoneyType implements FieldType {
   name: String!
+}
+
+type monthly_special_line_itemType implements Type {
+  typeRef: Reference!
+  type: TypeDefinition!
+  special: StringField
+}
+
+type monthly_special_orderType implements Type {
+  typeRef: Reference!
+  type: TypeDefinition!
+  type_monthly_special_order: EnumField
+  date: DateField
+  guestSalesTotal: MoneyField
+  promoGroup: StringField
 }
 
 input MoveProductImageToPosition {
@@ -3471,6 +4227,13 @@ type Mutation {
     """
     key: String
   ): Category
+  createChannel(draft: ChannelDraft!): Channel
+  updateChannel(
+    id: String!
+    version: Long!
+    actions: [ChannelUpdateAction!]!
+  ): Channel
+  deleteChannel(id: String!, version: Long!): Channel
   createProductType(draft: ProductTypeDraft!): ProductTypeDefinition
   updateProductType(
     version: Long!
@@ -3499,6 +4262,34 @@ type Mutation {
     """
     key: String
   ): ProductTypeDefinition
+  createTypeDefinition(draft: TypeDefinitionDraft!): TypeDefinition
+  updateTypeDefinition(
+    version: Long!
+    actions: [TypeUpdateAction!]!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): TypeDefinition
+  deleteTypeDefinition(
+    version: Long!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): TypeDefinition
   createShippingMethod(draft: ShippingMethodDraft!): ShippingMethod
   updateShippingMethod(
     version: Long!
@@ -3674,6 +4465,34 @@ type Mutation {
     """
     key: String
   ): Product
+  createState(draft: StateDraft!): State
+  updateState(
+    version: Long!
+    actions: [StateUpdateAction!]!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): State
+  deleteState(
+    version: Long!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): State
 
   """
   Creates a customer. If an anonymous cart is given then the cart is assigned to
@@ -3681,7 +4500,15 @@ type Mutation {
   id of an anonymous session is given, all carts and orders will be assigned to
   the created customer.
   """
-  customerSignUp(draft: CustomerSignUpDraft!): CustomerSignInResult!
+  customerSignUp(
+    draft: CustomerSignUpDraft!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): CustomerSignInResult!
 
   """
   Retrieves the authenticated customer (a customer that matches the given email/password pair).
@@ -3718,10 +4545,24 @@ type Mutation {
   recalculated (it will have up-to-date prices, taxes and discounts, and invalid
   line items have been removed).
   """
-  customerSignIn(draft: CustomerSignInDraft!): CustomerSignInResult!
+  customerSignIn(
+    draft: CustomerSignInDraft!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): CustomerSignInResult!
   updateCustomer(
     version: Long!
     actions: [CustomerUpdateAction!]!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
 
     """
     Queries with specified ID
@@ -3738,6 +4579,12 @@ type Mutation {
     personalDataErasure: Boolean = false
 
     """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+
+    """
     Queries with specified ID
     """
     id: String
@@ -3752,6 +4599,12 @@ type Mutation {
     version: Long!
     currentPassword: String!
     newPassword: String!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
   ): Customer
 
   """
@@ -3765,12 +4618,27 @@ type Mutation {
     version: Long
     tokenValue: String!
     newPassword: String!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
   ): Customer
 
   """
   Verifies customer's email using a token.
   """
-  customerConfirmEmail(version: Long, tokenValue: String!): Customer
+  customerConfirmEmail(
+    version: Long
+    tokenValue: String!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): Customer
 
   """
   The token value is used to reset the password of the customer with the given
@@ -3783,7 +4651,13 @@ type Mutation {
     The validity of the created token in minutes.
     """
     ttlMinutes: Int
-  ): CustomerToken
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): CustomerPasswordToken
   customerCreateEmailVerificationToken(
     id: String!
     version: Long
@@ -3792,13 +4666,27 @@ type Mutation {
     The validity of the created token in minutes.
     """
     ttlMinutes: Int!
-  ): CustomerToken!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): CustomerEmailToken!
 
   """
   If used with an access token for Anonymous Sessions, all orders and carts
   belonging to the anonymousId will be assigned to the newly created customer.
   """
-  customerSignMeUp(draft: CustomerSignMeUpDraft!): CustomerSignInResult!
+  customerSignMeUp(
+    draft: CustomerSignMeUpDraft!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): CustomerSignInResult!
 
   """
   Retrieves the authenticated customer (a customer that matches the given email/password pair).
@@ -3815,22 +4703,65 @@ type Mutation {
   recalculated (it will have up-to-date prices, taxes and discounts, and invalid
   line items have been removed).
   """
-  customerSignMeIn(draft: CustomerSignMeInDraft!): CustomerSignInResult!
+  customerSignMeIn(
+    draft: CustomerSignMeInDraft!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): CustomerSignInResult!
   updateMyCustomer(
     version: Long!
     actions: [MyCustomerUpdateAction!]!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
   ): Customer
   deleteMyCustomer(
     version: Long!
     personalDataErasure: Boolean = false
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
   ): Customer
   customerChangeMyPassword(
     version: Long!
     currentPassword: String!
     newPassword: String!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
   ): Customer
-  customerConfirmMyEmail(tokenValue: String!): Customer
-  customerResetMyPassword(tokenValue: String!, newPassword: String!): Customer
+  customerConfirmMyEmail(
+    tokenValue: String!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): Customer
+  customerResetMyPassword(
+    tokenValue: String!
+    newPassword: String!
+
+    """
+    Beta feature. The mutation is only performed if the resource is part of the
+    store. Can be used with store-specific OAuth permissions.
+    """
+    storeKey: KeyReferenceInput
+  ): Customer
   createInventoryEntry(draft: InventoryEntryDraft!): InventoryEntry
   updateInventoryEntry(
     id: String!
@@ -3950,6 +4881,78 @@ type Mutation {
     """
     storeKey: KeyReferenceInput
   ): Order
+  createShoppingList(draft: ShoppingListDraft!): ShoppingList
+  updateShoppingList(
+    version: Long!
+    actions: [ShoppingListUpdateAction!]!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): ShoppingList
+  deleteShoppingList(
+    version: Long!
+    personalDataErasure: Boolean = false
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): ShoppingList
+  createMyShoppingList(draft: MyShoppingListDraft!): ShoppingList
+  updateMyShoppingList(
+    id: String!
+    version: Long!
+    actions: [MyShoppingListUpdateAction!]!
+  ): ShoppingList
+  deleteMyShoppingList(id: String!, version: Long!): ShoppingList
+  createPayment(draft: PaymentDraft!): Payment
+  updatePayment(
+    version: Long!
+    actions: [PaymentUpdateAction!]!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Payment
+  deletePayment(
+    version: Long!
+    personalDataErasure: Boolean = false
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Payment
+  createMyPayment(draft: MyPaymentDraft!): MyPayment
+  updateMyPayment(
+    id: String!
+    version: Long!
+    actions: [MyPaymentUpdateAction!]!
+  ): MyPayment
+  deleteMyPayment(id: String!, version: Long!): MyPayment
   updateProject(
     version: Long!
     actions: [ProjectSettingsUpdateAction!]!
@@ -3982,6 +4985,91 @@ type Mutation {
     """
     key: String
   ): Store @deprecated(reason: "beta feature")
+  createReview(draft: ReviewDraft!): Review
+  updateReview(
+    version: Long!
+    actions: [ReviewUpdateAction!]!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Review
+  deleteReview(
+    version: Long!
+    personalDataErasure: Boolean = false
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Review
+  createSubscription(draft: SubscriptionDraft!): Subscription
+  updateSubscription(
+    version: Long!
+    actions: [SubscriptionUpdateAction!]!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Subscription
+  deleteSubscription(
+    version: Long!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Subscription
+  createExtension(draft: ExtensionDraft!): Extension
+  updateExtension(
+    version: Long!
+    actions: [ExtensionUpdateAction!]!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Extension
+  deleteExtension(
+    version: Long!
+
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Extension
   createApiClient(draft: CreateApiClient!): APIClientWithSecret
   deleteApiClient(id: String!): APIClientWithoutSecret
 }
@@ -3990,7 +5078,6 @@ input MyCartDraft {
   currency: Currency!
   country: Country
   inventoryMode: InventoryMode = None
-  inventoryReservationsExpireInMinutes: Int
   custom: CustomFieldsDraft
   customerEmail: String
   shippingAddress: AddressInput
@@ -4068,9 +5155,83 @@ input MyLineItemDraft {
   shippingDetails: ItemShippingDetailsDraft
 }
 
+"""
+My Payments endpoint provides access to payments scoped to a specific user.
+[documentation](https://docs.commercetools.com/http-api-projects-me-payments#mypayment)
+"""
+type MyPayment {
+  id: String!
+  version: Long!
+  customerRef: Reference
+  customer: Customer
+  anonymousId: String
+  paymentMethodInfo: PaymentMethodInfo!
+  amountPlanned: Money!
+  transactions: [Transaction!]!
+  custom: CustomFieldsType
+}
+
+input MyPaymentDraft {
+  amountPlanned: MoneyInput!
+  paymentMethodInfo: PaymentMethodInfoInput
+  custom: CustomFieldsDraft
+  transaction: MyTransactionDraft
+}
+
+input MyPaymentUpdateAction {
+  addTransaction: AddMyPaymentTransaction
+  changeAmountPlanned: ChangePaymentAmountPlanned
+  setCustomField: SetPaymentCustomField
+  setMethodInfoInterface: SetPaymentMethodInfoInterface
+  setMethodInfoMethod: SetPaymentMethodInfoMethod
+  setMethodInfoName: SetPaymentMethodInfoName
+}
+
+input MyShoppingListDraft {
+  name: [LocalizedStringItemInputType!]!
+  description: [LocalizedStringItemInputType!]
+  lineItems: [ShoppingListLineItemDraft!] = []
+  textLineItems: [TextLineItemDraft!] = []
+  custom: CustomFieldsDraft
+  deleteDaysAfterLastModification: Int
+}
+
+input MyShoppingListUpdateAction {
+  addLineItem: AddShoppingListLineItem
+  addTextLineItem: AddShoppingListTextLineItem
+  changeLineItemQuantity: ChangeShoppingListLineItemQuantity
+  changeLineItemsOrder: ChangeShoppingListLineItemsOrder
+  changeName: ChangeShoppingListName
+  changeTextLineItemName: ChangeShoppingListTextLineItemName
+  changeTextLineItemQuantity: ChangeShoppingListTextLineItemQuantity
+  changeTextLineItemsOrder: ChangeShoppingListTextLineItemsOrder
+  removeLineItem: RemoveShoppingListLineItem
+  removeTextLineItem: RemoveShoppingListTextLineItem
+  setCustomField: SetShoppingListCustomField
+  setCustomType: SetShoppingListCustomType
+  setDeleteDaysAfterLastModification: SetShoppingListDeleteDaysAfterLastModification
+  setDescription: SetShoppingListDescription
+  setLineItemCustomField: SetShoppingListLineItemCustomField
+  setLineItemCustomType: SetShoppingListLineItemCustomType
+  setTextLineItemCustomField: SetShoppingListTextLineItemCustomField
+  setTextLineItemCustomType: SetShoppingListTextLineItemCustomType
+  setTextLineItemDescription: SetShoppingListTextLineItemDescription
+}
+
+input MyTransactionDraft {
+  timestamp: DateTime
+  type: TransactionType!
+  amount: MoneyInput!
+  interactionId: String
+}
+
 type NestedAttributeDefinitionType implements AttributeDefinitionType {
   typeReference: Reference!
   name: String!
+}
+
+interface NotificationFormat {
+  type: String!
 }
 
 type NumberAttribute implements Attribute {
@@ -4089,6 +5250,60 @@ type NumberField implements CustomField {
 
 type NumberType implements FieldType {
   name: String!
+}
+
+"""
+Nuts.com Product
+"""
+type Nuts_com_ProductProductType implements ProductType {
+  productTypeId: String!
+  urlName: StringAttribute
+  meltable: EnumAttribute
+  remarketingEnabled: BooleanAttribute
+  plaEnabled: BooleanAttribute
+  hiddenFromSearch: BooleanAttribute
+  hiddenFromDy: BooleanAttribute
+  requiresCustomization: BooleanAttribute
+  inMix: BooleanAttribute
+  inTray: BooleanAttribute
+  setBackordered: EnumAttribute
+  setBackorderedUntil: DateAttribute
+  orderHint: NumberAttribute
+  shortDescription: LocalizedStringAttribute
+  ingredients: LocalizedStringAttribute
+  instructions: LocalizedStringAttribute
+  healthTips: LocalizedStringAttribute
+  allergens: LocalizedStringAttribute
+  nutritionFacts: ReferenceAttribute
+  countryOfOrigin: LocalizedEnumAttribute
+  hsCode: StringAttribute
+  density: NumberAttribute
+  countPerPound: NumberAttribute
+  plaTitle: LocalizedStringAttribute
+  plaDescription: LocalizedStringAttribute
+  storageRequirements: LocalizedEnumAttribute
+  googleProductCategory: EnumAttribute
+  merchandisingCategory: EnumAttribute
+  customPageTitle: LocalizedStringAttribute
+  customProduct: EnumAttribute
+  tagReferences: [ReferenceAttribute!]
+  variantName: LocalizedStringAttribute
+  active: BooleanAttribute
+  weight: NumberAttribute
+  bulk: BooleanAttribute
+  wholesale: BooleanAttribute
+  sample: BooleanAttribute
+  backordered: EnumAttribute
+  snackPack: BooleanAttribute
+  backorderedUntil: DateAttribute
+  autoBackorder: BooleanAttribute
+  bagSize: EnumAttribute
+  servingsPerContainer: NumberAttribute
+  ordergrooveSkuSwapGroup: StringAttribute
+  caffeine: LocalizedEnumAttribute
+  grindSize: LocalizedEnumAttribute
+  fulfillmentException: EnumAttribute
+  tinColor: LocalizedEnumAttribute
 }
 
 """
@@ -4155,11 +5370,13 @@ type Order implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   id: String!
   version: Long!
   createdAt: DateTime!
@@ -4271,6 +5488,7 @@ input OrderUpdateAction {
   setReturnPaymentState: SetOrderReturnPaymentState
   setReturnShipmentState: SetOrderReturnShipmentState
   setShippingAddress: SetOrderShippingAddress
+  setStore: SetOrderStore
   transitionCustomLineItemState: TransitionOrderCustomLineItemState
   transitionLineItemState: TransitionOrderLineItemState
   transitionState: TransitionOrderState
@@ -4353,11 +5571,13 @@ type Payment implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
   id: String!
   version: Long!
   createdAt: DateTime!
@@ -4385,6 +5605,19 @@ type Payment implements Versioned {
   ): [CustomField!]
 }
 
+input PaymentDraft {
+  amountPlanned: MoneyInput!
+  paymentMethodInfo: PaymentMethodInfoInput
+  custom: CustomFieldsDraft
+  key: String
+  customer: ResourceIdentifierInput
+  anonymousId: String
+  interfaceId: String
+  paymentStatus: PaymentStatusInput
+  transactions: [TransactionDraft!]
+  interfaceInteractions: [CustomFieldsDraft!]
+}
+
 type PaymentInfo {
   payments: [Payment!]!
   paymentRefs: [Reference!]!
@@ -4405,6 +5638,12 @@ type PaymentMethodInfo {
     acceptLanguage: [Locale!]
   ): String
   nameAllLocales: [LocalizedString!]
+}
+
+input PaymentMethodInfoInput {
+  paymentInterface: String
+  method: String
+  name: [LocalizedStringItemInputType!]
 }
 
 type PaymentQueryResult {
@@ -4429,6 +5668,44 @@ type PaymentStatus {
   state: State
 }
 
+input PaymentStatusInput {
+  interfaceCode: String
+  interfaceText: String
+  state: ReferenceInput
+}
+
+input PaymentUpdateAction {
+  addInterfaceInteraction: AddPaymentInterfaceInteraction
+  addTransaction: AddPaymentTransaction
+  changeAmountPlanned: ChangePaymentAmountPlanned
+  changeTransactionInteractionId: ChangePaymentTransactionInteractionId
+  changeTransactionState: ChangePaymentTransactionState
+  changeTransactionTimestamp: ChangePaymentTransactionTimestamp
+  setAmountPaid: SetPaymentAmountPaid
+  setAmountRefunded: SetPaymentAmountRefunded
+  setAnonymousId: SetPaymentAnonymousId
+  setAuthorization: SetPaymentAuthorization
+  setCustomField: SetPaymentCustomField
+  setCustomType: SetPaymentCustomType
+  setCustomer: SetPaymentCustomer
+  setExternalId: SetPaymentExternalId
+  setInterfaceId: SetPaymentInterfaceId
+  setKey: SetPaymentKey
+  setMethodInfoInterface: SetPaymentMethodInfoInterface
+  setMethodInfoMethod: SetPaymentMethodInfoMethod
+  setMethodInfoName: SetPaymentMethodInfoName
+  setStatusInterfaceCode: SetPaymentStatusInterfaceCode
+  setStatusInterfaceText: SetPaymentStatusInterfaceText
+  transitionState: TransitionPaymentState
+}
+
+"""
+promotional products for testing pampered chef monthly specials
+"""
+type PC_Test_Promo_ProductsProductType implements ProductType {
+  productTypeId: String!
+}
+
 type PlainEnumValue {
   key: String!
   label: String!
@@ -4446,6 +5723,19 @@ type PlainEnumValueResult {
   results: [PlainEnumValue!]!
 }
 
+type PlatformFormat implements NotificationFormat {
+  type: String!
+}
+
+input PlatformFormatInput {
+  dummy: String
+}
+
+type Point implements Geometry {
+  coordinates: [Float!]!
+  type: String!
+}
+
 type PriceFunction {
   function: String!
   currencyCode: Currency!
@@ -4456,7 +5746,7 @@ input PriceFunctionDraft {
   currencyCode: Currency!
 }
 
-type Product implements Versioned {
+type Product implements Versioned & ReviewTarget {
   id: String!
   key: String
   version: Long!
@@ -4472,6 +5762,7 @@ type Product implements Versioned {
   state: State
   taxCategoryRef: Reference
   taxCategory: TaxCategory
+  reviewRatingStatistics: ReviewRatingStatistics
   createdBy: Initiator
   lastModifiedBy: Initiator
 }
@@ -4524,6 +5815,7 @@ type ProductData {
     """
     acceptLanguage: [Locale!]
   ): String
+  slugAllLocales: [LocalizedString!]!
   categoryOrderHint(categoryId: String!): String
   categoryOrderHints: [CategoryOrderHint!]!
   categoriesRef: [Reference!]!
@@ -4546,6 +5838,7 @@ type ProductData {
     """
     acceptLanguage: [Locale!]
   ): String
+  metaTitleAllLocales: [LocalizedString!]
   metaKeywords(
     """
     String is defined for different locales. This argument specifies the desired locale.
@@ -4557,6 +5850,7 @@ type ProductData {
     """
     acceptLanguage: [Locale!]
   ): String
+  metaKeywordsAllLocales: [LocalizedString!]
   metaDescription(
     """
     String is defined for different locales. This argument specifies the desired locale.
@@ -4568,6 +5862,7 @@ type ProductData {
     """
     acceptLanguage: [Locale!]
   ): String
+  metaDescriptionAllLocales: [LocalizedString!]
   masterVariant: ProductVariant!
   variants(
     """
@@ -4666,6 +5961,7 @@ type ProductDiscount implements Versioned {
     """
     acceptLanguage: [Locale!]
   ): String
+  referenceRefs: [Reference!]!
   nameAllLocales: [LocalizedString!]!
   descriptionAllLocales: [LocalizedString!]
   value: ProductDiscountValue!
@@ -4742,8 +6038,10 @@ type ProductPrice {
   id: String
   value: BaseMoney!
   country: Country
-  customerGroup: Reference
-  channel: Reference
+  customerGroup: CustomerGroup
+  customerGroupRef: Reference
+  channel: Channel
+  channelRef: Reference
   validFrom: DateTime
   validUntil: DateTime
   discounted: DiscountedProductPriceValue
@@ -4767,11 +6065,13 @@ type ProductPrice {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
+    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
   """
-  customFields: Type
+  customFields: Type @deprecated(reason: "Please use 'custom.customFields'")
+  custom: CustomFieldsType
 
   """
   Custom fields are returned as a list instead of an object structure.
@@ -5076,6 +6376,8 @@ type ProjectProjection {
   languages: [Locale!]!
   createdAt: DateTime!
   trialUntil: YearMonth
+  carts: CartsConfiguration!
+  shoppingLists: ShoppingListsConfiguration!
   version: Long!
   externalOAuth: ExternalOAuth
   messages: MessagesConfiguration!
@@ -5085,12 +6387,14 @@ type ProjectProjection {
 }
 
 input ProjectSettingsUpdateAction {
+  changeCartsConfiguration: ChangeProjectSettingsCartsConfiguration
   changeCountries: ChangeProjectSettingsCountries
   changeCurrencies: ChangeProjectSettingsCurrencies
   changeLanguages: ChangeProjectSettingsLanguages
   changeMessagesConfiguration: ChangeProjectSettingsMessagesConfiguration
   changeMessagesEnabled: ChangeProjectSettingsMessagesEnabled
   changeName: ChangeProjectSettingsName
+  changeShoppingListsConfiguration: ChangeProjectSettingsShoppingListsConfiguration
   setExternalOAuth: SetProjectSettingsExternalOAuth
   setShippingRateInputType: SetProjectSettingsShippingRateInputType
 }
@@ -5111,7 +6415,7 @@ enum PublishScope {
   Prices
 }
 
-type Query implements CartQueryInterface & CustomerActiveCartInterface & OrderQueryInterface & MeFieldInterface {
+type Query implements CartQueryInterface & CustomerActiveCartInterface & OrderQueryInterface & CustomerQueryInterface & ShoppingListQueryInterface & ShippingMethodsByCartInterface & MeFieldInterface {
   """
   This field can only be used with an access token created with the password flow or with an anonymous session.
 
@@ -5199,11 +6503,6 @@ type Query implements CartQueryInterface & CustomerActiveCartInterface & OrderQu
     * `productTypeNames`
     """
     filters: [SearchFilter!]
-
-    """
-    Enables experimental features.
-    """
-    experimental: Boolean = false
   ): CategorySearchResult!
 
   """
@@ -5253,11 +6552,6 @@ type Query implements CartQueryInterface & CustomerActiveCartInterface & OrderQu
     by default sorted by relevance (a score of matches against the search term in descending order)
     """
     sorts: [SearchSort!]
-
-    """
-    Enables experimental features.
-    """
-    experimental: Boolean = false
   ): CategorySearchResult!
   channel(
     """
@@ -5502,6 +6796,23 @@ type Query implements CartQueryInterface & CustomerActiveCartInterface & OrderQu
     limit: Int
     offset: Int
   ): OrderQueryResult!
+  shoppingList(
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): ShoppingList
+  shoppingLists(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): ShoppingListQueryResult!
   payment(
     """
     Queries with specified ID
@@ -5537,6 +6848,57 @@ type Query implements CartQueryInterface & CustomerActiveCartInterface & OrderQu
     limit: Int
     offset: Int
   ): StoreQueryResult! @deprecated(reason: "beta feature")
+  review(
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Review
+  reviews(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): ReviewQueryResult!
+  subscription(
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Subscription
+  subscriptions(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): SubscriptionQueryResult!
+  extension(
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): Extension
+  extensions(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): ExtensionQueryResult!
   apiClient(id: String!): APIClientWithoutSecret
   apiClients(
     where: String
@@ -5639,16 +7001,23 @@ input RemoveCategoryAsset {
   assetId: String
 }
 
+input RemoveChannelRoles {
+  roles: [ChannelRole!]!
+}
+
 input RemoveCustomerAddress {
-  addressId: String!
+  addressId: String
+  addressKey: String
 }
 
 input RemoveCustomerBillingAddressId {
-  addressId: String!
+  addressId: String
+  addressKey: String
 }
 
 input RemoveCustomerShippingAddressId {
-  addressId: String!
+  addressId: String
+  addressKey: String
 }
 
 input RemoveCustomerStore {
@@ -5725,6 +7094,24 @@ input RemoveShippingMethodZone {
   zone: ResourceIdentifierInput!
 }
 
+input RemoveShoppingListLineItem {
+  lineItemId: String!
+  quantity: Int
+}
+
+input RemoveShoppingListTextLineItem {
+  textLineItemId: String!
+  quantity: Int
+}
+
+input RemoveStateRoles {
+  roles: [StateRole!]!
+}
+
+input RemoveTypeFieldDefinition {
+  fieldName: String!
+}
+
 input RemoveZoneLocation {
   location: ZoneLocation!
 }
@@ -5791,6 +7178,77 @@ input RevertStagedVariantChanges {
   variantId: Int!
 }
 
+type Review implements Versioned {
+  key: String
+  uniquenessValue: String
+  locale: Locale
+  authorName: String
+  title: String
+  text: String
+  targetRef: Reference
+  target: ReviewTarget
+  rating: Int
+  stateRef: Reference
+  state: State
+  includedInStatistics: Boolean!
+  customerRef: Reference
+  customer: Customer
+  custom: CustomFieldsType
+  id: String!
+  version: Long!
+  createdAt: DateTime!
+  lastModifiedAt: DateTime!
+  createdBy: Initiator
+  lastModifiedBy: Initiator
+}
+
+input ReviewDraft {
+  key: String
+  uniquenessValue: String
+  locale: Locale
+  authorName: String
+  title: String
+  text: String
+  target: TargetReferenceInput
+  state: ResourceIdentifierInput
+  rating: Int
+  customer: ResourceIdentifierInput
+  custom: CustomFieldsDraft
+}
+
+type ReviewQueryResult {
+  offset: Int!
+  count: Int!
+  total: Long!
+  results: [Review!]!
+}
+
+type ReviewRatingStatistics {
+  averageRating: Float!
+  highestRating: Int!
+  lowestRating: Int!
+  count: Long!
+  ratingsDistribution: Json!
+}
+
+interface ReviewTarget {
+  id: String!
+}
+
+input ReviewUpdateAction {
+  setAuthorName: SetReviewAuthorName
+  setCustomField: SetReviewCustomField
+  setCustomType: SetReviewCustomType
+  setCustomer: SetReviewCustomer
+  setKey: SetReviewKey
+  setLocale: SetReviewLocale
+  setRating: SetReviewRating
+  setTarget: SetReviewTarget
+  setText: SetReviewText
+  setTitle: SetReviewTitle
+  transitionState: TransitionReviewState
+}
+
 enum RoundingMode {
   """
   [Round half down](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
@@ -5826,6 +7284,7 @@ scalar SearchFilter
 
 type SearchKeyword {
   text: String!
+  suggestTokenizer: SuggestTokenizer
 }
 
 input SearchKeywordInput {
@@ -6109,6 +7568,30 @@ input SetCategoryMetaTitle {
   metaTitle: [LocalizedStringItemInputType!]
 }
 
+input SetChannelAddress {
+  address: AddressInput
+}
+
+input SetChannelCustomField {
+  name: String!
+  value: String
+}
+
+input SetChannelCustomType {
+  fields: [CustomFieldInput!]
+  type: ResourceIdentifierInput
+  typeKey: String
+  typeId: String
+}
+
+input SetChannelGeoLocation {
+  geoLocation: GeometryInput
+}
+
+input SetChannelRoles {
+  roles: [ChannelRole!]!
+}
+
 input SetCustomerCompanyName {
   companyName: String
 }
@@ -6131,10 +7614,12 @@ input SetCustomerDateOfBirth {
 
 input SetCustomerDefaultBillingAddress {
   addressId: String
+  addressKey: String
 }
 
 input SetCustomerDefaultShippingAddress {
   addressId: String
+  addressKey: String
 }
 
 input SetCustomerExternalId {
@@ -6244,6 +7729,14 @@ input SetDiscountCodeValidFromAndUntil {
 
 input SetDiscountCodeValidUntil {
   validUntil: DateTime
+}
+
+input SetExtensionKey {
+  key: String
+}
+
+input SetExtensionTimeoutInMs {
+  timeoutInMs: Int
 }
 
 input setInputTip {
@@ -6390,6 +7883,75 @@ input SetOrderReturnShipmentState {
 
 input SetOrderShippingAddress {
   address: AddressInput
+}
+
+input SetOrderStore {
+  store: ResourceIdentifierInput
+}
+
+input SetPaymentAmountPaid {
+  amount: MoneyInput
+}
+
+input SetPaymentAmountRefunded {
+  amount: MoneyInput
+}
+
+input SetPaymentAnonymousId {
+  anonymousId: String
+}
+
+input SetPaymentAuthorization {
+  amount: MoneyInput
+  until: DateTime
+}
+
+input SetPaymentCustomer {
+  customer: ReferenceInput
+}
+
+input SetPaymentCustomField {
+  name: String!
+  value: String
+}
+
+input SetPaymentCustomType {
+  fields: [CustomFieldInput!]
+  type: ResourceIdentifierInput
+  typeKey: String
+  typeId: String
+}
+
+input SetPaymentExternalId {
+  externalId: String
+}
+
+input SetPaymentInterfaceId {
+  interfaceId: String
+}
+
+input SetPaymentKey {
+  key: String
+}
+
+input SetPaymentMethodInfoInterface {
+  interface: String!
+}
+
+input SetPaymentMethodInfoMethod {
+  method: String
+}
+
+input SetPaymentMethodInfoName {
+  name: [LocalizedStringItemInputType!]
+}
+
+input SetPaymentStatusInterfaceCode {
+  interfaceCode: String
+}
+
+input SetPaymentStatusInterfaceText {
+  interfaceText: String
 }
 
 input SetProductAssetCustomField {
@@ -6593,6 +8155,50 @@ input SetProjectSettingsShippingRateInputType {
   shippingRateInputType: ShippingRateInputTypeInput
 }
 
+input SetReviewAuthorName {
+  authorName: String
+}
+
+input SetReviewCustomer {
+  customer: ResourceIdentifierInput
+}
+
+input SetReviewCustomField {
+  name: String!
+  value: String
+}
+
+input SetReviewCustomType {
+  fields: [CustomFieldInput!]
+  type: ResourceIdentifierInput
+  typeKey: String
+  typeId: String
+}
+
+input SetReviewKey {
+  key: String
+}
+
+input SetReviewLocale {
+  locale: Locale
+}
+
+input SetReviewRating {
+  rating: Int
+}
+
+input SetReviewTarget {
+  target: TargetReferenceInput
+}
+
+input SetReviewText {
+  text: String
+}
+
+input SetReviewTitle {
+  title: String
+}
+
 input SetSearchKeywords {
   searchKeywords: [SearchKeywordInput!]!
   staged: Boolean
@@ -6606,12 +8212,125 @@ input SetShippingMethodKey {
   key: String
 }
 
+input SetShippingMethodLocalizedDescription {
+  localizedDescription: [LocalizedStringItemInputType!]
+}
+
 input SetShippingMethodPredicate {
   predicate: String
 }
 
+input SetShoppingListAnonymousId {
+  anonymousId: String
+}
+
+input SetShoppingListCustomer {
+  customer: ResourceIdentifierInput
+}
+
+input SetShoppingListCustomField {
+  name: String!
+  value: String
+}
+
+input SetShoppingListCustomType {
+  fields: [CustomFieldInput!]
+  type: ResourceIdentifierInput
+  typeKey: String
+  typeId: String
+}
+
+input SetShoppingListDeleteDaysAfterLastModification {
+  deleteDaysAfterLastModification: Int
+}
+
+input SetShoppingListDescription {
+  description: [LocalizedStringItemInputType!]
+}
+
+input SetShoppingListKey {
+  key: String
+}
+
+input SetShoppingListLineItemCustomField {
+  lineItemId: String!
+  name: String!
+  value: String
+}
+
+input SetShoppingListLineItemCustomType {
+  lineItemId: String!
+  fields: [CustomFieldInput!]
+  type: ResourceIdentifierInput
+  typeKey: String
+  typeId: String
+}
+
+input SetShoppingListSlug {
+  slug: [LocalizedStringItemInputType!]
+}
+
+input SetShoppingListTextLineItemCustomField {
+  textLineItemId: String!
+  name: String!
+  value: String
+}
+
+input SetShoppingListTextLineItemCustomType {
+  textLineItemId: String!
+  fields: [CustomFieldInput!]
+  type: ResourceIdentifierInput
+  typeKey: String
+  typeId: String
+}
+
+input SetShoppingListTextLineItemDescription {
+  textLineItemId: String!
+  description: [LocalizedStringItemInputType!]
+}
+
+input SetStateDescription {
+  description: [LocalizedStringItemInputType!]
+}
+
+input SetStateName {
+  name: [LocalizedStringItemInputType!]
+}
+
+input SetStateRoles {
+  roles: [StateRole!]!
+}
+
+input SetStateTransitions {
+  transitions: [ResourceIdentifierInput!]
+}
+
+input SetStoreDistributionChannels {
+  distributionChannels: [ResourceIdentifierInput!]
+}
+
+input SetStoreLanguages {
+  languages: [Locale!]
+}
+
 input SetStoreName {
   name: [LocalizedStringItemInputType!]
+}
+
+input SetStoreSupplyChannels {
+  supplyChannels: [ResourceIdentifierInput!]
+}
+
+input SetSubscriptionChanges {
+  changes: [ChangeSubscriptionInput!]!
+}
+
+input SetSubscriptionKey {
+  key: String
+}
+
+input SetSubscriptionMessages {
+  messages: [MessageSubscriptionInput!]!
 }
 
 input SetTaxCategoryKey {
@@ -6621,6 +8340,10 @@ input SetTaxCategoryKey {
 type SetType implements FieldType {
   elementType: FieldType!
   name: String!
+}
+
+input SetTypeDescription {
+  description: [LocalizedStringItemInputType!]
 }
 
 input SetZoneDescription {
@@ -6645,35 +8368,49 @@ type ShippingInfo {
   price: Money!
   shippingRate: ShippingRate!
   taxRate: TaxRate
-  taxCategory: Reference
   deliveries: [Delivery!]!
   discountedPrice: DiscountedLineItemPrice
   taxedPrice: TaxedItemPrice
   shippingMethodState: ShippingMethodState!
   shippingMethod: ShippingMethod
   shippingMethodRef: Reference
+  taxCategory: TaxCategory
+  taxCategoryRef: Reference
 }
 
 type ShippingMethod implements Versioned {
-  id: String!
-  version: Long!
   name: String!
-  description: String
+  description: String @deprecated(reason: "Use localizedDescription")
   zoneRates: [ZoneRate!]!
   isDefault: Boolean!
   predicate: String
+  key: String
+  taxCategoryRef: Reference
+  localizedDescriptionAllLocales: [LocalizedString!]
+  localizedDescription(
+    """
+    String is defined for different locales. This argument specifies the desired locale.
+    """
+    locale: Locale
+
+    """
+    List of languages the client is able to understand, and which locale variant is preferred.
+    """
+    acceptLanguage: [Locale!]
+  ): String
+  taxCategory: TaxCategory
+  id: String!
+  version: Long!
   createdAt: DateTime!
   lastModifiedAt: DateTime!
-  key: String
-  lastModifiedBy: Initiator
   createdBy: Initiator
-  taxCategoryRef: Reference
-  taxCategory: TaxCategory
+  lastModifiedBy: Initiator
 }
 
 input ShippingMethodDraft {
   name: String!
   description: String
+  localizedDescription: [LocalizedStringItemInputType!]
   taxCategory: ResourceIdentifierInput!
   zoneRates: [ZoneRateDraft!] = []
   isDefault: Boolean!
@@ -6686,6 +8423,13 @@ type ShippingMethodQueryResult {
   count: Int!
   total: Long!
   results: [ShippingMethod!]!
+}
+
+"""
+A field to retrieve available shipping methods for a cart.
+"""
+interface ShippingMethodsByCartInterface {
+  shippingMethodsByCart(id: String!): [ShippingMethod!]!
 }
 
 enum ShippingMethodState {
@@ -6711,6 +8455,7 @@ input ShippingMethodUpdateAction {
   removeZone: RemoveShippingMethodZone
   setDescription: SetShippingMethodDescription
   setKey: SetShippingMethodKey
+  setLocalizedDescription: SetShippingMethodLocalizedDescription
   setPredicate: SetShippingMethodPredicate
 }
 
@@ -6831,8 +8576,215 @@ input ShippingTargetInput {
   dummy: String
 }
 
+type ShoppingList implements Versioned {
+  key: String
+  name(
+    """
+    String is defined for different locales. This argument specifies the desired locale.
+    """
+    locale: Locale
+
+    """
+    List of languages the client is able to understand, and which locale variant is preferred.
+    """
+    acceptLanguage: [Locale!]
+  ): String
+  nameAllLocales: [LocalizedString!]!
+  description(
+    """
+    String is defined for different locales. This argument specifies the desired locale.
+    """
+    locale: Locale
+
+    """
+    List of languages the client is able to understand, and which locale variant is preferred.
+    """
+    acceptLanguage: [Locale!]
+  ): String
+  descriptionAllLocales: [LocalizedString!]
+  slug(
+    """
+    String is defined for different locales. This argument specifies the desired locale.
+    """
+    locale: Locale
+
+    """
+    List of languages the client is able to understand, and which locale variant is preferred.
+    """
+    acceptLanguage: [Locale!]
+  ): String
+  slugAllLocales: [LocalizedString!]
+  customerRef: Reference
+  customer: Customer
+  anonymousId: String
+  lineItems: [ShoppingListLineItem!]!
+  textLineItems: [TextLineItem!]!
+  custom: CustomFieldsType
+  deleteDaysAfterLastModification: Int
+  id: String!
+  version: Long!
+  createdAt: DateTime!
+  lastModifiedAt: DateTime!
+  createdBy: Initiator
+  lastModifiedBy: Initiator
+}
+
+input ShoppingListDraft {
+  name: [LocalizedStringItemInputType!]!
+  description: [LocalizedStringItemInputType!]
+  lineItems: [ShoppingListLineItemDraft!] = []
+  textLineItems: [TextLineItemDraft!] = []
+  custom: CustomFieldsDraft
+  deleteDaysAfterLastModification: Int
+  key: String
+  customer: ResourceIdentifierInput
+  slug: [LocalizedStringItemInputType!]
+  anonymousId: String
+}
+
+type ShoppingListLineItem {
+  id: String!
+  productId: String!
+  variantId: Int
+  productTypeRef: Reference!
+  productType: ProductTypeDefinition!
+  quantity: Int!
+  addedAt: DateTime!
+  name(
+    """
+    String is defined for different locales. This argument specifies the desired locale.
+    """
+    locale: Locale
+
+    """
+    List of languages the client is able to understand, and which locale variant is preferred.
+    """
+    acceptLanguage: [Locale!]
+  ): String
+  nameAllLocales: [LocalizedString!]!
+  deactivatedAt: DateTime
+  custom: CustomFieldsType
+  productSlug(
+    """
+    String is defined for different locales. This argument specifies the desired locale.
+    """
+    locale: Locale
+
+    """
+    List of languages the client is able to understand, and which locale variant is preferred.
+    """
+    acceptLanguage: [Locale!]
+  ): String
+  variant: ProductVariant
+}
+
+input ShoppingListLineItemDraft {
+  productId: String
+  sku: String
+  variantId: Int
+  quantity: Int = 1
+  custom: CustomFieldsDraft
+  addedAt: DateTime
+}
+
+"""
+Fields to access shopping lists. Includes direct access to a single list and searching for shopping lists.
+"""
+interface ShoppingListQueryInterface {
+  shoppingList(
+    """
+    Queries with specified ID
+    """
+    id: String
+
+    """
+    Queries with specified key
+    """
+    key: String
+  ): ShoppingList
+  shoppingLists(
+    where: String
+    sort: [String!]
+    limit: Int
+    offset: Int
+  ): ShoppingListQueryResult!
+}
+
+type ShoppingListQueryResult {
+  offset: Int!
+  count: Int!
+  total: Long!
+  results: [ShoppingList!]!
+}
+
+type ShoppingListsConfiguration {
+  deleteDaysAfterLastModification: Int
+}
+
+input ShoppingListsConfigurationInput {
+  deleteDaysAfterLastModification: Int
+}
+
+input ShoppingListUpdateAction {
+  addLineItem: AddShoppingListLineItem
+  addTextLineItem: AddShoppingListTextLineItem
+  changeLineItemQuantity: ChangeShoppingListLineItemQuantity
+  changeLineItemsOrder: ChangeShoppingListLineItemsOrder
+  changeName: ChangeShoppingListName
+  changeTextLineItemName: ChangeShoppingListTextLineItemName
+  changeTextLineItemQuantity: ChangeShoppingListTextLineItemQuantity
+  changeTextLineItemsOrder: ChangeShoppingListTextLineItemsOrder
+  removeLineItem: RemoveShoppingListLineItem
+  removeTextLineItem: RemoveShoppingListTextLineItem
+  setAnonymousId: SetShoppingListAnonymousId
+  setCustomField: SetShoppingListCustomField
+  setCustomType: SetShoppingListCustomType
+  setCustomer: SetShoppingListCustomer
+  setDeleteDaysAfterLastModification: SetShoppingListDeleteDaysAfterLastModification
+  setDescription: SetShoppingListDescription
+  setKey: SetShoppingListKey
+  setLineItemCustomField: SetShoppingListLineItemCustomField
+  setLineItemCustomType: SetShoppingListLineItemCustomType
+  setSlug: SetShoppingListSlug
+  setTextLineItemCustomField: SetShoppingListTextLineItemCustomField
+  setTextLineItemCustomType: SetShoppingListTextLineItemCustomType
+  setTextLineItemDescription: SetShoppingListTextLineItemDescription
+}
+
 input SimpleAttributeTypeDraft {
   dummy: String
+}
+
+input SimpleFieldTypeDraft {
+  dummy: String
+}
+
+type SNSDestination implements Destination {
+  topicArn: String!
+  accessKey: String!
+  accessSecret: String!
+  type: String!
+}
+
+input SNSDestinationInput {
+  topicArn: String!
+  accessKey: String!
+  accessSecret: String!
+}
+
+type SQSDestination implements Destination {
+  queueUrl: String!
+  accessKey: String!
+  accessSecret: String!
+  region: String!
+  type: String!
+}
+
+input SQSDestinationInput {
+  queueUrl: String!
+  accessKey: String!
+  accessSecret: String!
+  region: String!
 }
 
 """
@@ -6893,6 +8845,16 @@ type State implements Versioned {
   lastModifiedBy: Initiator
 }
 
+input StateDraft {
+  key: String!
+  type: StateType!
+  name: [LocalizedStringItemInputType!]
+  description: [LocalizedStringItemInputType!]
+  initial: Boolean
+  roles: [StateRole!]
+  transitions: [ReferenceInput!]
+}
+
 type StateQueryResult {
   offset: Int!
   count: Int!
@@ -6911,6 +8873,49 @@ enum StateType {
   ReviewState
   PaymentState
   LineItemState
+}
+
+input StateUpdateAction {
+  addRoles: AddStateRoles
+  changeInitial: ChangeStateInitial
+  changeKey: ChangeStateKey
+  changeType: ChangeStateType
+  removeRoles: RemoveStateRoles
+  setDescription: SetStateDescription
+  setName: SetStateName
+  setRoles: SetStateRoles
+  setTransitions: SetStateTransitions
+}
+
+"""
+Link to a parent static bundle product by custom ID
+"""
+type static_bundle_parent_child_linkType implements Type {
+  typeRef: Reference!
+  type: TypeDefinition!
+  external_id: StringField
+  parent: StringField
+}
+
+"""
+The product variant included in a static bundle
+"""
+type StaticBundleChildVariantProductType implements ProductType {
+  productTypeId: String!
+  quantity: NumberAttribute
+  sku: StringAttribute
+  variant_id: NumberAttribute
+  product_ref: ReferenceAttribute
+  product_name: LocalizedStringAttribute
+}
+
+"""
+A static bundle of product variants
+"""
+type StaticBundleParentProductType implements ProductType {
+  productTypeId: String!
+  products: [StaticBundleChildVariantProductType!]
+  productSearch: [StringAttribute!]
 }
 
 """
@@ -6932,6 +8937,11 @@ type Store implements Versioned {
     acceptLanguage: [Locale!]
   ): String
   nameAllLocales: [LocalizedString!]
+  languages: [Locale!]
+  distributionChannelsRef: [Reference!]!
+  distributionChannels: [Channel!]!
+  supplyChannelsRef: [Reference!]!
+  supplyChannels: [Channel!]!
   createdAt: DateTime!
   lastModifiedAt: DateTime!
   createdBy: Initiator
@@ -6946,7 +8956,10 @@ type StoreQueryResult {
 }
 
 input StoreUpdateAction {
+  setDistributionChannels: SetStoreDistributionChannels
+  setLanguages: SetStoreLanguages
   setName: SetStoreName
+  setSupplyChannels: SetStoreSupplyChannels
 }
 
 type StringAttribute implements Attribute {
@@ -6963,6 +8976,20 @@ type StringType implements FieldType {
   name: String!
 }
 
+"""
+Used to store Stripe objects data in CTP Payment.interfaceInteractions
+"""
+type stripe_objectType implements Type {
+  typeRef: Reference!
+  type: TypeDefinition!
+  id: StringField
+  object: StringField
+  amount: NumberField
+  currency: StringField
+  status: StringField
+  jsonResponse: StringField
+}
+
 type SubRate {
   name: String!
   amount: Float!
@@ -6973,6 +9000,59 @@ input SubRateDraft {
   amount: Float!
 }
 
+type Subscription implements Versioned {
+  key: String
+  destination: Destination!
+  messages: [MessageSubscription!]!
+  changes: [ChangeSubscription!]!
+  format: NotificationFormat!
+  status: SubscriptionHealthStatus!
+  id: String!
+  version: Long!
+  createdAt: DateTime!
+  lastModifiedAt: DateTime!
+  createdBy: Initiator
+  lastModifiedBy: Initiator
+}
+
+input SubscriptionDraft {
+  key: String
+  destination: DestinationInput!
+  messages: [MessageSubscriptionInput!]
+  changes: [ChangeSubscriptionInput!]
+  format: SubscriptionFormatInput
+}
+
+input SubscriptionFormatInput {
+  Platform: PlatformFormatInput
+  CloudEvents: CloudEventsSubscriptionsFormatInput
+}
+
+enum SubscriptionHealthStatus {
+  TemporaryError
+  ConfigurationErrorDeliveryStopped
+  ConfigurationError
+  Healthy
+}
+
+type SubscriptionQueryResult {
+  offset: Int!
+  count: Int!
+  total: Long!
+  results: [Subscription!]!
+}
+
+input SubscriptionUpdateAction {
+  changeDestination: ChangeSubscriptionDestination
+  setChanges: SetSubscriptionChanges
+  setKey: SetSubscriptionKey
+  setMessages: SetSubscriptionMessages
+}
+
+interface SuggestTokenizer {
+  type: String!
+}
+
 """
 Stores information about order synchronization activities (like export or import).
 """
@@ -6981,6 +9061,12 @@ type SyncInfo {
   channel: Channel
   externalId: String
   syncedAt: DateTime!
+}
+
+input TargetReferenceInput {
+  typeId: String!
+  id: String
+  key: String
 }
 
 enum TaxCalculationMode {
@@ -7005,6 +9091,8 @@ type TaxCategory implements Versioned {
   description: String
   rates: [TaxRate!]!
   key: String
+  typeId: String!
+    @deprecated(reason: "Use 'taxCategoryRef' to fetch the reference.")
   id: String!
   version: Long!
   createdAt: DateTime!
@@ -7140,8 +9228,47 @@ type TextAttributeDefinitionType implements AttributeDefinitionType {
 UI hint telling what kind of edit control should be displayed for a text attribute.
 """
 enum TextInputHint {
-  MultiLine
   SingleLine
+  MultiLine
+}
+
+type TextLineItem {
+  id: String!
+  name(
+    """
+    String is defined for different locales. This argument specifies the desired locale.
+    """
+    locale: Locale
+
+    """
+    List of languages the client is able to understand, and which locale variant is preferred.
+    """
+    acceptLanguage: [Locale!]
+  ): String
+  nameAllLocales: [LocalizedString!]!
+  description(
+    """
+    String is defined for different locales. This argument specifies the desired locale.
+    """
+    locale: Locale
+
+    """
+    List of languages the client is able to understand, and which locale variant is preferred.
+    """
+    acceptLanguage: [Locale!]
+  ): String
+  descriptionAllLocales: [LocalizedString!]
+  quantity: Int!
+  custom: CustomFieldsType
+  addedAt: DateTime!
+}
+
+input TextLineItemDraft {
+  name: [LocalizedStringItemInputType!]!
+  description: [LocalizedStringItemInputType!]
+  quantity: Int = 1
+  custom: CustomFieldsDraft
+  addedAt: DateTime
 }
 
 """
@@ -7192,6 +9319,14 @@ type Transaction {
   state: TransactionState!
 }
 
+input TransactionDraft {
+  timestamp: DateTime
+  type: TransactionType!
+  amount: MoneyInput!
+  interactionId: String
+  state: TransactionState
+}
+
 enum TransactionState {
   Failure
   Success
@@ -7228,9 +9363,29 @@ input TransitionOrderState {
   force: Boolean = false
 }
 
+input TransitionPaymentState {
+  state: ResourceIdentifierInput!
+  force: Boolean = false
+}
+
 input TransitionProductState {
   state: ReferenceInput!
   force: Boolean
+}
+
+input TransitionReviewState {
+  state: ResourceIdentifierInput!
+  force: Boolean = false
+}
+
+type Trigger {
+  resourceTypeId: String!
+  actions: [ActionType!]!
+}
+
+input TriggerInput {
+  resourceTypeId: String!
+  actions: [ActionType!]
 }
 
 interface Type {
@@ -7291,11 +9446,36 @@ type TypeDefinition implements Versioned {
   lastModifiedBy: Initiator
 }
 
+input TypeDefinitionDraft {
+  key: String!
+  name: [LocalizedStringItemInputType!]!
+  description: [LocalizedStringItemInputType!]
+  resourceTypeIds: [String!]!
+  fieldDefinitions: [FieldDefinitionInput!]
+}
+
 type TypeDefinitionQueryResult {
   offset: Int!
   count: Int!
   total: Long!
   results: [TypeDefinition!]!
+}
+
+input TypeUpdateAction {
+  addEnumValue: AddTypeEnumValue
+  addFieldDefinition: AddTypeFieldDefinition
+  addLocalizedEnumValue: AddTypeLocalizedEnumValue
+  changeEnumValueLabel: ChangeTypeEnumValueLabel
+  changeEnumValueOrder: ChangeTypeEnumValueOrder
+  changeLabel: ChangeTypeLabel
+  changeFieldDefinitionOrder: ChangeTypeFieldDefinitionOrder
+  changeInputHint: ChangeTypeInputHint
+  changeLocalizedEnumValueLabel: ChangeTypeLocalizedEnumValueLabel
+  changeLocalizedEnumValueOrder: ChangeTypeLocalizedEnumValueOrder
+  changeKey: ChangeTypeKey
+  changeName: ChangeTypeName
+  removeFieldDefinition: RemoveTypeFieldDefinition
+  setDescription: SetTypeDescription
 }
 
 input UnpublishProduct {
@@ -7328,6 +9508,10 @@ interface Versioned {
   lastModifiedBy: Initiator
 }
 
+type WhitespaceSuggestTokenizer implements SuggestTokenizer {
+  type: String!
+}
+
 input WhitespaceSuggestTokenizerInput {
   dummy: String
 }
@@ -7341,16 +9525,16 @@ scalar YearMonth
 Zones allow defining ShippingRates for specific Locations.
 """
 type Zone implements Versioned {
-  id: String!
-  version: Long!
   name: String!
   key: String
   description: String
+  locations: [Location!]!
+  id: String!
+  version: Long!
   createdAt: DateTime!
   lastModifiedAt: DateTime!
-  lastModifiedBy: Initiator
   createdBy: Initiator
-  locations: [Location!]!
+  lastModifiedBy: Initiator
 }
 
 input ZoneLocation {

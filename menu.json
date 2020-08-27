@@ -1,22 +1,43 @@
 {
-  "key": "Bundles",
-  "uriPath": "bundle-manager",
+  "key": "custom-objects",
+  "uriPath": "custom-objects",
   "icon": "RocketIcon",
-  "permissions": ["ViewProducts", "ManageProducts"],
+  "permissions": ["ManageProducts", "ManageOrders", "ManageCustomers"],
   "featureToggle": null,
-  "submenu": [],
+  "submenu": [
+    {
+      "key": "custom-object-list",
+      "labelAllLocales": [
+        {
+          "locale": "en",
+          "value": "Custom Objects List"
+        }
+      ],
+      "uriPath": "custom-objects"
+    },
+    {
+      "key": "container-list",
+      "labelAllLocales": [
+        {
+          "locale": "en",
+          "value": "Container List"
+        }
+      ],
+      "uriPath": "custom-objects/containers"
+    }
+  ],
   "labelAllLocales": [
     {
       "locale": "en",
-      "value": "Bundles"
+      "value": "Custom Objects"
     },
     {
       "locale": "de",
-      "value": "Bundles"
+      "value": "Custom Objects"
     },
     {
       "locale": "es",
-      "value": "Bundles"
+      "value": "Custom Objects"
     }
   ]
 }

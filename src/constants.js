@@ -1,7 +1,7 @@
 export const PERMISSIONS = {
   ManageProducts: 'ManageProducts',
-  ViewProducts: 'ViewProducts'
+  ManageOrders: 'ManageOrders',
+  ManageCustomers: 'ManageCustomers',
 };
-export const ROOT_PATH = 'bundle-manager';
-export const BUNDLE_PRODUCT_TYPE = 'static-bundle-parent';
-export const MASTER_VARIANT_ID = 1;
+export const ROOT_PATH = 'custom-objects';
+export const CONTAINER = 'mc-custom-object-schema';
