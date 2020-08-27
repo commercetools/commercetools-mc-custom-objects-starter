@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+public/
+csp.json
+env.json
+.firebase/
+.firebaserc
+firebase.json
+lambda.js

@@ -1,0 +1,43 @@
+{
+  "key": "custom-objects",
+  "uriPath": "custom-objects",
+  "icon": "RocketIcon",
+  "permissions": ["ManageProducts", "ManageOrders", "ManageCustomers"],
+  "featureToggle": null,
+  "submenu": [
+    {
+      "key": "custom-object-list",
+      "labelAllLocales": [
+        {
+          "locale": "en",
+          "value": "Custom Objects List"
+        }
+      ],
+      "uriPath": "custom-objects"
+    },
+    {
+      "key": "container-list",
+      "labelAllLocales": [
+        {
+          "locale": "en",
+          "value": "Container List"
+        }
+      ],
+      "uriPath": "custom-objects/containers"
+    }
+  ],
+  "labelAllLocales": [
+    {
+      "locale": "en",
+      "value": "Custom Objects"
+    },
+    {
+      "locale": "de",
+      "value": "Custom Objects"
+    },
+    {
+      "locale": "es",
+      "value": "Custom Objects"
+    }
+  ]
+}

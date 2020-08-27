@@ -1,0 +1,11 @@
+{
+  "csp": {
+    "script-src": ["custom-objects.firebaseapp.com"],
+    "connect-src": [
+      "custom-objects.firebaseapp.com",
+      "mc-api.us-central1.gcp.commercetools.com",
+      "mc-api.commercetools.co"
+    ],
+    "style-src": ["custom-objects.firebaseapp.com"]
+  }
+}
