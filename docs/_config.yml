@@ -1,0 +1,6 @@
+title: Custom Objects Custom Application
+description: Create and manage custom objects on the commercetools platform.
+remote_theme: pmarsceill/just-the-docs
+aux_links:
+  "Custom Objects on GitHub":
+    - "//github.com/commercetools/mc-custom-app-custom-objects"
