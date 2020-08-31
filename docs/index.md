@@ -46,3 +46,21 @@ manage Custom Objects that are validated against a defined schema.
 - [Prettier](https://prettier.io/docs/en/index.html) - Code formatter
 - [ESLint](https://eslint.org/docs/user-guide/getting-started) - JS, CSS, and
   GraphQL linter
+
+## Installation
+
+Simply run `yarn` or `yarn install` from the repository root to install the
+application's dependencies.
+
+The application has a dependency on the private package
+`@commercetools-us-ps/mc-app-core`, which requires an
+[npm auth token](https://docs.npmjs.com/about-authentication-tokens). To acquire
+an auth token, request access to the `@commercetools-us-ps` scope from the US
+Professional Services team.
+[Create](https://docs.npmjs.com/creating-and-viewing-authentication-tokens) the
+auth token then run the following commands to configure npm. This will allow the
+installation of the private package.
+
+```shell
+export NPM_TOKEN=xxxx-xxxx-xxxx-xxxx
+```
