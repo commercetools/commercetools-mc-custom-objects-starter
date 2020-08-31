@@ -16,7 +16,7 @@ nav_order: 1
 1. TOC 
 {:toc}
 
-# Application Overview
+## Application Overview
 
 commercetools offers unparalleled data configuration; however, there are
 situations where a company needs to store information that does not fit neatly
