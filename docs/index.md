@@ -31,3 +31,18 @@ When managed through the commercetools API, Custom Object values are not
 validated with their value consisting of a JSON string. This Custom Application
 enables the creation of Custom Object schemas, which are then used to create and
 manage Custom Objects that are validated against a defined schema.
+
+## Technology
+
+- [ReactJS](https://reactjs.org/)
+- [Apollo](https://www.apollographql.com/docs/react/) &
+  [GraphQL](https://graphql.org/learn/)
+- [Merchant Center Application Kit](https://docs.commercetools.com/custom-applications/)
+- [UI Kit](https://uikit.commercetools.com/?path=/story/introduction--getting-started) -
+  Merchant Center component library
+- [Yarn](https://classic.yarnpkg.com/en/docs/getting-started) - Package manager
+- [Jest](https://jestjs.io/docs/en/getting-started) - Test runner
+- [Enzyme](https://enzymejs.github.io/enzyme/) - React testing utility
+- [Prettier](https://prettier.io/docs/en/index.html) - Code formatter
+- [ESLint](https://eslint.org/docs/user-guide/getting-started) - JS, CSS, and
+  GraphQL linter
