@@ -203,3 +203,8 @@ with a Merchant Center project.
 
 ![Merchant Center Registration - Main Nav](assets/custom-application-registration-main.png)
 ![Merchant Center Registration - Sub Nav](assets/custom-application-registration-sub.png)
+
+## Support
+
+Contact the US Professional Services team for all support requests related to
+the ensemble discounts solution.
