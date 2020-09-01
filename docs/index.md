@@ -47,6 +47,12 @@ manage Custom Objects that are validated against a defined schema.
 - [ESLint](https://eslint.org/docs/user-guide/getting-started) - JS, CSS, and
   GraphQL linter
 
+## Limitations
+
+This application only displays Custom Objects created with a schema managed by
+this application. Custom Objects created through the API without a schema are
+not displayed.
+
 ## Installation
 
 Simply run `yarn` or `yarn install` from the repository root to install the
