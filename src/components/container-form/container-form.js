@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import reduce from 'lodash/reduce';
@@ -28,6 +28,7 @@ const initializeEmptyValues = () => ({
 });
 
 const ContainerForm = ({ container, onSubmit }) => {
+  const intl = useIntl();
   const { project } = useApplicationContext();
   const { languages } = project;
 
@@ -35,9 +36,11 @@ const ContainerForm = ({ container, onSubmit }) => {
     ? initializeContainerValues(container)
     : initializeEmptyValues();
 
-  const stringSchema = yup
-    .string()
-    .required(<FormattedMessage {...messages.requiredFieldError} />);
+  const requiredFieldMessage = intl.formatMessage(messages.requiredFieldError);
+  const requiredFieldError = {
+    required: requiredFieldMessage,
+  };
+  const stringSchema = yup.string().required(requiredFieldError);
   const attributeSchema = {
     name: stringSchema,
     type: stringSchema,
@@ -56,12 +59,8 @@ const ContainerForm = ({ container, onSubmit }) => {
       is: (val) => val === TYPES.Enum,
       then: yup.array(
         yup.object({
-          value: yup
-            .string()
-            .required(<FormattedMessage {...messages.requiredFieldError} />),
-          label: yup
-            .string()
-            .required(<FormattedMessage {...messages.requiredFieldError} />),
+          value: yup.string().required(requiredFieldMessage),
+          label: yup.string().required(requiredFieldMessage),
         })
       ),
     }),
@@ -69,19 +68,13 @@ const ContainerForm = ({ container, onSubmit }) => {
       is: (val) => val === TYPES.LocalizedEnum,
       then: yup.array(
         yup.object({
-          value: yup
-            .string()
-            .required(<FormattedMessage {...messages.requiredFieldError} />),
+          value: yup.string().required(requiredFieldMessage),
           label: yup.object(
             reduce(
               languages,
               (name, lang) => ({
                 ...name,
-                [lang]: yup
-                  .string()
-                  .required(
-                    <FormattedMessage {...messages.requiredFieldError} />
-                  ),
+                [lang]: yup.string().required(requiredFieldMessage),
               }),
               {}
             )
