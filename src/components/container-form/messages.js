@@ -167,6 +167,86 @@ export default defineMessages({
     description: 'Label for enum localized label label',
     defaultMessage: 'Label ({language})',
   },
+  validationTitle: {
+    id: 'Container.form.validation.title',
+    description: 'Title for validation field',
+    defaultMessage: 'Validation',
+  },
+  validationTypeTitle: {
+    id: 'Container.form.validation.type.title',
+    description: 'Title for validation type field',
+    defaultMessage: 'Type',
+  },
+  validationValueTitle: {
+    id: 'Container.form.validation.value.title',
+    description: 'Title for validation value field',
+    defaultMessage: 'Value',
+  },
+  addValidationButton: {
+    id: 'Container.form.validation.add.button',
+    description: 'Label for add validation button',
+    defaultMessage: 'Add Validation',
+  },
+  noValidationLabel: {
+    id: 'Container.form.validation.none',
+    description: 'Label for no validation',
+    defaultMessage: 'No additional validation for attribute.',
+  },
+  minValidationLabel: {
+    id: 'Container.form.validation.min.label',
+    description: 'Label for minimum validation',
+    defaultMessage: 'Minimum',
+  },
+  maxValidationLabel: {
+    id: 'Container.form.validation.max.label',
+    description: 'Label for maximum validation',
+    defaultMessage: 'Maximum',
+  },
+  lengthValidationLabel: {
+    id: 'Container.form.validation.length.label',
+    description: 'Label for length validation',
+    defaultMessage: 'Length',
+  },
+  emailValidationLabel: {
+    id: 'Container.form.validation.min.label',
+    description: 'Label for email validation',
+    defaultMessage: 'Email',
+  },
+  urlValidationLabel: {
+    id: 'Container.form.validation.url.label',
+    description: 'Label for url validation',
+    defaultMessage: 'URL',
+  },
+  matchesValidationLabel: {
+    id: 'Container.form.validation.matches.label',
+    description: 'Label for matches validation',
+    defaultMessage: 'Matches (regex)',
+  },
+  lessThanValidationLabel: {
+    id: 'Container.form.validation.lessThan.label',
+    description: 'Label for less than validation',
+    defaultMessage: 'Less than',
+  },
+  moreThanValidationLabel: {
+    id: 'Container.form.validation.moreThan.label',
+    description: 'Label for more than validation',
+    defaultMessage: 'More than',
+  },
+  integerValidationLabel: {
+    id: 'Container.form.validation.integer.label',
+    description: 'Label for integer validation',
+    defaultMessage: 'Integer',
+  },
+  positiveValidationLabel: {
+    id: 'Container.form.validation.positive.label',
+    description: 'Label for positive validation',
+    defaultMessage: 'Positive',
+  },
+  negativeValidationLabel: {
+    id: 'Container.form.validation.negative.label',
+    description: 'Label for negative validation',
+    defaultMessage: 'Negative',
+  },
   addLabel: {
     id: 'Container.form.add.button',
     description: 'Label for add button',
@@ -186,5 +266,60 @@ export default defineMessages({
     id: 'Container.form.error.required',
     description: 'The error message for required fields',
     defaultMessage: 'This field is required. Provide a value.',
+  },
+  minQuantityError: {
+    id: 'Container.form.error.minQuantity',
+    description: 'Error message for quantity minimum',
+    defaultMessage: 'Field must greater than or equal to {value}.',
+  },
+  maxQuantityError: {
+    id: 'Container.form.errors.maxQuantity',
+    description: 'Error message for quantity maximum',
+    defaultMessage: 'Field must less than or equal to {value}.',
+  },
+  moreThanError: {
+    id: 'Container.form.error.moreThan',
+    description: 'Error message for quantity minimum',
+    defaultMessage: 'Field must greater than {value}.',
+  },
+  lessThanError: {
+    id: 'Container.form.errors.lessThan',
+    description: 'Error message for quantity maximum',
+    defaultMessage: 'Field must less than {value}.',
+  },
+  integerError: {
+    id: 'Container.form.errors.integer',
+    description: 'Error message for integer',
+    defaultMessage: 'Field must be an integer.',
+  },
+  positiveError: {
+    id: 'Container.form.errors.positive',
+    description: 'Error message for positive',
+    defaultMessage: 'Field must be positive.',
+  },
+  negativeError: {
+    id: 'Container.form.errors.negative',
+    description: 'Error message for negative',
+    defaultMessage: 'Field must be negative.',
+  },
+  lengthError: {
+    id: 'Container.form.errors.negative',
+    description: 'Error message for negative',
+    defaultMessage: 'Field must be have a length of {value}.',
+  },
+  emailError: {
+    id: 'Container.form.errors.email',
+    description: 'Error message for negative',
+    defaultMessage: 'Field must be an email.',
+  },
+  urlError: {
+    id: 'Container.form.errors.url',
+    description: 'Error message for negative',
+    defaultMessage: 'Field must be a URL.',
+  },
+  matchesError: {
+    id: 'Container.form.errors.match',
+    description: 'Error message for matches (regex)',
+    defaultMessage: 'Field must match format {value}.',
   },
 });
