@@ -127,6 +127,105 @@ managed namespaces.
 - Field level validation for types and required fields
 - Localized fields default to locales defined in the project settings
 
+## Data Model
+
+### Container Schema
+
+Container schemas are
+[Custom Objects](https://docs.commercetools.com/http-api-projects-custom-objects).
+
+- **container** -
+  [`mc-custom-object-schema`](https://github.com/commercetools/mc-custom-app-custom-objects/blob/89382c773b420756f55f06a583baf6d6e18f1597/src/constants.js#L7)
+- **key** - String, matching the pattern `[-_~.a-zA-Z0-9]+` - Required
+- **value** - Object
+  - **attributes** - Array of [Attribute](#attribute) - Required
+
+<!--prettier-ignore-start-->
+#### Attribute
+{: .no_toc }
+<!--prettier-ignore-end-->
+
+- **name** - String - Required\
+  Displayed in [start case](https://lodash.com/docs/4.17.15#startCase) in the Custom
+  Object form as form field titles. Saved in schema as [kebab case](https://lodash.com/docs/4.17.15#kebabCase).
+- **type** - [Type](#type) - Required\
+  The type of the attribute. Determines the Custom Object form field input type.
+- **set** - Boolean\
+  Flag indicating if the attribute is an array/set.
+- **required** - Boolean\
+  Flag indicating if the attribute is required.
+- **display** - Boolean\
+  Flag indicating if the attribute should be displayed in the [Custom Object List](#custom-object-list)
+  Value column
+- **attributes** - Array of [Attribute](#attribute) - Required when `type` is
+  Object
+- **reference** - [Reference](#reference) - Required when `type` is Reference
+- **enum** - Array of [Enum](#enum) - Required when `type` is List (enum)
+- **lenum** - Array of [LocalizedEnum](#localizedenum) - Required when `type` is
+  Localized List (enum)
+
+<!--prettier-ignore-start-->
+#### Type
+{: .no_toc }
+<!--prettier-ignore-end-->
+
+List of available types.
+
+- Text
+- [Localized Text](https://docs.commercetools.com/http-api-types#localizedstring)
+- Number
+- Boolean
+- [Money](https://docs.commercetools.com/http-api-types#money)
+- [Date](https://docs.commercetools.com/http-api-types#date)
+- [Time](https://docs.commercetools.com/http-api-types#time)
+- [Date and time](https://docs.commercetools.com/http-api-types#datetime)
+- List (enum)
+- Localized List (enum)
+- [Reference](https://docs.commercetools.com/http-api-types#resourceidentifier)
+  by ID or key
+- Object
+
+<!--prettier-ignore-start-->
+#### Reference
+{: .no_toc }
+<!--prettier-ignore-end-->
+
+- **by** - Enum (id, key)
+- **type** -
+  [ReferenceType](https://docs.commercetools.com/http-api-types#referencetype)
+
+<!--prettier-ignore-start-->
+#### Enum
+{: .no_toc }
+<!--prettier-ignore-end-->
+
+- **value** - String - Required
+- **label** - String - Required\
+  The display text.
+
+<!--prettier-ignore-start-->
+#### LocalizedEnum
+{: .no_toc }
+<!--prettier-ignore-end-->
+
+- **value** - String - Required
+- **label** -
+  [LocalizedString](https://docs.commercetools.com/http-api-types#localizedstring) -
+  Required
+
+![Schema Data Model](assets/schema-data-model.png)
+
+### Custom Object
+
+- **container** - String\
+  The key of a [container schema](#container-schema).
+- **key** - String, matching the pattern `[-_~.a-zA-Z0-9]+` - Required
+- **value** - Object\
+  Dynamically determined based on the schema's attributes. The object's keys are
+  the [attribute's](#attribute) name in [kebab case](https://lodash.com/docs/4.17.15#kebabCase).
+
+![Custom Object Data Model](assets/custom-object-data-model.png)
+
 ## Installation
 
 Simply run `yarn` or `yarn install` from the repository root to install the
