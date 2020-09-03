@@ -215,6 +215,73 @@ List of available types.
 
 ![Schema Data Model](assets/schema-data-model.png)
 
+<!--prettier-ignore-start-->
+#### Example Data
+{: .no_toc }
+<!--prettier-ignore-end-->
+
+```json
+{
+  "id": "0b1fa712-ba9f-4785-b394-3da71b401207",
+  "version": 1,
+  "container": "mc-custom-object-schema",
+  "key": "example-schema",
+  "value": {
+    "attributes": [
+      {
+        "attributes": [
+          {
+            "display": true,
+            "reference": { "type": "product", "by": "id" },
+            "required": true,
+            "set": false,
+            "type": "Reference",
+            "name": "product"
+          },
+          { "required": false, "set": true, "type": "String", "name": "text" }
+        ],
+        "display": false,
+        "required": false,
+        "set": false,
+        "type": "Object",
+        "name": "object"
+      },
+      {
+        "display": true,
+        "enum": [
+          { "label": "one", "value": "1" },
+          { "label": "two", "value": "2" }
+        ],
+        "required": false,
+        "set": false,
+        "type": "Enum",
+        "name": "list"
+      },
+      {
+        "lenum": [
+          { "label": { "de": "one (de)", "en": "one" }, "value": "1" },
+          { "label": { "de": "two (de)", "en": "two" }, "value": "2" }
+        ],
+        "required": false,
+        "set": false,
+        "type": "LocalizedEnum",
+        "name": "localized list"
+      }
+    ]
+  },
+  "createdAt": "2020-09-02T15:25:52.545Z",
+  "lastModifiedAt": "2020-09-02T15:25:52.545Z",
+  "lastModifiedBy": {
+    "isPlatformClient": true,
+    "user": { "typeId": "user", "id": "f2303e24-a06c-458c-8986-363b8cf208c4" }
+  },
+  "createdBy": {
+    "isPlatformClient": true,
+    "user": { "typeId": "user", "id": "f2303e24-a06c-458c-8986-363b8cf208c4" }
+  }
+}
+```
+
 ### Custom Object
 
 - **container** - String\
@@ -225,6 +292,41 @@ List of available types.
   the [attribute's](#attribute) name in [kebab case](https://lodash.com/docs/4.17.15#kebabCase).
 
 ![Custom Object Data Model](assets/custom-object-data-model.png)
+
+<!--prettier-ignore-start-->
+#### Example Data
+{: .no_toc }
+<!--prettier-ignore-end-->
+
+```json
+{
+  "id": "9d04530b-24dc-41eb-b3ed-7555cab532d8",
+  "version": 1,
+  "container": "example-schema",
+  "key": "example-custom-object",
+  "value": {
+    "localizedList": "1",
+    "list": "2",
+    "object": {
+      "text": ["hello", "world"],
+      "product": {
+        "id": "1aa491b0-f23d-4900-b8dc-41fd94bdcffa",
+        "typeId": "product"
+      }
+    }
+  },
+  "createdAt": "2020-09-02T15:28:57.702Z",
+  "lastModifiedAt": "2020-09-02T15:28:57.702Z",
+  "lastModifiedBy": {
+    "isPlatformClient": true,
+    "user": { "typeId": "user", "id": "f2303e24-a06c-458c-8986-363b8cf208c4" }
+  },
+  "createdBy": {
+    "isPlatformClient": true,
+    "user": { "typeId": "user", "id": "f2303e24-a06c-458c-8986-363b8cf208c4" }
+  }
+}
+```
 
 ## Installation
 
