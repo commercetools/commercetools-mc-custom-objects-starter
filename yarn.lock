@@ -1318,10 +1318,10 @@
     "@babel/runtime" "7.11.2"
     "@babel/runtime-corejs3" "7.11.2"
 
-"@commercetools-frontend/eslint-config-mc-app@16.15.3":
-  version "16.15.3"
-  resolved "https://registry.yarnpkg.com/@commercetools-frontend/eslint-config-mc-app/-/eslint-config-mc-app-16.15.3.tgz#e8ee03291d77a80c9b145fe66e4d910a41d298a5"
-  integrity sha512-jCm9wBFhi6s4x2rFX6XM0FKMmb//4mVo9GS/tRQ/k6XstoHaaXRzAUk1Xkn3gwOkmtEb3X1cN//8MdUu4Vca7Q==
+"@commercetools-frontend/eslint-config-mc-app@17.8.0":
+  version "17.8.0"
+  resolved "https://registry.yarnpkg.com/@commercetools-frontend/eslint-config-mc-app/-/eslint-config-mc-app-17.8.0.tgz#e71625f735d99d0510fac5f03ced32e4c84f32fc"
+  integrity sha512-aXFrxbEAfIFNcHm/dmlBd7zAAxpcYx8rQQT1IBpQc3mXL3Q53dSBQNct9eTvUu29dRfu4yn5q7XIqZESbGMDKA==
 
 "@commercetools-frontend/i18n@16.16.2":
   version "16.16.2"
