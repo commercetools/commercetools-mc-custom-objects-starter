@@ -1048,6 +1048,14 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime-corejs3@7.12.5":
+  version "7.12.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.12.5.tgz#ffee91da0eb4c6dae080774e94ba606368e414f4"
+  integrity sha512-roGr54CsTmNPPzZoCP1AmDXuBoNao7tnSA83TXTwt+UK5QVyh1DIJnrgYRPWKCF2flqZQXwa7Yr8v7VmLzF0YQ==
+  dependencies:
+    core-js-pure "^3.0.0"
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime-corejs3@7.8.4":
   version "7.8.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.8.4.tgz#ccc4e042e2fae419c67fa709567e5d2179ed3940"
@@ -1060,6 +1068,13 @@
   version "7.11.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
   integrity sha512-TeWkU52so0mPtDcaCTxNBI/IHiz0pZgr8VEFqXFtZWpYD08ZB6FaSwVAS8MKRQAP3bYKiVjwysOJgMFY28o6Tw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
+"@babel/runtime@7.12.5":
+  version "7.12.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
+  integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -1122,6 +1137,21 @@
     "@types/lodash" "^4.14.155"
     lodash "4.17.20"
     lodash-es "4.17.15"
+    redux-thunk "2.3.0"
+
+"@commercetools-frontend/actions-global@17.10.1":
+  version "17.10.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-frontend/actions-global/-/actions-global-17.10.1.tgz#2712b58e720b87664be1e2a32419a99a88e4c50b"
+  integrity sha512-41Q1BlVX3QaRzZnnVpV33DfqvUUWxxlELxCmtMaPhHwsmbug05vUcW2ppsZG0mlIMOQa+g7lX3ROq41ddY4r7w==
+  dependencies:
+    "@babel/runtime" "7.12.5"
+    "@babel/runtime-corejs3" "7.12.5"
+    "@commercetools-frontend/browser-history" "17.10.1"
+    "@commercetools-frontend/constants" "17.10.1"
+    "@commercetools-frontend/notifications" "17.6.0"
+    "@commercetools-frontend/sentry" "17.10.1"
+    "@types/lodash" "^4.14.167"
+    lodash "4.17.20"
     redux-thunk "2.3.0"
 
 "@commercetools-frontend/application-components@16.16.2":
@@ -1310,6 +1340,18 @@
     history-query-enhancer "1.0.4"
     qss "2.0.3"
 
+"@commercetools-frontend/browser-history@17.10.1":
+  version "17.10.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-frontend/browser-history/-/browser-history-17.10.1.tgz#58dd1b14bdb3bc8099fecbf8815d71e0b25a1e42"
+  integrity sha512-6lxpb0PKfDDvdMGQOtdS4yakaii4BBCU1mxnZjsAOQ9shjKJ6OH5poabDn+BYY2iHsi/4fgNqRi2AucRVHVLwA==
+  dependencies:
+    "@babel/runtime" "7.12.5"
+    "@babel/runtime-corejs3" "7.12.5"
+    "@types/history" "4.7.8"
+    history "4.10.1"
+    history-query-enhancer "1.0.4"
+    qss "2.0.3"
+
 "@commercetools-frontend/constants@16.16.0":
   version "16.16.0"
   resolved "https://registry.yarnpkg.com/@commercetools-frontend/constants/-/constants-16.16.0.tgz#9b36426b17a3e88e42873c4df3e688d74ab529de"
@@ -1317,6 +1359,14 @@
   dependencies:
     "@babel/runtime" "7.11.2"
     "@babel/runtime-corejs3" "7.11.2"
+
+"@commercetools-frontend/constants@17.10.1":
+  version "17.10.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-frontend/constants/-/constants-17.10.1.tgz#0a1c05c14428d0d7b4c6720b31ca9d889b1078e7"
+  integrity sha512-SlomAK0Yz8ae6sBO7XB3dq8vVxsyRUQ5dDDC3k1R64wvdLh2mf+sw4z50UxQtfb8BIZzxjXPS/4BqzIXxuHfHA==
+  dependencies:
+    "@babel/runtime" "7.12.5"
+    "@babel/runtime-corejs3" "7.12.5"
 
 "@commercetools-frontend/eslint-config-mc-app@16.15.3":
   version "16.15.3"
@@ -1478,6 +1528,14 @@
     "@babel/runtime" "7.11.2"
     "@babel/runtime-corejs3" "7.11.2"
 
+"@commercetools-frontend/notifications@17.6.0":
+  version "17.6.0"
+  resolved "https://registry.yarnpkg.com/@commercetools-frontend/notifications/-/notifications-17.6.0.tgz#c8232cf5d1bffe251283a55f3f171cfa66f0455a"
+  integrity sha512-2HsO7seNBf3vNcSbjB92ajPH4eKkrM3GOPQho8vo3jp3Ww7RqluwiFkNnYDTvEA2f3miuPt+UYDYULydKmT1gQ==
+  dependencies:
+    "@babel/runtime" "7.12.5"
+    "@babel/runtime-corejs3" "7.12.5"
+
 "@commercetools-frontend/permissions@16.16.1":
   version "16.16.1"
   resolved "https://registry.yarnpkg.com/@commercetools-frontend/permissions/-/permissions-16.16.1.tgz#2b8651a9841fdcb4256d47c085cb76115773314a"
@@ -1548,6 +1606,18 @@
     "@babel/runtime-corejs3" "7.11.2"
     "@commercetools-frontend/constants" "16.16.0"
     "@sentry/browser" "5.21.3"
+    "@types/prop-types" "^15.7.3"
+    prop-types "15.7.2"
+
+"@commercetools-frontend/sentry@17.10.1":
+  version "17.10.1"
+  resolved "https://registry.yarnpkg.com/@commercetools-frontend/sentry/-/sentry-17.10.1.tgz#785ccaa8e5b46a015f61bd8672e4f3b7b1cb7b00"
+  integrity sha512-63hloDRAZ73l4g4a3izAb0hcXfjXGEgvo8dMDw8+Anoluaf0n4ircAiguyRjoMYGIsluyDDUQwzFeTXEvq/moA==
+  dependencies:
+    "@babel/runtime" "7.12.5"
+    "@babel/runtime-corejs3" "7.12.5"
+    "@commercetools-frontend/constants" "17.10.1"
+    "@sentry/browser" "5.30.0"
     "@types/prop-types" "^15.7.3"
     prop-types "15.7.2"
 
@@ -3852,6 +3922,16 @@
     "@sentry/utils" "5.21.3"
     tslib "^1.9.3"
 
+"@sentry/browser@5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@sentry/browser/-/browser-5.30.0.tgz#c28f49d551db3172080caef9f18791a7fd39e3b3"
+  integrity sha512-rOb58ZNVJWh1VuMuBG1mL9r54nZqKeaIlwSlvzJfc89vyfd7n6tQ1UXMN383QBz/MS5H5z44Hy5eE+7pCrYAfw==
+  dependencies:
+    "@sentry/core" "5.30.0"
+    "@sentry/types" "5.30.0"
+    "@sentry/utils" "5.30.0"
+    tslib "^1.9.3"
+
 "@sentry/core@5.21.3":
   version "5.21.3"
   resolved "https://registry.yarnpkg.com/@sentry/core/-/core-5.21.3.tgz#f8423514d4f4c2227ec43abb5db64f0e45fcdb80"
@@ -3863,6 +3943,17 @@
     "@sentry/utils" "5.21.3"
     tslib "^1.9.3"
 
+"@sentry/core@5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-5.30.0.tgz#6b203664f69e75106ee8b5a2fe1d717379b331f3"
+  integrity sha512-TmfrII8w1PQZSZgPpUESqjB+jC6MvZJZdLtE/0hZ+SrnKhW3x5WlYLvTXZpcWePYBku7rl2wn1RZu6uT0qCTeg==
+  dependencies:
+    "@sentry/hub" "5.30.0"
+    "@sentry/minimal" "5.30.0"
+    "@sentry/types" "5.30.0"
+    "@sentry/utils" "5.30.0"
+    tslib "^1.9.3"
+
 "@sentry/hub@5.21.3":
   version "5.21.3"
   resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-5.21.3.tgz#9a47bc7777a0909b76b3106022cff5a320e90798"
@@ -3870,6 +3961,15 @@
   dependencies:
     "@sentry/types" "5.21.3"
     "@sentry/utils" "5.21.3"
+    tslib "^1.9.3"
+
+"@sentry/hub@5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-5.30.0.tgz#2453be9b9cb903404366e198bd30c7ca74cdc100"
+  integrity sha512-2tYrGnzb1gKz2EkMDQcfLrDTvmGcQPuWxLnJKXJvYTQDGLlEvi2tWz1VIHjunmOvJrB5aIQLhm+dcMRwFZDCqQ==
+  dependencies:
+    "@sentry/types" "5.30.0"
+    "@sentry/utils" "5.30.0"
     tslib "^1.9.3"
 
 "@sentry/minimal@5.21.3":
@@ -3881,10 +3981,24 @@
     "@sentry/types" "5.21.3"
     tslib "^1.9.3"
 
+"@sentry/minimal@5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-5.30.0.tgz#ce3d3a6a273428e0084adcb800bc12e72d34637b"
+  integrity sha512-BwWb/owZKtkDX+Sc4zCSTNcvZUq7YcH3uAVlmh/gtR9rmUvbzAA3ewLuB3myi4wWRAMEtny6+J/FN/x+2wn9Xw==
+  dependencies:
+    "@sentry/hub" "5.30.0"
+    "@sentry/types" "5.30.0"
+    tslib "^1.9.3"
+
 "@sentry/types@5.21.3":
   version "5.21.3"
   resolved "https://registry.yarnpkg.com/@sentry/types/-/types-5.21.3.tgz#0147f0b76c4b75559343fd46863f9b004ff3d7d4"
   integrity sha512-GU0lFZkeGJuCuNN3D8lXyBku6M1UtZzV8f8U4a4nGGFS0R3VqxDHrC3eupRc8Vut/1xfgvFz1qCkPstXUrEBuA==
+
+"@sentry/types@5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-5.30.0.tgz#19709bbe12a1a0115bc790b8942917da5636f402"
+  integrity sha512-R8xOqlSTZ+htqrfteCWU5Nk0CDN5ApUTvrlvBuiH1DyP6czDZ4ktbZB0hAgBlVcK0U+qpD3ag3Tqqpa5Q67rPw==
 
 "@sentry/utils@5.21.3":
   version "5.21.3"
@@ -3892,6 +4006,14 @@
   integrity sha512-JethkNMHA32gvKQWkTl8uccW0XP+FCJazIIbYFqVc3qJVhOnzfqgPuhLWt0f9/YvHJKG3SLEs+Li5bpiBDyURQ==
   dependencies:
     "@sentry/types" "5.21.3"
+    tslib "^1.9.3"
+
+"@sentry/utils@5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-5.30.0.tgz#9a5bd7ccff85ccfe7856d493bffa64cabc41e980"
+  integrity sha512-zaYmoH0NWWtvnJjC9/CBseXMtKHm/tm40sz3YfJRxeQjyzRqNQPgivpd9R/oDJCYj999mzdW382p/qi2ypjLww==
+  dependencies:
+    "@sentry/types" "5.30.0"
     tslib "^1.9.3"
 
 "@sheerun/mutationobserver-shim@0.3.3":
@@ -4149,6 +4271,11 @@
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.7.tgz#613957d900fab9ff84c8dfb24fa3eef0c2a40896"
   integrity sha512-2xtoL22/3Mv6a70i4+4RB7VgbDDORoWwjcqeNysojZA0R7NK17RbY5Gof/2QiFfJgX+KkWghbwJ+d/2SB8Ndzg==
 
+"@types/history@4.7.8":
+  version "4.7.8"
+  resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.8.tgz#49348387983075705fe8f4e02fb67f7daaec4934"
+  integrity sha512-S78QIYirQcUoo6UJZx9CSP0O2ix9IaeAXwQi26Rhr/+mg7qqPy8TzaxHSUut7eGjL8WmLccT7/MXf304WjqHcA==
+
 "@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
@@ -4211,6 +4338,11 @@
   version "4.14.160"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.160.tgz#2f1bba6500bc3cb9a732c6d66a083378fb0b0b29"
   integrity sha512-aP03BShJoO+WVndoVj/WNcB/YBPt+CIU1mvaao2GRAHy2yg4pT/XS4XnVHEQBjPJGycWf/9seKEO9vopTJGkvA==
+
+"@types/lodash@^4.14.167":
+  version "4.14.168"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.168.tgz#fe24632e79b7ade3f132891afff86caa5e5ce008"
+  integrity sha512-oVfRvqHV/V6D1yifJbVRU3TMp8OT6o6BG+U9MkwuJ3U8/CsDHvalRpsxBqivn71ztOFZBTfJMvETbqHiaNSj7Q==
 
 "@types/minimatch@*":
   version "3.0.3"
