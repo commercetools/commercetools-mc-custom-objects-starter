@@ -34,7 +34,7 @@
     "@commercetools-frontend/actions-global": "16.16.0",
     "@commercetools-frontend/application-components": "16.16.2",
     "@commercetools-frontend/application-shell": "16.16.3",
-    "@commercetools-frontend/application-shell-connectors": "16.16.1",
+    "@commercetools-frontend/application-shell-connectors": "17.10.1",
     "@commercetools-frontend/assets": "16.15.3",
     "@commercetools-frontend/constants": "16.16.0",
     "@commercetools-frontend/i18n": "16.16.2",
