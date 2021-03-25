@@ -12,15 +12,13 @@ import { SelectInput } from '@commercetools-uikit/inputs';
 import Grid from '@commercetools-uikit/grid';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
-import {
-  Pagination,
-  TabContainer,
-  View,
-  ViewHeader,
-} from '@commercetools-us-ps/mc-app-core/components';
-import { SORT_OPTIONS } from '@commercetools-us-ps/mc-app-core/constants';
+import Pagination from '../pagination';
+import TabContainer from '../tab-container';
+import View from '../view';
+import ViewHeader from '../view-header';
 import GetContainers from '../get-custom-objects.rest.graphql';
 import { DEFAULT_VARIABLES, FIELDS } from './constants';
+import { SORT_OPTIONS } from '../../constants';
 import messages from './messages';
 
 const sortOptions = [

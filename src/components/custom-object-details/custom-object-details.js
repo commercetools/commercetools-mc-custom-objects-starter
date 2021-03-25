@@ -8,14 +8,12 @@ import { NOTIFICATION_KINDS_SIDE } from '@commercetools-frontend/constants';
 import { IconButton } from '@commercetools-uikit/buttons';
 import { BinLinearIcon } from '@commercetools-uikit/icons';
 import Text from '@commercetools-uikit/text';
-import {
-  BackToList,
-  TabContainer,
-  TabHeader,
-  View,
-  ViewHeader,
-} from '@commercetools-us-ps/mc-app-core/components';
-import { useShowSideNotification } from '@commercetools-us-ps/mc-app-core/hooks';
+import BackToList from '../back-to-list';
+import TabContainer from '../tab-container';
+import TabHeader from '../tab-header';
+import View from '../view';
+import ViewHeader from '../view-header';
+import { useShowSideNotification } from '../../hooks';
 import { ROOT_PATH } from '../../constants';
 import EditCustomObject from '../edit-custom-object';
 import GetCustomObject from '../get-custom-object.rest.graphql';

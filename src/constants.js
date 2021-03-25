@@ -1,3 +1,4 @@
+export const SORT_OPTIONS = { ASC: 'ASC', DESC: 'DESC' };
 export const PERMISSIONS = {
   ManageProducts: 'ManageProducts',
   ManageOrders: 'ManageOrders',
