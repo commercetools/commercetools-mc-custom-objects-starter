@@ -8,13 +8,11 @@ import {
   NOTIFICATION_KINDS_SIDE,
 } from '@commercetools-frontend/constants';
 import Spacings from '@commercetools-uikit/spacings';
-import {
-  BackToList,
-  TabContainer,
-  View,
-  ViewHeader,
-} from '@commercetools-us-ps/mc-app-core/components';
-import { useShowSideNotification } from '@commercetools-us-ps/mc-app-core/hooks';
+import BackToList from '../back-to-list';
+import TabContainer from '../tab-container';
+import View from '../view';
+import ViewHeader from '../view-header';
+import { useShowSideNotification } from '../../hooks';
 import { CONTAINER, ROOT_PATH } from '../../constants';
 import ContainerForm from '../container-form';
 import CreateContainerCustomObject from '../update-custom-object.rest.graphql';

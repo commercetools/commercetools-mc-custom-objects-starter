@@ -428,7 +428,7 @@ type Asset {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -740,7 +740,7 @@ type Cart implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -844,7 +844,7 @@ type CartDiscount implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -1181,9 +1181,9 @@ type Category implements Versioned {
   Number of a products in the category subtree.
   """
   productCount: Int!
-    @deprecated(
-      reason: "The returned number is representing only staged products. Use 'stagedProductCount' instead"
-    )
+  @deprecated(
+    reason: "The returned number is representing only staged products. Use 'stagedProductCount' instead"
+  )
 
   """
   Number of staged products in the category subtree.
@@ -1221,7 +1221,7 @@ type Category implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -1329,9 +1329,9 @@ type CategorySearch {
   parent: CategorySearch
   externalId: String
   productCount: Int!
-    @deprecated(
-      reason: "The returned number is representing only staged products. Use 'stagedProductCount' instead"
-    )
+  @deprecated(
+    reason: "The returned number is representing only staged products. Use 'stagedProductCount' instead"
+  )
   stagedProductCount: Int!
   childCount: Int!
   productTypeNames: [String!]!
@@ -1363,7 +1363,7 @@ type CategorySearch {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -1872,7 +1872,7 @@ input ChangeZoneName {
 type Channel implements Versioned & ReviewTarget {
   id: String!
   typeId: String!
-    @deprecated(reason: "Use 'channelRef' to fetch the reference.")
+  @deprecated(reason: "Use 'channelRef' to fetch the reference.")
   version: Long!
   key: String!
   roles: [ChannelRole!]!
@@ -1924,7 +1924,7 @@ type Channel implements Versioned & ReviewTarget {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -2113,7 +2113,7 @@ type Customer implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -2174,7 +2174,7 @@ assigned to certain customer groups.
 type CustomerGroup implements Versioned {
   id: String!
   typeId: String!
-    @deprecated(reason: "Use 'customerGroupRef' to fetch the reference.")
+  @deprecated(reason: "Use 'customerGroupRef' to fetch the reference.")
   version: Long!
   name: String!
   key: String
@@ -2199,7 +2199,7 @@ type CustomerGroup implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -2560,7 +2560,7 @@ type CustomLineItem {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -2785,7 +2785,7 @@ type DiscountCode implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -2933,7 +2933,7 @@ type DiscountedProductPriceValue {
   Temporal. Will be renamed some time in the future. Please use 'discount'.
   """
   discountRel: ProductDiscount
-    @deprecated(reason: "Will be removed in the future. Please use 'discount'.")
+  @deprecated(reason: "Will be removed in the future. Please use 'discount'.")
 }
 
 input DiscountedProductPriceValueInput {
@@ -3455,7 +3455,7 @@ type InventoryEntry implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -3672,7 +3672,7 @@ type LineItem {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -5370,7 +5370,7 @@ type Order implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -5530,21 +5530,21 @@ type Payment implements Versioned {
   interfaceId: String
   amountPlanned: Money!
   amountAuthorized: Money
-    @deprecated(
-      reason: "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
-    )
+  @deprecated(
+    reason: "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
+  )
   authorizedUntil: DateTime
-    @deprecated(
-      reason: "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
-    )
+  @deprecated(
+    reason: "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
+  )
   amountPaid: Money
-    @deprecated(
-      reason: "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
-    )
+  @deprecated(
+    reason: "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
+  )
   amountRefunded: Money
-    @deprecated(
-      reason: "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
-    )
+  @deprecated(
+    reason: "https://docs.commercetools.com/release-notes.html#releases-2017-09-29-payment-api-beta-changes"
+  )
   paymentMethodInfo: PaymentMethodInfo!
   paymentStatus: PaymentStatus!
   transactions: [Transaction!]!
@@ -5571,7 +5571,7 @@ type Payment implements Versioned {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -5754,7 +5754,7 @@ type Product implements Versioned & ReviewTarget {
   productType: ProductTypeDefinition
   masterData: ProductCatalogData!
   catalogData(id: String!): ProductCatalogData
-    @deprecated(reason: "only 'masterData' supported")
+  @deprecated(reason: "only 'masterData' supported")
   skus: [String!]!
   createdAt: DateTime!
   lastModifiedAt: DateTime!
@@ -6065,7 +6065,7 @@ type ProductPrice {
     """
     excludeNames: [String!]
   ): [RawCustomField!]
-    @deprecated(reason: "Please use 'custom.customFieldsRaw'")
+  @deprecated(reason: "Please use 'custom.customFieldsRaw'")
 
   """
   This field would contain type data
@@ -6432,7 +6432,7 @@ type Query implements CartQueryInterface & CustomerActiveCartInterface & OrderQu
   This field gives access to the resources (such as carts) that are inside one of the given stores.
   """
   inStores(keys: [KeyReferenceInput!]!): InStore!
-    @deprecated(reason: "beta feature")
+  @deprecated(reason: "beta feature")
   customerGroup(
     """
     Queries with specified ID
@@ -9092,7 +9092,7 @@ type TaxCategory implements Versioned {
   rates: [TaxRate!]!
   key: String
   typeId: String!
-    @deprecated(reason: "Use 'taxCategoryRef' to fetch the reference.")
+  @deprecated(reason: "Use 'taxCategoryRef' to fetch the reference.")
   id: String!
   version: Long!
   createdAt: DateTime!

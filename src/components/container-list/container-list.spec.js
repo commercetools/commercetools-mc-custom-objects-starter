@@ -5,15 +5,13 @@ import faker from 'faker';
 import { setQuery, useQuery } from '@apollo/react-hooks';
 import { SelectInput } from '@commercetools-uikit/inputs';
 import Grid from '@commercetools-uikit/grid';
-import {
-  Pagination,
-  ViewHeader,
-} from '@commercetools-us-ps/mc-app-core/components';
-import { SORT_OPTIONS } from '@commercetools-us-ps/mc-app-core/constants';
+import Pagination from '../pagination';
+import ViewHeader from '../view-header';
 import { generateContainers } from '../../test-util';
 import GetContainers from '../get-custom-objects.rest.graphql';
 import ContainerList from './container-list';
 import { DEFAULT_VARIABLES, FIELDS, PAGE_SIZE } from './constants';
+import { SORT_OPTIONS } from '../../constants';
 
 const mocks = {
   match: {

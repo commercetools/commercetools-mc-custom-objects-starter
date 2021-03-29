@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import faker from 'faker';
 import times from 'lodash/times';
 import * as ApplicationContext from '@commercetools-frontend/application-shell-connectors';
-import { useEffectMock } from '@commercetools-us-ps/mc-app-core/test-util';
+import useEffectMock from '../../test-util/use-effect-mock';
 import { generateContainers } from '../../test-util';
 import Form from './form';
 import { getAttributeValues } from './util';

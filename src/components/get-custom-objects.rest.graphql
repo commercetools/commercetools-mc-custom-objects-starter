@@ -5,11 +5,11 @@ query GetCustomObjects(
   $offset: Int
 ) {
   customObjects(where: $where, sort: $sort, limit: $limit, offset: $offset)
-    @rest(
-      path: "/custom-objects?{args}"
-      type: "CustomObjectQueryResult"
-      method: "GET"
-    ) {
+  @rest(
+    path: "/custom-objects?{args}"
+    type: "CustomObjectQueryResult"
+    method: "GET"
+  ) {
     count
     total
     offset
