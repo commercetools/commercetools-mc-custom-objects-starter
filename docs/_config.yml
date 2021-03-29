@@ -1,6 +1,11 @@
-title: Custom Objects Custom Application
+title: Custom Objects Editor
 description: Create and manage custom objects on the commercetools platform.
 remote_theme: pmarsceill/just-the-docs
 aux_links:
-  "Custom Objects on GitHub":
-    - "//github.com/commercetools/mc-custom-app-custom-objects"
+  'View on GitHub':
+    - '//github.com/commercetools/mc-custom-app-custom-objects'
+footer_content: ''
+logo: 'assets/commercetools.svg'
+color_scheme: commercetools
+plugins:
+  - jekyll-remote-theme
