@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import faker from 'faker';
 import camelCase from 'lodash/camelCase';
-import { useEffectMock } from '@commercetools-us-ps/mc-app-core/test-util';
+import useEffectMock from '../../test-util/use-effect-mock';
 import { TYPES } from './constants';
 import Attribute from './attribute';
 

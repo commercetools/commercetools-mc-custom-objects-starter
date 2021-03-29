@@ -11,9 +11,8 @@ import { stringify } from 'qs';
 import { FormattedDate } from 'react-intl';
 import { useQuery, setQuery } from '@apollo/react-hooks';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
-import { PaginatedTable } from '@commercetools-us-ps/mc-app-core/components';
-import { SORT_OPTIONS } from '@commercetools-us-ps/mc-app-core/constants';
-import { useEffectMock } from '@commercetools-us-ps/mc-app-core/test-util';
+import PaginatedTable from '../paginated-table';
+import useEffectMock from '../../test-util/use-effect-mock';
 import {
   generateAttribute,
   generateContainer,
@@ -30,6 +29,7 @@ import {
   DEFAULT_VARIABLES,
   PAGE_SIZE,
 } from './constants';
+import { SORT_OPTIONS } from '../../constants';
 import { COLUMN_KEYS } from './column-definitions';
 
 const containerContext = generateContainerContext();

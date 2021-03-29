@@ -11,7 +11,7 @@ import {
 } from '@apollo/react-hooks';
 import { mockShowNotification } from '@commercetools-frontend/actions-global';
 import { ConfirmationDialog } from '@commercetools-frontend/application-components';
-import { ViewHeader } from '@commercetools-us-ps/mc-app-core/components';
+import ViewHeader from '../view-header';
 import { generateContainer } from '../../test-util';
 import { ROOT_PATH } from '../../constants';
 import GetContainer from '../get-custom-object.rest.graphql';

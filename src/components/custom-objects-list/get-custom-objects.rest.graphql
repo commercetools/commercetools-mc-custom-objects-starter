@@ -1,10 +1,10 @@
 query GetCustomObjects($queryString: String) {
   customObjects(qs: $queryString)
-    @rest(
-      path: "/custom-objects?{args.qs}"
-      type: "CustomObjectQueryResult"
-      method: "GET"
-    ) {
+  @rest(
+    path: "/custom-objects?{args.qs}"
+    type: "CustomObjectQueryResult"
+    method: "GET"
+  ) {
     count
     total
     offset

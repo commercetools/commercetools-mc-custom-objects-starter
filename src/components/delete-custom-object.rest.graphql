@@ -1,11 +1,11 @@
 mutation DeleteCustomObject($body: Json, $id: String!, $version: Integer!) {
   customObjects(body: $body, id: $id, version: $version)
-    @rest(
-      path: "/custom-objects/{args.id}?version={args.version}"
-      type: "CustomObjectQueryResult"
-      method: "DELETE"
-      bodyKey: "body"
-    ) {
+  @rest(
+    path: "/custom-objects/{args.id}?version={args.version}"
+    type: "CustomObjectQueryResult"
+    method: "DELETE"
+    bodyKey: "body"
+  ) {
     results @type(name: "DeletedCustomObject") {
       id
       key

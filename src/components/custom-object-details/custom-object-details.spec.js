@@ -11,7 +11,7 @@ import {
 import { FormattedMessage } from 'react-intl';
 import { mockShowNotification } from '@commercetools-frontend/actions-global';
 import { ConfirmationDialog } from '@commercetools-frontend/application-components';
-import { ViewHeader } from '@commercetools-us-ps/mc-app-core/components';
+import ViewHeader from '../view-header';
 import { ROOT_PATH } from '../../constants';
 import { generateCustomObject } from '../../test-util';
 import GetCustomObject from '../get-custom-object.rest.graphql';

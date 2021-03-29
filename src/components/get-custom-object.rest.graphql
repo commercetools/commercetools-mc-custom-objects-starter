@@ -1,10 +1,10 @@
 query GetCustomObject($id: String!) {
   customObject(id: $id)
-    @rest(
-      path: "/custom-objects/{args.id}"
-      type: "CustomObjectByIdQueryResult"
-      method: "GET"
-    ) {
+  @rest(
+    path: "/custom-objects/{args.id}"
+    type: "CustomObjectByIdQueryResult"
+    method: "GET"
+  ) {
     id
     version
     container
