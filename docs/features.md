@@ -20,12 +20,12 @@ A grid displaying the container schemas within the commercetools project.
 ![Schemas List](./assets/schemas-list.gif)
 
 - Pagination
-  - [Default page size](https://github.com/commercetools/mc-custom-app-custom-objects/blob/f4ca9b17b9b554c0c4ed68a845e0b01dad80b219/src/components/container-list/constants.js#L8)
+  - [Default page size](https://github.com/commercetools/commercetools-mc-custom-objects-starter/blob/f4ca9b17b9b554c0c4ed68a845e0b01dad80b219/src/components/container-list/constants.js#L8)
     of 15
   - Enabled when the number of schemas exceeds the page size
 - Sorting
   - Sortable values are schema key, last modified date, and created date
-  - [Initial sort](https://github.com/commercetools/mc-custom-app-custom-objects/blob/f4ca9b17b9b554c0c4ed68a845e0b01dad80b219/src/components/container-list/container-list.js#L51)
+  - [Initial sort](https://github.com/commercetools/commercetools-mc-custom-objects-starter/blob/f4ca9b17b9b554c0c4ed68a845e0b01dad80b219/src/components/container-list/container-list.js#L51)
     is key in ascending order (alphabetical)
 
 ### Container Schema Management
@@ -65,12 +65,12 @@ managed namespaces.
 ![Custom Objects List](assets/custom-objects-list.gif)
 
 - Pagination
-  - [Default page size](https://github.com/commercetools/mc-custom-app-custom-objects/blob/aa1d8c00b0a26359b7ec006ca286877a992651e5/src/components/custom-objects-list/constants.js#L16)
+  - [Default page size](https://github.com/commercetools/commercetools-mc-custom-objects-starter/blob/aa1d8c00b0a26359b7ec006ca286877a992651e5/src/components/custom-objects-list/constants.js#L16)
     of 20,
   - Displayed when the number of Custom Objects exceeds the page size
 - Sorting
   - Sortable columns are Container, Key, and Last Modified
-  - [Initial sort](https://github.com/commercetools/mc-custom-app-custom-objects/blob/aa1d8c00b0a26359b7ec006ca286877a992651e5/src/components/custom-objects-list/custom-objects-list.js#L47)
+  - [Initial sort](https://github.com/commercetools/commercetools-mc-custom-objects-starter/blob/aa1d8c00b0a26359b7ec006ca286877a992651e5/src/components/custom-objects-list/custom-objects-list.js#L47)
     is Last Modified in descending order (most recently modified first)
 - Filter by Custom Object container and key (exact match)
 - Attributes displayed in the Value column are managed by the Custom Object's
