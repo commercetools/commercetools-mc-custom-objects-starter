@@ -30,7 +30,7 @@
     "deploy:firebase": "yarn compile-html:firebase && firebase deploy"
   },
   "dependencies": {
-    "@apollo/react-hooks": "3.1.5",
+    "@apollo/react-hooks": "4.0.0",
     "@commercetools-frontend/actions-global": "16.16.0",
     "@commercetools-frontend/application-components": "16.16.2",
     "@commercetools-frontend/application-shell": "16.16.3",
