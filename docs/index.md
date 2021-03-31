@@ -24,7 +24,7 @@ a JSON data schema and Create, Read, Update, and Delete objects tied to that sch
 
 _Always speak with a commercetools professional when modeling your data._
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View it on GitHub](https://github.com/commercetools/mc-custom-app-custom-objects){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 } [View it on GitHub](https://github.com/commercetools/commercetools-mc-custom-objects-starter){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
@@ -97,7 +97,7 @@ with a Merchant Center project.
 
 ## License
 
-[MIT license](https://github.com/commercetools/commercetools/mc-custom-app-custom-objects/LICENSE.txt).
+[MIT license](https://github.com/commercetools/commercetools/commercetools-mc-custom-objects-starter/LICENSE.txt).
 
 ## Contributing
 

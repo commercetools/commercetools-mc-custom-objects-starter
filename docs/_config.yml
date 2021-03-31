@@ -3,7 +3,7 @@ description: Create and manage custom objects on the commercetools platform.
 remote_theme: pmarsceill/just-the-docs
 aux_links:
   'View on GitHub':
-    - '//github.com/commercetools/mc-custom-app-custom-objects'
+    - '//github.com/commercetools/commercetools-mc-custom-objects-starter'
 footer_content: ''
 logo: 'assets/commercetools.svg'
 color_scheme: commercetools

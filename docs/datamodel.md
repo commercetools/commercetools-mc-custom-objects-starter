@@ -19,7 +19,7 @@ Container schemas are
 [Custom Objects](https://docs.commercetools.com/http-api-projects-custom-objects).
 
 - **container** -
-  [`mc-custom-object-schema`](https://github.com/commercetools/mc-custom-app-custom-objects/blob/89382c773b420756f55f06a583baf6d6e18f1597/src/constants.js#L7)
+  [`mc-custom-object-schema`](https://github.com/commercetools/commercetools-mc-custom-objects-starter/blob/89382c773b420756f55f06a583baf6d6e18f1597/src/constants.js#L7)
 - **key** - String, matching the pattern `[-_~.a-zA-Z0-9]+` - Required
 - **value** - Object
   - **attributes** - Array of [Attribute](#attribute) - Required
