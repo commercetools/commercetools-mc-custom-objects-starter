@@ -1,12 +1,14 @@
 import React from 'react';
 import camelCase from 'lodash/camelCase';
+import find from 'lodash/find';
 import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import reduce from 'lodash/reduce';
 import * as yup from 'yup';
 import { FormattedMessage } from 'react-intl';
 import { LocalizedTextInput } from '@commercetools-uikit/inputs';
-import { TYPES } from '../container-form/constants';
+import { TYPES, VALIDATION } from '../container-form/constants';
 
 export const getValue = (
   type,
@@ -80,11 +82,34 @@ export const getAttributeValues = (attributes, currencies, languages) =>
     {}
   );
 
-const getValidation = (method, required, messages) => {
-  const validation = yup[method]();
+const getValidation = (method, required, validation, messages) => {
+  const base = yup[method]();
+  const schema = !isEmpty(validation)
+    ? reduce(
+        validation,
+        (val, { type, value }) => {
+          const message = find(VALIDATION, { method: type }).message;
+
+          if (type === VALIDATION.Matches.method) {
+            return val[type](value, {
+              message: <FormattedMessage {...message} values={{ value }} />,
+            });
+          }
+
+          return value
+            ? val[type](
+                value,
+                <FormattedMessage {...message} values={{ value }} />
+              )
+            : val[type](<FormattedMessage {...message} />);
+        },
+        base
+      )
+    : base;
+
   return required
-    ? validation.required(<FormattedMessage {...messages.required} />)
-    : validation.nullable();
+    ? schema.required(<FormattedMessage {...messages.required} />)
+    : schema.nullable();
 };
 
 const getLocalizedStringValidation = (languages, required, messages) => {
@@ -108,7 +133,7 @@ const getLocalizedStringValidation = (languages, required, messages) => {
 };
 
 const getValidationByType = (
-  { type, required, attributes, reference },
+  { type, required, validation, attributes, reference },
   languages,
   messages
 ) => {
@@ -117,31 +142,31 @@ const getValidationByType = (
     case TYPES.Enum:
     case TYPES.LocalizedEnum:
     case TYPES.Time:
-      return getValidation('string', required, messages);
+      return getValidation('string', required, validation, messages);
 
     case TYPES.LocalizedString:
       return getLocalizedStringValidation(languages, required, messages);
 
     case TYPES.Number:
-      return getValidation('number', required, messages);
+      return getValidation('number', required, validation, messages);
 
     case TYPES.Boolean:
-      return getValidation('boolean', required, messages);
+      return getValidation('boolean', required, validation, messages);
 
     case TYPES.Money:
       return yup.object({
-        amount: getValidation('string', required, messages),
+        amount: getValidation('string', required, validation, messages),
         currencyCode: yup.string(),
       });
 
     case TYPES.Date:
     case TYPES.DateTime:
-      return getValidation('date', required, messages);
+      return getValidation('date', required, validation, messages);
 
     case TYPES.Reference:
       return yup.object({
         typeId: yup.string(),
-        [reference.by]: getValidation('string', required, messages),
+        [reference.by]: getValidation('string', required, validation, messages),
       });
 
     case TYPES.Object:

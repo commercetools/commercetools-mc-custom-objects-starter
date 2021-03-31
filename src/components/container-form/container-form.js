@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import find from 'lodash/find';
 import reduce from 'lodash/reduce';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import Form from './form';
+import { TYPES, VALIDATION } from './constants';
 import messages from './messages';
-import { TYPES } from './constants';
 
 const initializeContainerValues = ({ key, value }) => ({
   key,
@@ -23,6 +24,7 @@ const initializeEmptyValues = () => ({
       set: false,
       required: false,
       display: false,
+      validation: [],
     },
   ],
 });
@@ -47,6 +49,15 @@ const ContainerForm = ({ container, onSubmit }) => {
     set: yup.bool(),
     required: yup.bool(),
     display: yup.bool(),
+    validation: yup.array(
+      yup.object({
+        type: yup.string().required(requiredFieldMessage),
+        value: yup.string().when('type', {
+          is: (val) => val && find(VALIDATION, { method: val }).hasValue,
+          then: yup.string().required(requiredFieldMessage),
+        }),
+      })
+    ),
     attributes: yup.array(yup.lazy(() => yup.object(attributeSchema))),
     reference: yup.object().when('type', {
       is: (val) => val === TYPES.Reference,
