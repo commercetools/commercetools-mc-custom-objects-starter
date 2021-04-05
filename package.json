@@ -126,7 +126,7 @@
     "lint-staged": "10.2.13",
     "prettier": "2.1.1",
     "stylelint": "13.6.1",
-    "stylelint-config-standard": "20.0.0",
+    "stylelint-config-standard": "21.0.0",
     "stylelint-order": "4.1.0",
     "typescript": "3.9.7"
   }
