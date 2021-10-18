@@ -93,7 +93,7 @@
     "@babel/core": "7.11.4",
     "@commercetools-frontend/eslint-config-mc-app": "16.15.3",
     "@commercetools-frontend/jest-preset-mc-app": "16.16.1",
-    "@commercetools-frontend/mc-scripts": "16.16.3",
+    "@commercetools-frontend/mc-scripts": "20.10.3",
     "@commitlint/cli": "9.1.2",
     "@commitlint/config-conventional": "9.1.2",
     "@testing-library/react": "10.4.9",
